@@ -1,0 +1,109 @@
+---
+import Section from "../layout/Section.astro";
+
+type TimelineEntry = {
+  title: string;
+  organization: string;
+  period: string;
+  type: "Education" | "Project" | "Work" | "Hackathon";
+  description: string;
+};
+
+// Static timeline — not CMS-sourced for the MVP.
+const timeline: TimelineEntry[] = [
+  {
+    title: "Applied Computer Science",
+    organization: "Karel de Grote Hogeschool, Antwerp",
+    period: "2022 — present",
+    type: "Education",
+    description:
+      "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
+  },
+  {
+    title: "Gazetkomania AI Flyer Extraction",
+    organization: "Personal project",
+    period: "2024 — 2025",
+    type: "Project",
+    description:
+      "Built an AI-assisted extraction pipeline for grocery flyers using Spring Boot and Gemini. Multi-pass validation, PostgreSQL persistence, MinIO storage.",
+  },
+  {
+    title: "Integration 4 CI/CD on Google Cloud",
+    organization: "Academic project",
+    period: "2024",
+    type: "Project",
+    description:
+      "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
+  },
+  {
+    title: "ServicePulse Link Monitor",
+    organization: "Personal project",
+    period: "2024",
+    type: "Project",
+    description:
+      "HTTP endpoint monitoring service with configurable schedules, failure alerting, and persistent history — built with Spring Boot and Docker.",
+  },
+  {
+    title: "Roometrix IoT Air Quality System",
+    organization: "Academic project",
+    period: "2023",
+    type: "Project",
+    description:
+      "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
+  },
+];
+
+const typeBadge: Record<string, string> = {
+  Education: "badge-accent",
+  Project: "badge-primary",
+  Work: "badge-secondary",
+  Hackathon: "badge-ghost",
+};
+---
+
+<Section id="experience">
+  <h2 class="text-3xl font-bold tracking-tight">Experience & Education</h2>
+  <p class="mt-2 text-base-content/60">
+    Key projects and milestones, most recent first.
+  </p>
+
+  <ul class="timeline timeline-vertical mt-10">
+    {
+      timeline.map((entry, index) => (
+        <li>
+          {index !== 0 && <hr class="bg-base-300" />}
+          <div class="timeline-start text-sm text-base-content/50 md:text-right">
+            {entry.period}
+          </div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5 text-primary"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box mb-6 bg-base-200">
+            <div class="mb-2 flex flex-wrap items-center gap-2">
+              <span class:list={["badge badge-sm", typeBadge[entry.type]]}>
+                {entry.type}
+              </span>
+            </div>
+            <h3 class="font-semibold">{entry.title}</h3>
+            <p class="text-sm text-base-content/60">{entry.organization}</p>
+            <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
+          </div>
+          {index !== timeline.length - 1 && <hr class="bg-base-300" />}
+        </li>
+      ))
+    }
+  </ul>
+</Section>
+
