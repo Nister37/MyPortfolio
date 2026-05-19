@@ -1,0 +1,27 @@
+:root {
+  --section-max-width: 1120px;
+  --section-padding-inline: 1rem;
+}
+
+.prose-portfolio {
+  line-height: 1.75;
+
+  h2 {
+    margin-top: 2.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  pre {
+    border-radius: 1rem;
+    overflow-x: auto;
+  }
+
+  img {
+    border-radius: 1rem;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+}
+

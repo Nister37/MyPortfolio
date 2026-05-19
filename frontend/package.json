@@ -15,7 +15,17 @@
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/svelte": "^8.1.1",
     "astro": "^6.3.5",
+    "lucide-svelte": "^1.0.1",
+    "motion": "^12.39.0",
     "svelte": "^5.55.8",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@iconify-json/devicon": "^1.2.62",
+    "@iconify-json/simple-icons": "^1.2.83",
+    "@tailwindcss/vite": "^4.3.0",
+    "daisyui": "^5.5.20",
+    "sass": "^1.99.0",
+    "tailwindcss": "^4.3.0"
   }
 }

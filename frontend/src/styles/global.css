@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "portfolio-dark";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(14% 0.02 260);
+  --color-base-200: oklch(18% 0.025 260);
+  --color-base-300: oklch(23% 0.03 260);
+  --color-base-content: oklch(92% 0.01 260);
+
+  --color-primary: oklch(70% 0.16 250);
+  --color-secondary: oklch(70% 0.14 180);
+  --color-accent: oklch(75% 0.15 80);
+  --color-neutral: oklch(25% 0.02 260);
+}
+
