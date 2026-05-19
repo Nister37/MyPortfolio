@@ -1,0 +1,43 @@
+---
+import type { BlogPost } from "../../lib/cms/posts";
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+
+const formattedDate = post.publishedAt
+  ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+  : null;
+---
+
+<article class="card bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+  <div class="card-body gap-3">
+    <div class="flex flex-wrap items-center gap-2">
+      {
+        (post.tags ?? []).map((tag) => (
+          <span class="badge badge-outline badge-sm">{tag}</span>
+        ))
+      }
+    </div>
+
+    <h3 class="card-title text-lg leading-snug">
+      <a href={`/blog/${post.slug}`} class="link-hover hover:text-primary">
+        {post.title}
+      </a>
+    </h3>
+
+    <p class="text-sm text-base-content/65">{post.description}</p>
+
+    <div class="mt-1 flex items-center gap-3 text-xs text-base-content/45">
+      {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
+      {post.readingTime && <span>{post.readingTime} min read</span>}
+    </div>
+  </div>
+</article>
+

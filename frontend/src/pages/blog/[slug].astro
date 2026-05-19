@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPosts } from "../../lib/cms/posts";
+import type { BlogPost } from "../../lib/cms/posts";
+import Section from "../../components/layout/Section.astro";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+
+const formattedDate = post.publishedAt
+  ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  : null;
+---
+
+<BaseLayout title={`${post.title} | Pawel Ryfiak`} description={post.description}>
+  <main>
+    <Section>
+      <a class="link link-primary text-sm" href="/blog">← All posts</a>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {(post.tags ?? []).map((tag) => (
+          <span class="badge badge-outline">{tag}</span>
+        ))}
+      </div>
+
+      <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight">{post.title}</h1>
+
+      <div class="mt-3 flex items-center gap-3 text-sm text-base-content/50">
+        {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
+        {post.readingTime && <span>&bull; {post.readingTime} min read</span>}
+      </div>
+
+      <p class="mt-6 max-w-3xl text-lg text-base-content/70">{post.description}</p>
+
+      {
+        post.content ? (
+          <div
+            class="prose-portfolio prose mt-10 max-w-3xl text-base-content"
+            set:html={post.content}
+          />
+        ) : (
+          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-8 text-center text-base-content/50">
+            Full article content will appear here once sourced from Strapi.
+          </div>
+        )
+      }
+    </Section>
+  </main>
+</BaseLayout>
+
