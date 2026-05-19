@@ -1,0 +1,73 @@
+---
+import type { Project } from "../../lib/cms/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="card bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+  <div class="card-body gap-4">
+    <div class="flex flex-wrap gap-2">
+      {project.categories.map((cat) => (
+        <span class="badge badge-primary badge-sm">{cat}</span>
+      ))}
+    </div>
+
+    <h3 class="card-title text-lg leading-snug">{project.title}</h3>
+
+    <p class="text-sm text-base-content/70">{project.summary}</p>
+
+    {
+      project.highlights.length > 0 && (
+        <ul class="space-y-1 text-sm text-base-content/60">
+          {project.highlights.map((point) => (
+            <li class="flex items-start gap-2">
+              <span class="mt-1 text-primary" aria-hidden="true">▸</span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div class="flex flex-wrap gap-2 pt-1">
+      {project.stack.map((item) => (
+        <span class="badge badge-outline badge-sm">{item}</span>
+      ))}
+    </div>
+
+    <div class="card-actions mt-2 flex-wrap gap-2">
+      <a href={`/projects/${project.slug}`} class="btn btn-primary btn-sm">
+        Case study
+      </a>
+      {
+        project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        )
+      }
+      {
+        project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Live demo
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
