@@ -1,0 +1,91 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getProjects } from "../../lib/cms/projects";
+import type { Project } from "../../lib/cms/projects";
+import Section from "../../components/layout/Section.astro";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout
+  title={`${project.title} | Pawel Ryfiak`}
+  description={project.summary}
+>
+  <main>
+    <Section>
+      <a class="link link-primary text-sm" href="/projects">← All projects</a>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {project.categories.map((cat) => (
+          <span class="badge badge-primary">{cat}</span>
+        ))}
+      </div>
+
+      <h1 class="mt-4 text-4xl font-bold tracking-tight">{project.title}</h1>
+      <p class="mt-4 max-w-3xl text-lg text-base-content/70">{project.summary}</p>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        {project.stack.map((item) => (
+          <span class="badge badge-outline">{item}</span>
+        ))}
+      </div>
+
+      {
+        project.highlights.length > 0 && (
+          <div class="mt-10">
+            <h2 class="text-xl font-semibold">Technical highlights</h2>
+            <ul class="mt-4 space-y-2">
+              {project.highlights.map((point) => (
+                <li class="flex items-start gap-3 text-base-content/75">
+                  <span class="mt-1 text-primary" aria-hidden="true">▸</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        {
+          project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </a>
+          )
+        }
+        {
+          project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              class="btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Live demo
+            </a>
+          )
+        }
+      </div>
+    </Section>
+  </main>
+</BaseLayout>
+
