@@ -24,7 +24,7 @@ const { project } = Astro.props;
   title={`${project.title} | Pawel Ryfiak`}
   description={project.summary}
 >
-  <main>
+  <main id="main-content">
     <Section>
       <a class="link link-primary text-sm" href="/projects">← All projects</a>
 
@@ -88,4 +88,5 @@ const { project } = Astro.props;
     </Section>
   </main>
 </BaseLayout>
+
 
