@@ -8,6 +8,11 @@ export type Project = {
   categories: string[];
   stack: string[];
   highlights: string[];
+  problem?: string;
+  myRole?: string;
+  architecture?: string;
+  hardestProblem?: string;
+  lessonsLearned?: string;
   githubUrl?: string;
   liveUrl?: string;
   coverImageUrl?: string;
@@ -24,6 +29,11 @@ type StrapiProjectItem = {
   categories?: string[];
   stack?: string[];
   highlights?: string[];
+  problem?: string;
+  myRole?: string;
+  architecture?: string;
+  hardestProblem?: string;
+  lessonsLearned?: string;
   githubUrl?: string;
   liveUrl?: string;
   coverImageUrl?: string;
@@ -49,6 +59,11 @@ export async function getProjects(): Promise<Project[]> {
       categories: item.categories ?? [],
       stack: item.stack ?? [],
       highlights: item.highlights ?? [],
+      problem: item.problem,
+      myRole: item.myRole,
+      architecture: item.architecture,
+      hardestProblem: item.hardestProblem,
+      lessonsLearned: item.lessonsLearned,
       githubUrl: item.githubUrl,
       liveUrl: item.liveUrl,
       coverImageUrl: item.coverImageUrl,
@@ -65,4 +80,7 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   const all = await getProjects();
   return all.filter((project) => project.featured);
 }
+
+
+
 

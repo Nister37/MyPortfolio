@@ -18,6 +18,15 @@ interface Props {
 }
 
 const { project } = Astro.props;
+
+// Prose sections rendered only when the field contains content
+const proseSections = [
+  { heading: "Problem", content: project.problem },
+  { heading: "My role", content: project.myRole },
+  { heading: "Architecture", content: project.architecture },
+  { heading: "Hardest technical problem", content: project.hardestProblem },
+  { heading: "What I learned", content: project.lessonsLearned },
+].filter((s) => s.content);
 ---
 
 <BaseLayout
@@ -37,20 +46,22 @@ const { project } = Astro.props;
       <h1 class="mt-4 text-4xl font-bold tracking-tight">{project.title}</h1>
       <p class="mt-4 max-w-3xl text-lg text-base-content/70">{project.summary}</p>
 
-      <div class="mt-4 flex flex-wrap gap-2">
+      <!-- Tech stack -->
+      <div class="mt-5 flex flex-wrap gap-2">
         {project.stack.map((item) => (
           <span class="badge badge-outline">{item}</span>
         ))}
       </div>
 
+      <!-- Technical highlights -->
       {
         project.highlights.length > 0 && (
-          <div class="mt-10">
-            <h2 class="text-xl font-semibold">Technical highlights</h2>
+          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-6">
+            <h2 class="text-lg font-semibold">Technical highlights</h2>
             <ul class="mt-4 space-y-2">
               {project.highlights.map((point) => (
                 <li class="flex items-start gap-3 text-base-content/75">
-                  <span class="mt-1 text-primary" aria-hidden="true">▸</span>
+                  <span class="mt-0.5 text-primary" aria-hidden="true">▸</span>
                   {point}
                 </li>
               ))}
@@ -59,7 +70,22 @@ const { project } = Astro.props;
         )
       }
 
-      <div class="mt-10 flex flex-wrap gap-3">
+      <!-- Case study sections (problem, role, architecture etc.) -->
+      {
+        proseSections.length > 0 && (
+          <div class="mt-10 space-y-10 max-w-3xl">
+            {proseSections.map(({ heading, content }) => (
+              <div>
+                <h2 class="text-xl font-semibold">{heading}</h2>
+                <p class="mt-3 leading-relaxed text-base-content/75">{content}</p>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- Links -->
+      <div class="mt-12 flex flex-wrap gap-3">
         {
           project.githubUrl && (
             <a
@@ -84,9 +110,8 @@ const { project } = Astro.props;
             </a>
           )
         }
+        <a href="/projects" class="btn btn-ghost">← All projects</a>
       </div>
     </Section>
   </main>
 </BaseLayout>
-
-
