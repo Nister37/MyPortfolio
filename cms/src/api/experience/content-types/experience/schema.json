@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "experiences",
+  "info": {
+    "singularName": "experience",
+    "pluralName": "experiences",
+    "displayName": "Experience"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "organization": { "type": "string", "required": true },
+    "startDate": { "type": "date" },
+    "endDate": { "type": "date" },
+    "description": { "type": "blocks" },
+    "type": {
+      "type": "enumeration",
+      "enum": ["Education", "Project", "Work", "Hackathon"],
+      "required": true
+    },
+    "order": { "type": "integer" }
+  }
+}
+

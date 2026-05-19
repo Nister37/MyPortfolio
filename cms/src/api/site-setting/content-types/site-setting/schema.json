@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "fullName": { "type": "string", "required": true },
+    "headline": { "type": "string", "required": true },
+    "shortBio": { "type": "blocks", "required": true },
+    "email": { "type": "email", "required": true },
+    "githubUrl": { "type": "string", "required": true },
+    "linkedinUrl": { "type": "string" },
+    "cvUrl": { "type": "string" },
+    "availability": { "type": "string" },
+    "location": { "type": "string" }
+  }
+}
+

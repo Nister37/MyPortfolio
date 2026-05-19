@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Project",
+    "description": "Portfolio project case study"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "summary": {
+      "type": "text",
+      "required": true
+    },
+    "problem": {
+      "type": "blocks"
+    },
+    "myRole": {
+      "type": "blocks"
+    },
+    "stack": {
+      "type": "json"
+    },
+    "categories": {
+      "type": "json"
+    },
+    "highlights": {
+      "type": "json"
+    },
+    "architecture": {
+      "type": "blocks"
+    },
+    "hardestProblem": {
+      "type": "blocks"
+    },
+    "lessonsLearned": {
+      "type": "blocks"
+    },
+    "githubUrl": {
+      "type": "string"
+    },
+    "liveUrl": {
+      "type": "string"
+    },
+    "coverImageUrl": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}
+

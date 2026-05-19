@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "skills",
+  "info": {
+    "singularName": "skill",
+    "pluralName": "skills",
+    "displayName": "Skill"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "category": {
+      "type": "enumeration",
+      "enum": ["Backend", "DevOps", "Frontend", "AI", "Database"],
+      "required": true
+    },
+    "level": {
+      "type": "enumeration",
+      "enum": ["Strong", "Good", "Learning"]
+    },
+    "icon": { "type": "string" },
+    "order": { "type": "integer" }
+  }
+}
+
