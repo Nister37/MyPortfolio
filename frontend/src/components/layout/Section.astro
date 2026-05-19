@@ -11,8 +11,9 @@ const { id, class: className } = Astro.props;
   {id}
   class:list={["py-16 md:py-24", className]}
 >
-  <div class="mx-auto max-w-[1120px] px-4">
+  <div class="mx-auto max-w-[1120px] px-4" data-reveal>
     <slot />
   </div>
 </section>
+
 

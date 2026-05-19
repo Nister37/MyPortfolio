@@ -28,6 +28,25 @@ const {
     <Header />
     <slot />
     <Footer />
+    <script>
+      // Section reveal — runs once per page load, respects prefers-reduced-motion.
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!prefersReducedMotion) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>
+
 
