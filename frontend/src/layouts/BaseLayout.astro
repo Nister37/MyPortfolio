@@ -7,12 +7,16 @@ import Footer from "../components/layout/Footer.astro";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
 const {
   title,
   description = "Pawel Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
+  ogImage,
 } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryfiak.github.io");
 ---
 
 <!doctype html>
@@ -21,7 +25,16 @@ const {
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
     <title>{title}</title>
   </head>
   <body class="min-h-screen bg-base-100 text-base-content antialiased">
@@ -55,6 +68,8 @@ const {
     </script>
   </body>
 </html>
+
+
 
 
 
