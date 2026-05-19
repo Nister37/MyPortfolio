@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+import "../styles/custom.scss";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Pawel Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="portfolio-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content antialiased">
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>
+

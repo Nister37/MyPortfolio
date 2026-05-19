@@ -1,0 +1,113 @@
+---
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-[1120px] items-center justify-between px-4 py-3">
+    <a href="/" class="text-lg font-bold tracking-tight text-primary">
+      Pawel Ryfiak
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+      {
+        navLinks.map(({ href, label }) => (
+          <a
+            href={href}
+            class:list={[
+              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              currentPath === href
+                ? "bg-base-200 text-primary"
+                : "text-base-content/70 hover:bg-base-200 hover:text-base-content",
+            ]}
+            aria-current={currentPath === href ? "page" : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
+      <a
+        href="/cv.pdf"
+        class="btn btn-primary btn-sm ml-2"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Download CV
+      </a>
+    </nav>
+
+    <!-- Mobile hamburger using daisyUI drawer -->
+    <div class="md:hidden">
+      <div class="drawer drawer-end">
+        <input id="mobile-nav" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content">
+          <label
+            for="mobile-nav"
+            class="btn btn-ghost btn-sm"
+            aria-label="Open navigation menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </label>
+        </div>
+        <div class="drawer-side">
+          <label
+            for="mobile-nav"
+            aria-label="Close navigation menu"
+            class="drawer-overlay"
+          ></label>
+          <nav
+            class="flex min-h-full w-64 flex-col gap-2 bg-base-200 p-6 pt-16"
+            aria-label="Mobile navigation"
+          >
+            {
+              navLinks.map(({ href, label }) => (
+                <a
+                  href={href}
+                  class:list={[
+                    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                    currentPath === href
+                      ? "bg-base-300 text-primary"
+                      : "text-base-content/70 hover:bg-base-300 hover:text-base-content",
+                  ]}
+                  aria-current={currentPath === href ? "page" : undefined}
+                >
+                  {label}
+                </a>
+              ))
+            }
+            <a
+              href="/cv.pdf"
+              class="btn btn-primary btn-sm mt-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download CV
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
