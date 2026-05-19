@@ -1,0 +1,32 @@
+---
+import { getPosts } from "../../lib/cms/posts";
+import BlogCard from "../blog/BlogCard.astro";
+import Section from "../layout/Section.astro";
+
+const allPosts = await getPosts();
+// Show the 3 most recent on the homepage preview
+const previewPosts = allPosts.slice(0, 3);
+---
+
+<Section id="blog">
+  <div class="mb-10 flex items-end justify-between">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Recent Posts</h2>
+      <p class="mt-2 text-base-content/60">
+        Technical writing on things I built, debugged, or learned the hard way.
+      </p>
+    </div>
+    <a href="/blog" class="btn btn-outline btn-sm hidden md:inline-flex">
+      All posts →
+    </a>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {previewPosts.map((post) => <BlogCard post={post} />)}
+  </div>
+
+  <div class="mt-8 md:hidden">
+    <a href="/blog" class="btn btn-outline w-full">All posts →</a>
+  </div>
+</Section>
+

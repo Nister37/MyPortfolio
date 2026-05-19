@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from "../components/layout/Section.astro";
+import ContactCta from "../components/home/ContactCta.astro";
+---
+
+<BaseLayout
+  title="About | Pawel Ryfiak"
+  description="About Pawel Ryfiak — Junior Software Engineer focused on backend, automation, and DevOps."
+>
+  <main>
+    <Section>
+      <div class="max-w-3xl">
+        <h1 class="text-4xl font-bold tracking-tight">About</h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-base-content/80">
+          I am a software engineering student at Karel de Grote Hogeschool in Antwerp,
+          focused on backend systems, deployment automation, and practical infrastructure work.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          My strongest area is Java and Spring Boot — building REST APIs, validation layers,
+          JPA integrations, and running them inside Docker. I have shipped CI/CD pipelines
+          on Google Cloud using GitLab CI, Nginx, and Compose-based blue-green deployments.
+          Most recently I have been building AI-assisted data extraction tooling with Gemini
+          and Spring Boot.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          I am expanding into modern frontend work — learning Astro, Svelte, Tailwind CSS,
+          and Strapi — by building this portfolio from scratch. Not to become a frontend
+          developer, but to understand the full deployment picture.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          I am looking for an IT internship or junior backend/automation role where I can
+          contribute to a real codebase, learn from experienced engineers, and keep improving
+          my DevOps and system design skills. Based in Antwerp, open to remote and EU roles.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/projects" class="btn btn-primary">View projects</a>
+          <a href="/blog" class="btn btn-outline">Read blog</a>
+          <a
+            href="/cv.pdf"
+            class="btn btn-ghost"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download CV
+          </a>
+        </div>
+      </div>
+    </Section>
+
+    <ContactCta />
+  </main>
+</BaseLayout>
+
