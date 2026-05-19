@@ -1,0 +1,39 @@
+---
+import Section from "../layout/Section.astro";
+import { skillCategories } from "../../data/skills";
+
+// Badge colour maps to level so the visual weight reflects proficiency without fake bars.
+const levelBadge: Record<string, string> = {
+  Strong: "badge-primary",
+  Good: "badge-secondary",
+  Learning: "badge-ghost",
+};
+---
+
+<Section id="skills">
+  <h2 class="text-3xl font-bold tracking-tight">Skills</h2>
+  <p class="mt-2 text-base-content/60">
+    Grouped by domain. No fake percentages — labels show real relative confidence.
+  </p>
+
+  <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      skillCategories.map(({ category, skills }) => (
+        <div class="rounded-xl border border-base-300 bg-base-200 p-5">
+          <h3 class="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
+            {category}
+          </h3>
+          <ul class="space-y-3">
+            {skills.map(({ name, level }) => (
+              <li class="flex items-center justify-between gap-2">
+                <span class="text-sm font-medium text-base-content">{name}</span>
+                <span class:list={["badge badge-sm", levelBadge[level]]}>{level}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
