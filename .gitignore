@@ -29,6 +29,5 @@ cms/public/uploads/*
 
 # AgentBridge tooling
 .agentbridge/
-instructions/*
-
+instructions/
 
