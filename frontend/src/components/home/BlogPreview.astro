@@ -8,11 +8,13 @@ interface Props {
 }
 const { lang = "en" } = Astro.props;
 
+// Filter by post.language if present; posts without a language flag are treated as English.
 const allPosts = await getPosts();
-const previewPosts = allPosts.slice(0, 3);
+const localePosts = allPosts.filter((p) => (p.language ?? "en") === lang);
+const previewPosts = localePosts.slice(0, 3);
+
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-// No /pl/blog yet — blog is English-only, both locales link to /blog
-const blogHref = `${base}blog`;
+const blogHref = lang === "pl" ? `${base}pl/blog` : `${base}blog`;
 ---
 <Section id="blog">
   <div class="mb-10 flex items-end justify-between">
@@ -22,7 +24,7 @@ const blogHref = `${base}blog`;
       </h2>
       <p class="mt-2 text-base-content/60">
         {lang === "pl"
-          ? "Techniczne posty o rzeczach, które zbudowa³em, debugowa³em lub zrozumia³em po ciê¿kiej pracy."
+          ? "Techniczne notatki o rzeczach, ktÃ³re zbudowaÅ‚em, debugowaÅ‚em lub zrozumiaÅ‚em po ciÄ™Å¼kiej drodze."
           : "Technical writing on things I built, debugged, or learned the hard way."}
       </p>
     </div>
@@ -39,3 +41,4 @@ const blogHref = `${base}blog`;
     </a>
   </div>
 </Section>
+

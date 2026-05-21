@@ -9,6 +9,7 @@ export const fallbackPosts: BlogPost[] = [
     tags: ["DevOps", "Spring Boot", "Google Cloud", "Docker"],
     featured: true,
     readingTime: 8,
+    language: "en",
     content: `
 <h2>The problem</h2>
 <p>I needed to deploy a Spring Boot REST API for the Integration 4 project onto a Google Compute Engine VM.
@@ -75,6 +76,7 @@ on the free tier this setup was good enough â€” it ran reliably for the ful
     tags: ["Architecture", "Backend"],
     featured: false,
     readingTime: 5,
+    language: "en",
     content: `
 <h2>The trap</h2>
 <p>Every time I start a new project I feel the pull to reach for the full toolkit: microservices, an event bus,
@@ -115,5 +117,7 @@ you to justify.</p>
     `.trim(),
   },
 ];
+
+
 
 

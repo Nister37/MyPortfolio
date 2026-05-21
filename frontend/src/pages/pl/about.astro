@@ -1,8 +1,9 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/layout/Section.astro";
 import ContactCta from "../../components/home/ContactCta.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <BaseLayout
@@ -41,15 +42,17 @@ import ContactCta from "../../components/home/ContactCta.astro";
         </p>
 
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href={getRelativeLocaleUrl("pl", "/projects")} class="btn btn-primary">Zobacz projekty</a>
-          <a href={getRelativeLocaleUrl("pl", "/blog")} class="btn btn-outline">Czytaj blog</a>
-          <a href={getRelativeLocaleUrl("pl", "/cv.pdf")} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+          <a href={`${base}pl/projects`} class="btn btn-primary">Zobacz projekty</a>
+          <a href={`${base}pl/blog`} class="btn btn-outline">Czytaj blog</a>
+          <a href={`${base}cv.pdf`} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
             Pobierz CV
           </a>
         </div>
       </div>
     </Section>
-    <ContactCta />
+    <ContactCta lang="pl" />
   </main>
 </BaseLayout>
+
+
 

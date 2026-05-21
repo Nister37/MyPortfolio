@@ -1,11 +1,11 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getPostsByLanguage } from "../../lib/cms/posts";
-import type { BlogPost } from "../../lib/cms/posts";
-import Section from "../../components/layout/Section.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getPostsByLanguage } from "../../../lib/cms/posts";
+import type { BlogPost } from "../../../lib/cms/posts";
+import Section from "../../../components/layout/Section.astro";
 
 export async function getStaticPaths() {
-  const posts = await getPostsByLanguage("en");
+  const posts = await getPostsByLanguage("pl");
 
   return posts.map((post) => ({
     params: { slug: post.slug },
@@ -19,9 +19,8 @@ interface Props {
 
 const { post } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-// Blog is English-only; slug pages live under /blog/
 const formattedDate = post.publishedAt
-  ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
+  ? new Date(post.publishedAt).toLocaleDateString("pl-PL", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -29,10 +28,15 @@ const formattedDate = post.publishedAt
   : null;
 ---
 
-<BaseLayout title={`${post.title} | Pawel Ryfiak`} description={post.description}>
+<BaseLayout
+  title={`${post.title} | Pawel Ryfiak`}
+  description={post.description}
+  lang="pl"
+  path={`/blog/${post.slug}`}
+>
   <main id="main-content">
     <Section>
-      <a class="link link-primary text-sm" href={`${base}blog`}>← All posts</a>
+      <a class="link link-primary text-sm" href={`${base}pl/blog`}>← Wszystkie wpisy</a>
 
       <div class="mt-6 flex flex-wrap gap-2">
         {(post.tags ?? []).map((tag) => (
@@ -44,7 +48,7 @@ const formattedDate = post.publishedAt
 
       <div class="mt-3 flex items-center gap-3 text-sm text-base-content/50">
         {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
-        {post.readingTime && <span>&bull; {post.readingTime} min read</span>}
+        {post.readingTime && <span>&bull; {post.readingTime} min czytania</span>}
       </div>
 
       <p class="mt-6 max-w-3xl text-lg text-base-content/70">{post.description}</p>
@@ -57,12 +61,11 @@ const formattedDate = post.publishedAt
           />
         ) : (
           <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-8 text-center text-base-content/50">
-            Full article content will appear here once sourced from Strapi.
+            Pełna treść artykułu pojawi się po pobraniu z Strapi.
           </div>
         )
       }
     </Section>
   </main>
 </BaseLayout>
-
 

@@ -11,6 +11,7 @@ export type BlogPost = {
   coverImageUrl?: string;
   readingTime?: number;
   featured?: boolean;
+  language?: "en" | "pl";
 };
 
 type StrapiPostItem = {
@@ -26,6 +27,7 @@ type StrapiPostItem = {
   coverImageUrl?: string;
   readingTime?: number;
   featured?: boolean;
+  language?: "en" | "pl";
 };
 
 type StrapiListResponse = {
@@ -49,6 +51,7 @@ export async function getPosts(): Promise<BlogPost[]> {
       coverImageUrl: item.coverImageUrl,
       readingTime: item.readingTime,
       featured: item.featured,
+      language: item.language ?? "en",
     }));
   } catch (error) {
     console.warn("Strapi unavailable — using fallback blog post data.", error);
@@ -56,3 +59,7 @@ export async function getPosts(): Promise<BlogPost[]> {
   }
 }
 
+export async function getPostsByLanguage(lang: "en" | "pl"): Promise<BlogPost[]> {
+  const posts = await getPosts();
+  return posts.filter((post) => (post.language ?? "en") === lang);
+}

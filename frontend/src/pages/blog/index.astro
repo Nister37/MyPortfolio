@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getPosts } from "../../lib/cms/posts";
+import { getPostsByLanguage } from "../../lib/cms/posts";
 import BlogCard from "../../components/blog/BlogCard.astro";
 import Section from "../../components/layout/Section.astro";
 
-const posts = await getPosts();
+const posts = await getPostsByLanguage("en");
 ---
 
 <BaseLayout
@@ -20,7 +20,7 @@ const posts = await getPosts();
       </p>
 
       <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => <BlogCard post={post} />)}
+        {posts.map((post) => <BlogCard post={post} lang="en" />)}
       </div>
 
       {
@@ -33,5 +33,7 @@ const posts = await getPosts();
     </Section>
   </main>
 </BaseLayout>
+
+
 
 
