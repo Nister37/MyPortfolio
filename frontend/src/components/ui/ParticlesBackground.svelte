@@ -14,14 +14,19 @@
   let themeObserver: MutationObserver | undefined;
   let initialised = false;
 
-  // Theme-aware colors. Keeps decent contrast on both dark and light backgrounds.
+  // Theme-aware colors. Light mode needs deeper saturation, stronger opacity,
+  // and a darker link color — pastel particles on a near-white background
+  // washed out entirely in earlier passes.
   function buildConfig(theme: "dark" | "light") {
     const particleColors =
       theme === "light"
-        ? ["#6366f1", "#8b5cf6", "#06b6d4", "#0ea5e9", "#10b981"]
+        ? ["#4338ca", "#7c3aed", "#0891b2", "#0284c7", "#059669"]
         : ["#a5b4fc", "#c4b5fd", "#67e8f9", "#7dd3fc", "#6ee7b7"];
 
-    const linkColor = theme === "light" ? "#94a3b8" : "#64748b";
+    const linkColor = theme === "light" ? "#475569" : "#64748b";
+    const particleOpacity = theme === "light" ? 0.85 : 0.55;
+    const linkOpacity = theme === "light" ? 0.55 : 0.35;
+    const linkWidth = theme === "light" ? 1.2 : 1;
 
     return {
       fullScreen: { enable: false },
@@ -32,14 +37,14 @@
         number: { value: 60, density: { enable: true, area: 900 } },
         color: { value: particleColors },
         shape: { type: "circle" },
-        opacity: { value: 0.55 },
-        size: { value: { min: 1, max: 3 } },
+        opacity: { value: particleOpacity },
+        size: { value: { min: 1.2, max: 3.2 } },
         links: {
           enable: true,
           distance: 140,
           color: linkColor,
-          opacity: 0.35,
-          width: 1,
+          opacity: linkOpacity,
+          width: linkWidth,
         },
         move: {
           enable: true,
@@ -54,7 +59,7 @@
           onClick: { enable: false },
         },
         modes: {
-          grab: { distance: 160, links: { opacity: 0.6 } },
+          grab: { distance: 160, links: { opacity: theme === "light" ? 0.8 : 0.6 } },
         },
       },
     };
@@ -110,4 +115,5 @@
     height: 100% !important;
   }
 </style>
+
 

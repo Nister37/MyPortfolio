@@ -98,64 +98,84 @@ const subheading =
     ? "Najnowsze na górze. Wpisy oznaczone linkiem prowadzą do powiązanego artykułu na blogu."
     : "Most recent first. Items marked as links open the related blog post.";
 
-const typeLabel: Record<EntryType, { en: string; pl: string }> = {
-  Education: { en: "Education", pl: "Edukacja" },
-  Project: { en: "Project", pl: "Projekt" },
-  Work: { en: "Work", pl: "Praca" },
-};
 const typeBadgeClass: Record<EntryType, string> = {
   Education: "badge-accent",
   Project: "badge-primary",
   Work: "badge-secondary",
 };
+
+// Two lifelines: education on the left, work + projects on the right.
+const educationEntries = entries.filter((entry) => entry.type === "Education");
+const experienceEntries = entries.filter((entry) => entry.type !== "Education");
+
+const educationHeading = lang === "pl" ? "Edukacja" : "Education";
+const experienceHeading = lang === "pl" ? "Doświadczenie" : "Experience";
+
+const columns = [
+  { heading: educationHeading, entries: educationEntries },
+  { heading: experienceHeading, entries: experienceEntries },
+];
 ---
 
 <Section id="experience">
   <h2 class="text-3xl font-bold tracking-tight">{heading}</h2>
   <p class="mt-2 text-base-content/60">{subheading}</p>
 
-  <!-- Continuous vertical line via border-l on the <ol>. Each <li> sits to the
-       right of the line; its dot is absolutely positioned over the line. -->
-  <ol class="timeline-list mt-10 space-y-4 border-l-2 border-base-300 pl-8">
+  <!-- Stacked on mobile (with the per-column subheading above each list);
+       side-by-side on desktop, each column its own continuous lifeline. -->
+  <div class="mt-10 grid gap-10 md:grid-cols-2 md:gap-8">
     {
-      entries.map((entry) => {
-        const Tag = entry.blogSlug ? "a" : "div";
-        const href = entry.blogSlug ? `${blogBase}${entry.blogSlug}` : undefined;
-        return (
-          <li class="relative">
-            <span
-              class="timeline-dot absolute -left-[37px] top-5 block h-3.5 w-3.5 rounded-full border-2 border-primary bg-base-100 transition-all"
-              aria-hidden="true"
-            />
-            <Tag
-              {href}
-              class:list={[
-                "timeline-card block rounded-lg border border-base-300 bg-base-200/40 p-5 transition-all",
-                entry.blogSlug && "timeline-card--linked cursor-pointer",
-              ]}
-            >
-              <div class="mb-1 flex flex-wrap items-center gap-2">
-                <span class="text-xs text-base-content/50">{entry.period}</span>
-                <span class:list={["badge badge-sm", typeBadgeClass[entry.type]]}>
-                  {typeLabel[entry.type][lang]}
-                </span>
-                {entry.blogSlug && (
-                  <span class="ml-auto text-xs text-primary/80">
-                    {lang === "pl" ? "Przeczytaj artykuł →" : "Read article →"}
-                  </span>
-                )}
-              </div>
-              <h3 class="font-semibold">{entry.title}</h3>
-              <p class="text-sm text-base-content/60">{entry.organization}</p>
-              {entry.description && (
-                <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
-              )}
-            </Tag>
-          </li>
-        );
-      })
+      columns.map((column) => (
+        <div>
+          <h3 class="mb-5 text-sm font-semibold uppercase tracking-wider text-base-content/60">
+            {column.heading}
+          </h3>
+          <ol class="timeline-list space-y-4 border-l-2 border-base-300 pl-8">
+            {column.entries.map((entry) => {
+              const Tag = entry.blogSlug ? "a" : "div";
+              const href = entry.blogSlug ? `${blogBase}${entry.blogSlug}` : undefined;
+              return (
+                <li class="relative">
+                  <span
+                    class="timeline-dot absolute -left-[37px] top-5 block h-3.5 w-3.5 rounded-full border-2 border-primary bg-base-100 transition-all"
+                    aria-hidden="true"
+                  />
+                  <Tag
+                    {href}
+                    class:list={[
+                      "timeline-card block rounded-lg border border-base-300 bg-base-200/40 p-5 transition-all",
+                      entry.blogSlug && "timeline-card--linked cursor-pointer",
+                    ]}
+                  >
+                    <div class="mb-1 flex flex-wrap items-center gap-2">
+                      <span class="text-xs text-base-content/50">{entry.period}</span>
+                      <span class:list={["badge badge-sm", typeBadgeClass[entry.type]]}>
+                        {entry.type === "Education"
+                          ? lang === "pl" ? "Edukacja" : "Education"
+                          : entry.type === "Project"
+                            ? lang === "pl" ? "Projekt" : "Project"
+                            : lang === "pl" ? "Praca" : "Work"}
+                      </span>
+                      {entry.blogSlug && (
+                        <span class="ml-auto text-xs text-primary/80">
+                          {lang === "pl" ? "Przeczytaj artykuł →" : "Read article →"}
+                        </span>
+                      )}
+                    </div>
+                    <h4 class="font-semibold">{entry.title}</h4>
+                    <p class="text-sm text-base-content/60">{entry.organization}</p>
+                    {entry.description && (
+                      <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
+                    )}
+                  </Tag>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))
     }
-  </ol>
+  </div>
 </Section>
 
 <style>
@@ -177,4 +197,5 @@ const typeBadgeClass: Record<EntryType, string> = {
     box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
   }
 </style>
+
 
