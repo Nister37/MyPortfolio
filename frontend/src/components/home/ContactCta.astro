@@ -1,5 +1,8 @@
 ---
-// ContactCta no longer imports Section — full-bleed bg handled by wrapper div instead.
+interface Props {
+  lang?: "en" | "pl";
+}
+const { lang = "en" } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -7,18 +10,21 @@ const base = import.meta.env.BASE_URL;
   <section id="contact" class="py-16 md:py-24">
     <div class="mx-auto max-w-[1120px] px-4" data-reveal>
       <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-3xl font-bold tracking-tight">Get in touch</h2>
+        <h2 class="text-3xl font-bold tracking-tight">
+          {lang === "pl" ? "Skontaktuj się" : "Get in touch"}
+        </h2>
         <p class="mt-4 text-base-content/65">
-          I am open to IT internships, junior backend positions, automation roles, and
-          DevOps-oriented opportunities. Based in Antwerp — available for remote and EU roles.
+          {lang === "pl"
+            ? "Jestem otwarty na staże IT, stanowiska junior backend, role automatyzacyjne i DevOps. Mieszkam w Antwerpii — dostępny zdalnie i w UE."
+            : "I am open to IT internships, junior backend positions, automation roles, and DevOps-oriented opportunities. Based in Antwerp — available for remote and EU roles."}
         </p>
 
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <a href="mailto:pawel.ryfiak@gmail.com" class="btn btn-primary">
-            Send an email
+            {lang === "pl" ? "Wyślij email" : "Send an email"}
           </a>
           <a
-            href="https://linkedin.com/in/pawelryfiak"
+            href="https://linkedin.com/in/pawelryfiak2004"
             class="btn btn-outline"
             target="_blank"
             rel="noopener noreferrer"
@@ -26,7 +32,7 @@ const base = import.meta.env.BASE_URL;
             LinkedIn
           </a>
           <a
-            href="https://github.com/pawelryfiak"
+            href="https://github.com/Nister37"
             class="btn btn-outline"
             target="_blank"
             rel="noopener noreferrer"
@@ -34,15 +40,16 @@ const base = import.meta.env.BASE_URL;
             GitHub
           </a>
           <a href={`${base}cv.pdf`} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
-            Download CV
+            {lang === "pl" ? "Pobierz CV" : "Download CV"}
           </a>
         </div>
 
         <p class="mt-6 text-sm text-base-content/45">
-          CV available on request if the PDF link is not yet live.
+          {lang === "pl"
+            ? "CV dostępne na żądanie, jeśli link PDF jeszcze nie działa."
+            : "CV available on request if the PDF link is not yet live."}
         </p>
       </div>
     </div>
   </section>
 </div>
-

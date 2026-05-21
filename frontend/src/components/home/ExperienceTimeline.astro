@@ -1,6 +1,11 @@
 ---
 import Section from "../layout/Section.astro";
 
+interface Props {
+  lang?: "en" | "pl";
+}
+const { lang = "en" } = Astro.props;
+
 type TimelineEntry = {
   title: string;
   organization: string;
@@ -12,36 +17,44 @@ type TimelineEntry = {
 // Static timeline — not CMS-sourced for the MVP.
 const timeline: TimelineEntry[] = [
   {
-    title: "Applied Computer Science",
+    title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
     organization: "Karel de Grote Hogeschool, Antwerp",
     period: "2024 — present",
     type: "Education",
     description:
-      "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
+      lang === "pl"
+        ? "Tworzenie backendu, bazy danych, sieci i zarządzanie projektami. Nacisk na inżynierię praktyczną."
+        : "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
   },
   {
     title: "Integration 4 CI/CD on Google Cloud",
-    organization: "Academic project",
+    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
     period: "2026",
     type: "Project",
     description:
-      "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
+      lang === "pl"
+        ? "Pełny pipeline CI/CD na GCE z GitLab CI, Dockerem i Nginx. Strategia blue-green z automatycznymi sprawdzeniami stanu."
+        : "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
   },
   {
     title: "ServicePulse Link Monitor",
-    organization: "Personal project",
+    organization: lang === "pl" ? "Projekt własny" : "Personal project",
     period: "2026",
     type: "Project",
     description:
-      "HTTP endpoint monitoring service with configurable schedules, failure alerting, and persistent history — built with Spring Boot and Docker.",
+      lang === "pl"
+        ? "Serwis monitorowania endpointów HTTP z konfigurowalnymi harmonogramami, alertami o awariach i persystentną historią — zbudowany w Spring Boot i Docker."
+        : "HTTP endpoint monitoring service with configurable schedules, failure alerting, and persistent history — built with Spring Boot and Docker.",
   },
   {
     title: "Roometrix IoT Air Quality System",
-    organization: "Academic project",
+    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
     period: "2025",
     type: "Project",
     description:
-      "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
+      lang === "pl"
+        ? "Ingest danych z czujników MQTT do monitorowania jakości powietrza z REST API i alertami progowymi."
+        : "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
   },
 ];
 
@@ -51,12 +64,21 @@ const typeBadge: Record<string, string> = {
   Work: "badge-secondary",
   Hackathon: "badge-ghost",
 };
+
+const typeLabel: Record<string, Record<string, string>> = {
+  en: { Education: "Education", Project: "Project", Work: "Work", Hackathon: "Hackathon" },
+  pl: { Education: "Edukacja", Project: "Projekt", Work: "Praca", Hackathon: "Hackathon" },
+};
 ---
 
 <Section id="experience">
-  <h2 class="text-3xl font-bold tracking-tight">Experience & Education</h2>
+  <h2 class="text-3xl font-bold tracking-tight">
+    {lang === "pl" ? "Doświadczenie i edukacja" : "Experience & Education"}
+  </h2>
   <p class="mt-2 text-base-content/60">
-    Key projects and milestones, most recent first.
+    {lang === "pl"
+      ? "Kluczowe projekty i etapy, od najnowszych."
+      : "Key projects and milestones, most recent first."}
   </p>
 
   <ul class="timeline timeline-vertical mt-10">
@@ -85,7 +107,7 @@ const typeBadge: Record<string, string> = {
           <div class="timeline-end timeline-box mb-6 bg-base-200">
             <div class="mb-2 flex flex-wrap items-center gap-2">
               <span class:list={["badge badge-sm", typeBadge[entry.type]]}>
-                {entry.type}
+                {typeLabel[lang][entry.type]}
               </span>
             </div>
             <h3 class="font-semibold">{entry.title}</h3>
@@ -98,5 +120,3 @@ const typeBadge: Record<string, string> = {
     }
   </ul>
 </Section>
-
-

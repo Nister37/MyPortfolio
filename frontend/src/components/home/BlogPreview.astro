@@ -2,26 +2,40 @@
 import { getPosts } from "../../lib/cms/posts";
 import BlogCard from "../blog/BlogCard.astro";
 import Section from "../layout/Section.astro";
+
+interface Props {
+  lang?: "en" | "pl";
+}
+const { lang = "en" } = Astro.props;
+
 const allPosts = await getPosts();
 const previewPosts = allPosts.slice(0, 3);
 const base = import.meta.env.BASE_URL;
+// No /pl/blog yet — blog is English-only, both locales link to /blog
+const blogHref = `${base}blog`;
 ---
 <Section id="blog">
   <div class="mb-10 flex items-end justify-between">
     <div>
-      <h2 class="text-3xl font-bold tracking-tight">Recent Posts</h2>
+      <h2 class="text-3xl font-bold tracking-tight">
+        {lang === "pl" ? "Ostatnie wpisy" : "Recent Posts"}
+      </h2>
       <p class="mt-2 text-base-content/60">
-        Technical writing on things I built, debugged, or learned the hard way.
+        {lang === "pl"
+          ? "Techniczne posty o rzeczach, które zbudowałem, debugowałem lub zrozumiałem po ciężkiej pracy."
+          : "Technical writing on things I built, debugged, or learned the hard way."}
       </p>
     </div>
-    <a href={`${base}blog`} class="btn btn-outline btn-sm hidden md:inline-flex">
-      All posts ->
+    <a href={blogHref} class="btn btn-outline btn-sm hidden md:inline-flex">
+      {lang === "pl" ? "Wszystkie wpisy ->" : "All posts ->"}
     </a>
   </div>
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     {previewPosts.map((post) => <BlogCard post={post} />)}
   </div>
   <div class="mt-8 md:hidden">
-    <a href={`${base}blog`} class="btn btn-outline w-full">All posts -></a>
+    <a href={blogHref} class="btn btn-outline w-full">
+      {lang === "pl" ? "Wszystkie wpisy ->" : "All posts ->"}
+    </a>
   </div>
 </Section>
