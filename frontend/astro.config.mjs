@@ -9,6 +9,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://pawelryfiak.github.io",
+  base: "/MyPortfolio",
   integrations: [svelte(), mdx()],
   vite: {
     plugins: [tailwindcss()],
