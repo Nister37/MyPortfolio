@@ -18,12 +18,12 @@ type TimelineEntry = {
 const timeline: TimelineEntry[] = [
   {
     title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
-    organization: "Karel de Grote Hogeschool, Antwerp",
-    period: "2024 — present",
+    organization: lang === "pl" ? "Karel de Grote Hogeschool, Antwerpia" : "Karel de Grote Hogeschool, Antwerp",
+    period: lang === "pl" ? "2024 — obecnie" : "2024 — present",
     type: "Education",
     description:
       lang === "pl"
-        ? "Tworzenie backendu, bazy danych, sieci i zarządzanie projektami. Nacisk na inżynierię praktyczną."
+        ? "Studia anglojęzyczne skoncentrowane na tworzeniu aplikacji, bazach danych, analizie systemów, testowaniu, pracy zespołowej i praktycznych projektach programistycznych."
         : "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
   },
   {
@@ -33,7 +33,7 @@ const timeline: TimelineEntry[] = [
     type: "Project",
     description:
       lang === "pl"
-        ? "Pełny pipeline CI/CD na GCE z GitLab CI, Dockerem i Nginx. Strategia blue-green z automatycznymi sprawdzeniami stanu."
+        ? "Projekt wdrożeniowy obejmujący GitLab CI, Docker, Google Compute Engine, Nginx, HTTPS oraz strategię blue-green deployment. Skupiał się na automatyzacji deploymentu i ograniczeniu przestojów aplikacji."
         : "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
   },
   {
@@ -43,7 +43,7 @@ const timeline: TimelineEntry[] = [
     type: "Project",
     description:
       lang === "pl"
-        ? "Serwis monitorowania endpointów HTTP z konfigurowalnymi harmonogramami, alertami o awariach i persystentną historią — zbudowany w Spring Boot i Docker."
+        ? "Aplikacja Spring Boot do monitorowania dostępności endpointów HTTP. Projekt łączy backend, PostgreSQL, Docker Compose, reverse proxy Caddy oraz podstawy deploymentu na serwerze."
         : "HTTP endpoint monitoring service with configurable schedules, failure alerting, and persistent history — built with Spring Boot and Docker.",
   },
   {
@@ -53,7 +53,7 @@ const timeline: TimelineEntry[] = [
     type: "Project",
     description:
       lang === "pl"
-        ? "Ingest danych z czujników MQTT do monitorowania jakości powietrza z REST API i alertami progowymi."
+        ? "Projekt systemu IoT do monitorowania jakości powietrza w pomieszczeniach. Obejmował zbieranie danych z czujników, backend API, zapis danych oraz proste alerty progowe."
         : "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
   },
 ];
@@ -120,3 +120,4 @@ const typeLabel: Record<string, Record<string, string>> = {
     }
   </ul>
 </Section>
+

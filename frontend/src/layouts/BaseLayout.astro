@@ -14,7 +14,7 @@ interface Props {
 
 const {
   title,
-  description = "Pawel Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
+  description = "Paweł Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
   ogImage,
   lang = "en",
   path = "/",
@@ -62,7 +62,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     </a>
     <Header lang={lang} path={path} />
     <slot />
-    <Footer />
+    <Footer lang={lang} />
     <script>
       // Section reveal — runs once per page load, respects prefers-reduced-motion.
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -83,6 +83,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     </script>
   </body>
 </html>
+
+
 
 
 

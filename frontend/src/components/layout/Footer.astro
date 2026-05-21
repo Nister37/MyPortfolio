@@ -1,20 +1,34 @@
 ---
+interface Props {
+  lang?: "en" | "pl";
+}
+const { lang = "en" } = Astro.props;
 const year = new Date().getFullYear();
+
+const subtitle =
+  lang === "pl"
+    ? "Student Applied Computer Science — Backend, automatyzacja i podstawy deploymentu"
+    : "Junior Software Engineer — Backend, Automation, DevOps";
+
+const copyright =
+  lang === "pl"
+    ? `© ${year} Paweł Ryfiak. Zbudowane przy użyciu Astro, Svelte, Tailwind CSS i Strapi.`
+    : `© ${year} Paweł Ryfiak. Built with Astro, Svelte, Tailwind CSS, and Strapi.`;
 ---
 
 <footer class="border-t border-base-300 bg-base-200">
   <div class="mx-auto max-w-[1120px] px-4 py-10">
     <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
       <div class="text-center md:text-left">
-        <p class="font-semibold text-base-content">Pawel Ryfiak</p>
+        <p class="font-semibold text-base-content">Paweł Ryfiak</p>
         <p class="mt-1 text-sm text-base-content/60">
-          Junior Software Engineer &mdash; Backend, Automation, DevOps
+          {subtitle}
         </p>
       </div>
 
       <nav class="flex items-center gap-4" aria-label="Social links">
         <a
-          href="https://github.com/pawelryfiak"
+          href="https://github.com/Nister37"
           target="_blank"
           rel="noopener noreferrer"
           class="text-base-content/60 transition-colors hover:text-primary"
@@ -35,7 +49,7 @@ const year = new Date().getFullYear();
         </a>
 
         <a
-          href="https://linkedin.com/in/pawelryfiak2004"
+          href="https://www.linkedin.com/in/pawelryfiak2004/"
           target="_blank"
           rel="noopener noreferrer"
           class="text-base-content/60 transition-colors hover:text-primary"
@@ -80,9 +94,12 @@ const year = new Date().getFullYear();
     </div>
 
     <p class="mt-8 text-center text-xs text-base-content/40">
-      &copy; {year} Pawel Ryfiak. Built with Astro, Svelte, Tailwind CSS, and Strapi.
+      {copyright}
     </p>
   </div>
 </footer>
+
+
+
 
 

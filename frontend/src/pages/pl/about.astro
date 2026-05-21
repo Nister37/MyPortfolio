@@ -7,8 +7,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <BaseLayout
-  title="O mnie | Pawel Ryfiak"
-  description="O Pawelu Ryfiaku — Junior Software Engineer specjalizujący się w backendzie, automatyzacji i DevOps."
+  title="O mnie | Paweł Ryfiak"
+  description="O Pawle Ryfiaku — studencie informatyki stosowanej skupionym na backendzie, automatyzacji i podstawach deploymentu."
   lang="pl"
   path="/about"
 >
@@ -19,31 +19,33 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
         <p class="mt-6 text-lg leading-relaxed text-base-content/80">
           Jestem studentem informatyki stosowanej na Karel de Grote Hogeschool w Antwerpii.
-          Skupiam się na systemach backendowych, automatyzacji wdrożeń i praktycznej pracy z infrastrukturą.
+          Skupiam się na backendzie w Javie i Spring Boot, automatyzacji powtarzalnych procesów
+          oraz podstawach deploymentu aplikacji.
         </p>
 
         <p class="mt-4 leading-relaxed text-base-content/70">
-          Moja mocna strona to Java i Spring Boot — budowanie REST API, warstw walidacji,
-          integracji JPA i uruchamianie ich w Dockerze. Wdrożyłem pipeline'y CI/CD
-          na Google Cloud przy użyciu GitLab CI, Nginx i strategii blue-green z Docker Compose.
+          Najpewniej czuję się w Javie i Spring Boot — projektuję REST API, warstwy walidacji,
+          integracje z bazą danych przez JPA i uruchamiam aplikacje w Dockerze. Pracowałem też
+          nad procesem CI/CD na Google Cloud z użyciem GitLab CI, Nginx i strategii blue-green
+          deployment z Docker Compose.
         </p>
 
         <p class="mt-4 leading-relaxed text-base-content/70">
-          Rozwijam się w nowoczesnym frontendzie — uczę się Astro, Svelte, Tailwind CSS
-          i Strapi, budując to portfolio od zera. Nie po to, żeby zostać frontend developerem,
-          ale żeby rozumieć cały obraz wdrożenia.
+          Równolegle uczę się nowoczesnego frontendu — Astro, Svelte, Tailwind CSS i Strapi —
+          budując to portfolio od podstaw. Nie zamierzam zostać frontend developerem, ale chcę
+          rozumieć cały proces wdrożenia aplikacji.
         </p>
 
-
         <p class="mt-4 leading-relaxed text-base-content/70">
-          Szukam stażu IT lub stanowiska junior backend/automatyzacja, gdzie będę mógł
-          wnosić wkład do realnego kodu, uczyć się od doświadczonych inżynierów i rozwijać
-          umiejętności DevOps oraz projektowania systemów. Mieszkam w Antwerpii, otwarty na pracę zdalną i w UE.
+          Szukam stażu programistycznego lub roli junior backend / automatyzacja, w której będę
+          mógł wnosić wkład do realnego kodu, uczyć się od bardziej doświadczonych inżynierów
+          oraz rozwijać umiejętności w zakresie projektowania systemów i podstaw deploymentu.
+          Obecnie mieszkam w Antwerpii, jestem dostępny zdalnie oraz w Polsce i UE.
         </p>
 
         <div class="mt-8 flex flex-wrap gap-3">
           <a href={`${base}pl/projects`} class="btn btn-primary">Zobacz projekty</a>
-          <a href={`${base}pl/blog`} class="btn btn-outline">Czytaj blog</a>
+          <a href={`${base}pl/blog`} class="btn btn-outline">Przeczytaj blog</a>
           <a href={`${base}cv.pdf`} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
             Pobierz CV
           </a>
@@ -53,6 +55,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     <ContactCta lang="pl" />
   </main>
 </BaseLayout>
+
+
 
 
 

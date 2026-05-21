@@ -76,7 +76,7 @@ export const translations = {
     },
     about: {
       title: "About Me",
-      bio: "I'm Pawel Ryfiak, a software engineering student at Karel de Grote Hogeschool in Antwerp. I focus on backend development, CI/CD automation, and practical infrastructure work.",
+      bio: "I'm Paweł Ryfiak, a software engineering student at Karel de Grote Hogeschool in Antwerp. I focus on backend development, CI/CD automation, and practical infrastructure work.",
     },
     notFound: {
       title: "Page not found",
@@ -174,4 +174,5 @@ export const translations = {
 export function t(lang: Lang) {
   return translations[lang];
 }
+
 
