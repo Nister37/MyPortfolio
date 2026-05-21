@@ -25,7 +25,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="portfolio-dark">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -41,6 +41,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <title>{title}</title>
+    <!-- Apply saved theme before first paint to prevent flash of wrong theme -->
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem("portfolio-theme");
+        document.documentElement.setAttribute(
+          "data-theme",
+          saved === "portfolio-light" ? "portfolio-light" : "portfolio-dark"
+        );
+      })();
+    </script>
   </head>
   <body class="min-h-screen bg-base-100 text-base-content antialiased">
     <!-- Skip nav for keyboard users -->
@@ -73,6 +83,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     </script>
   </body>
 </html>
+
+
 
 
 
