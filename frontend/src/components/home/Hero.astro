@@ -3,7 +3,7 @@ interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
 const projectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
 const blogHref = lang === "pl" ? `${base}pl/blog` : `${base}blog`;

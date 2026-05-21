@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
 const labels = {
   allProjects: "← Wszystkie projekty",
@@ -131,4 +131,5 @@ const proseSections = [
     </Section>
   </main>
 </BaseLayout>
+
 

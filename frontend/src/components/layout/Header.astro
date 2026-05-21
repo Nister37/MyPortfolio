@@ -1,4 +1,4 @@
-Ôªø---
+---
 import ThemeToggle from "../ui/ThemeToggle.astro";
 import LanguageSwitcher from "../ui/LanguageSwitcher.astro";
 interface Props {
@@ -6,9 +6,9 @@ interface Props {
   path?: string;
 }
 const { lang = "en", path = "/" } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const navLinks = [
-  { href: lang === "pl" ? `${base}pl` : base, label: lang === "pl" ? "Strona g≈Ç√≥wna" : "Home" },
+  { href: lang === "pl" ? `${base}pl` : base, label: lang === "pl" ? "Strona g≥Ûwna" : "Home" },
   { href: lang === "pl" ? `${base}pl/projects` : `${base}projects`, label: lang === "pl" ? "Projekty" : "Projects" },
   { href: `${base}blog`, label: "Blog" },
   { href: lang === "pl" ? `${base}pl/about` : `${base}about`, label: lang === "pl" ? "O mnie" : "About" },

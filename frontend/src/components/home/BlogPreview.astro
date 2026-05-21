@@ -1,4 +1,4 @@
-ï»¿---
+---
 import { getPosts } from "../../lib/cms/posts";
 import BlogCard from "../blog/BlogCard.astro";
 import Section from "../layout/Section.astro";
@@ -10,8 +10,8 @@ const { lang = "en" } = Astro.props;
 
 const allPosts = await getPosts();
 const previewPosts = allPosts.slice(0, 3);
-const base = import.meta.env.BASE_URL;
-// No /pl/blog yet â€” blog is English-only, both locales link to /blog
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+// No /pl/blog yet — blog is English-only, both locales link to /blog
 const blogHref = `${base}blog`;
 ---
 <Section id="blog">
@@ -22,7 +22,7 @@ const blogHref = `${base}blog`;
       </h2>
       <p class="mt-2 text-base-content/60">
         {lang === "pl"
-          ? "Techniczne posty o rzeczach, ktÃ³re zbudowaÅ‚em, debugowaÅ‚em lub zrozumiaÅ‚em po ciÄ™Å¼kiej pracy."
+          ? "Techniczne posty o rzeczach, które zbudowa³em, debugowa³em lub zrozumia³em po ciê¿kiej pracy."
           : "Technical writing on things I built, debugged, or learned the hard way."}
       </p>
     </div>
