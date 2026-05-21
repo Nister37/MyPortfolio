@@ -1,10 +1,13 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-@plugin "daisyui/theme" {
-  name: "portfolio-dark";
-  default: true;
-  prefersdark: true;
+/*
+  Theme variables defined with explicit attribute selectors so that setting
+  data-theme on <html> at runtime reliably switches the colour palette.
+  :root covers the SSR default before JS sets the attribute.
+*/
+:root,
+[data-theme="portfolio-dark"] {
   color-scheme: dark;
 
   --color-base-100: oklch(14% 0.02 260);
@@ -13,8 +16,55 @@
   --color-base-content: oklch(92% 0.01 260);
 
   --color-primary: oklch(70% 0.16 250);
+  --color-primary-content: oklch(98% 0.01 250);
   --color-secondary: oklch(70% 0.14 180);
+  --color-secondary-content: oklch(98% 0.01 180);
   --color-accent: oklch(75% 0.15 80);
+  --color-accent-content: oklch(14% 0.02 80);
   --color-neutral: oklch(25% 0.02 260);
+  --color-neutral-content: oklch(92% 0.01 260);
+
+  --color-info: oklch(72% 0.12 220);
+  --color-info-content: oklch(14% 0.02 260);
+  --color-success: oklch(72% 0.15 150);
+  --color-success-content: oklch(14% 0.02 260);
+  --color-warning: oklch(80% 0.16 70);
+  --color-warning-content: oklch(14% 0.02 260);
+  --color-error: oklch(65% 0.20 25);
+  --color-error-content: oklch(98% 0.01 260);
+
+  --rounded-box: 1rem;
+  --rounded-btn: 0.5rem;
+  --rounded-badge: 1.9rem;
 }
 
+[data-theme="portfolio-light"] {
+  color-scheme: light;
+
+  --color-base-100: oklch(98% 0.005 260);
+  --color-base-200: oklch(94% 0.008 260);
+  --color-base-300: oklch(88% 0.012 260);
+  --color-base-content: oklch(20% 0.02 260);
+
+  --color-primary: oklch(52% 0.18 250);
+  --color-primary-content: oklch(98% 0.005 250);
+  --color-secondary: oklch(52% 0.16 180);
+  --color-secondary-content: oklch(98% 0.005 180);
+  --color-accent: oklch(58% 0.17 80);
+  --color-accent-content: oklch(98% 0.005 80);
+  --color-neutral: oklch(75% 0.01 260);
+  --color-neutral-content: oklch(20% 0.02 260);
+
+  --color-info: oklch(60% 0.12 220);
+  --color-info-content: oklch(98% 0.005 260);
+  --color-success: oklch(60% 0.15 150);
+  --color-success-content: oklch(98% 0.005 260);
+  --color-warning: oklch(70% 0.16 70);
+  --color-warning-content: oklch(98% 0.005 260);
+  --color-error: oklch(55% 0.20 25);
+  --color-error-content: oklch(98% 0.005 260);
+
+  --rounded-box: 1rem;
+  --rounded-btn: 0.5rem;
+  --rounded-badge: 1.9rem;
+}
