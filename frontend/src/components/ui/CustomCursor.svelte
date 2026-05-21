@@ -98,8 +98,10 @@
 </script>
 
 <div bind:this={cursor} class="cursor" aria-hidden="true">
-  <!-- Smoothed triangle: tip at (0,0), rounded corners via stroke-linejoin.
-       Kept as a single closed path so the outline traces the whole silhouette. -->
+  <!-- Halo sits behind the triangle, centered on the tip. Scaling the halo
+       (not the triangle) keeps the visible click point exactly stationary —
+       the tip never appears to drift when entering interactive elements. -->
+  <span class="halo" aria-hidden="true"></span>
   <svg
     width="22"
     height="24"
@@ -128,23 +130,44 @@
     z-index: 9999;
     opacity: 0;
     will-change: transform, opacity;
-    transition:
-      opacity 0.2s ease,
-      scale 0.18s ease;
-    /* Anchor scale at the SVG tip so hover/press never visually shifts it. */
-    transform-origin: 0 0;
+    transition: opacity 0.2s ease;
   }
 
   .cursor svg {
     display: block;
     filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
+    position: relative;
+    z-index: 1;
   }
 
-  .cursor:global(.hover) {
-    scale: 1.25;
+  /* Halo is anchored at the tip (0,0). Centered via negative margins so its
+     own center sits on the tip — scaling it never moves anything visibly. */
+  .halo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-primary, #6366f1) 32%, transparent);
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
+    pointer-events: none;
   }
 
-  .cursor:global(.press) {
-    scale: 0.85;
+  .cursor:global(.hover) .halo {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .cursor:global(.press) .halo {
+    opacity: 1;
+    transform: scale(0.8);
+    background: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
   }
 </style>
+
