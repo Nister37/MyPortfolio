@@ -2,13 +2,12 @@
   import { onMount, onDestroy } from "svelte";
 
   /**
-   * Single-element custom cursor: a soft ring that follows the mouse with easing.
-   * Grows on interactive elements, shrinks on press.
-   *
-   * The native cursor is hidden via global CSS in BaseLayout (CSS-only, no flash).
+   * Smooth arrow-shaped custom cursor.
+   * Anchor point is the tip (top-left of the SVG).
+   * Hover on interactive elements scales it up slightly; pressing scales it down.
    */
 
-  let ring: HTMLDivElement;
+  let cursor: HTMLDivElement;
   let rafId = 0;
   let cleanup: (() => void) | undefined;
 
@@ -20,9 +19,11 @@
   const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary";
 
   function tick() {
-    x += (targetX - x) * 0.22;
-    y += (targetY - y) * 0.22;
-    if (ring) ring.style.transform = `translate3d(${x - 12}px, ${y - 12}px, 0)`;
+    // Slight easing so movement feels fluid but the tip still lands where the
+    // user expects on click — kept fast (0.35) to stay precise.
+    x += (targetX - x) * 0.35;
+    y += (targetY - y) * 0.35;
+    if (cursor) cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     rafId = requestAnimationFrame(tick);
   }
 
@@ -39,25 +40,25 @@
       if (firstMove) {
         x = targetX;
         y = targetY;
-        ring.style.opacity = "1";
+        cursor.style.opacity = "1";
         firstMove = false;
       }
     };
 
     const onOver = (e: PointerEvent) => {
       if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
-        ring.classList.add("hover");
+        cursor.classList.add("hover");
       }
     };
     const onOut = (e: PointerEvent) => {
       if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
-        ring.classList.remove("hover");
+        cursor.classList.remove("hover");
       }
     };
-    const onDown = () => ring.classList.add("press");
-    const onUp = () => ring.classList.remove("press");
-    const onLeave = () => (ring.style.opacity = "0");
-    const onEnter = () => (ring.style.opacity = "1");
+    const onDown = () => cursor.classList.add("press");
+    const onUp = () => cursor.classList.remove("press");
+    const onLeave = () => (cursor.style.opacity = "0");
+    const onEnter = () => (cursor.style.opacity = "1");
 
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerover", onOver);
@@ -86,39 +87,54 @@
   });
 </script>
 
-<div bind:this={ring} class="cursor" aria-hidden="true"></div>
+<div bind:this={cursor} class="cursor" aria-hidden="true">
+  <!-- Smooth arrow: filled with primary, thin contrasting outline so it stays
+       visible on both dark and light backgrounds. Anchor at (0,0) = the tip. -->
+  <svg
+    width="22"
+    height="28"
+    viewBox="0 0 22 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2 2 L2 22 L7.5 17.5 L11 25.5 L14 24 L10.5 16 L18 16 Z"
+      fill="var(--color-primary, #6366f1)"
+      stroke="var(--color-base-100, #fff)"
+      stroke-width="1.4"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+  </svg>
+</div>
 
 <style>
   .cursor {
     position: fixed;
     top: 0;
     left: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 9999px;
-    border: 1.5px solid var(--color-primary, #6366f1);
-    background: color-mix(in srgb, var(--color-primary, #6366f1) 10%, transparent);
     pointer-events: none;
     z-index: 9999;
     opacity: 0;
-    will-change: transform, opacity, width, height;
+    will-change: transform, opacity;
     transition:
-      width 0.18s ease,
-      height 0.18s ease,
-      background-color 0.18s ease,
-      opacity 0.2s ease;
+      opacity 0.2s ease,
+      scale 0.18s ease;
+    /* Use scale instead of width/height so the tip stays at (0,0). */
+    transform-origin: 2px 2px;
+  }
+
+  .cursor svg {
+    display: block;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
   }
 
   .cursor:global(.hover) {
-    width: 44px;
-    height: 44px;
-    background: color-mix(in srgb, var(--color-primary, #6366f1) 18%, transparent);
+    scale: 1.25;
   }
 
   .cursor:global(.press) {
-    width: 18px;
-    height: 18px;
-    background: color-mix(in srgb, var(--color-primary, #6366f1) 35%, transparent);
+    scale: 0.85;
   }
 </style>
 
