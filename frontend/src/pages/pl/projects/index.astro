@@ -22,10 +22,11 @@ const projects = await getProjects();
       </p>
 
       <div class="mt-10">
-        <ProjectFilter client:load projects={projects} />
+        <ProjectFilter client:load projects={projects} lang="pl" projectBase={`${base}pl/projects/`} />
       </div>
     </Section>
   </main>
 </BaseLayout>
+
 
 

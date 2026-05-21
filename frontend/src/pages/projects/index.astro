@@ -21,9 +21,10 @@ const projects = await getProjects();
 
       <div class="mt-10">
         <!-- ProjectFilter is a Svelte island — only hydrated on this page -->
-        <ProjectFilter client:load projects={projects} />
+        <ProjectFilter client:load projects={projects} projectBase={`${base}projects/`} />
       </div>
     </Section>
   </main>
 </BaseLayout>
+
 

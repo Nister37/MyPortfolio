@@ -19,7 +19,7 @@ interface Props {
 
 const { post } = Astro.props;
 const base = import.meta.env.BASE_URL;
-
+// Blog is English-only; slug pages live under /blog/
 const formattedDate = post.publishedAt
   ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
       day: "numeric",
@@ -64,7 +64,3 @@ const formattedDate = post.publishedAt
     </Section>
   </main>
 </BaseLayout>
-
-
-
-

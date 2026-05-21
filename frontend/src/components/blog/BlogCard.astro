@@ -2,11 +2,12 @@
 import type { BlogPost } from "../../lib/cms/posts";
 interface Props {
   post: BlogPost;
+  lang?: "en" | "pl";
 }
-const { post } = Astro.props;
+const { post, lang = "en" } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const formattedDate = post.publishedAt
-  ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
+  ? new Date(post.publishedAt).toLocaleDateString(lang === "pl" ? "pl-PL" : "en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -30,7 +31,9 @@ const formattedDate = post.publishedAt
     <p class="text-sm text-base-content/65">{post.description}</p>
     <div class="mt-1 flex items-center gap-3 text-xs text-base-content/45">
       {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
-      {post.readingTime && <span>{post.readingTime} min read</span>}
+      {post.readingTime && (
+        <span>{post.readingTime} {lang === "pl" ? "min czytania" : "min read"}</span>
+      )}
     </div>
   </div>
 </article>

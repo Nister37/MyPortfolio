@@ -1,8 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getProjects } from "../../lib/cms/projects";
-import type { Project } from "../../lib/cms/projects";
-import Section from "../../components/layout/Section.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getProjects } from "../../../lib/cms/projects";
+import type { Project } from "../../../lib/cms/projects";
+import Section from "../../../components/layout/Section.astro";
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -19,53 +19,39 @@ interface Props {
 
 const { project } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
 
 const labels = {
-  en: {
-    allProjects: "← All projects",
-    technicalHighlights: "Technical highlights",
-    problem: "Problem",
-    myRole: "My role",
-    architecture: "Architecture",
-    hardestProblem: "Hardest technical problem",
-    lessonsLearned: "What I learned",
-    viewOnGitHub: "View on GitHub",
-    liveDemo: "Live demo",
-  },
-  pl: {
-    allProjects: "← Wszystkie projekty",
-    technicalHighlights: "Najważniejsze aspekty techniczne",
-    problem: "Problem",
-    myRole: "Moja rola",
-    architecture: "Architektura",
-    hardestProblem: "Najtrudniejszy problem techniczny",
-    lessonsLearned: "Wnioski",
-    viewOnGitHub: "Zobacz na GitHub",
-    liveDemo: "Demo na żywo",
-  },
+  allProjects: "← Wszystkie projekty",
+  technicalHighlights: "Najważniejsze aspekty techniczne",
+  problem: "Problem",
+  myRole: "Moja rola",
+  architecture: "Architektura",
+  hardestProblem: "Najtrudniejszy problem techniczny",
+  lessonsLearned: "Wnioski",
+  viewOnGitHub: "Zobacz na GitHub",
+  liveDemo: "Demo na żywo",
 };
-const l = labels[lang];
 
-const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
+const allProjectsHref = `${base}pl/projects`;
 
 const proseSections = [
-  { heading: l.problem, content: project.problem },
-  { heading: l.myRole, content: project.myRole },
-  { heading: l.architecture, content: project.architecture },
-  { heading: l.hardestProblem, content: project.hardestProblem },
-  { heading: l.lessonsLearned, content: project.lessonsLearned },
+  { heading: labels.problem, content: project.problem },
+  { heading: labels.myRole, content: project.myRole },
+  { heading: labels.architecture, content: project.architecture },
+  { heading: labels.hardestProblem, content: project.hardestProblem },
+  { heading: labels.lessonsLearned, content: project.lessonsLearned },
 ].filter((s) => s.content);
 ---
 
 <BaseLayout
   title={`${project.title} | Pawel Ryfiak`}
   description={project.summary}
-  lang={lang}
+  lang="pl"
+  path={`/projects/${project.slug}`}
 >
   <main id="main-content">
     <Section>
-      <a class="link link-primary text-sm" href={allProjectsHref}>{l.allProjects}</a>
+      <a class="link link-primary text-sm" href={allProjectsHref}>{labels.allProjects}</a>
 
       <div class="mt-6 flex flex-wrap gap-2">
         {project.categories.map((cat) => (
@@ -87,7 +73,7 @@ const proseSections = [
       {
         project.highlights.length > 0 && (
           <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-6">
-            <h2 class="text-lg font-semibold">{l.technicalHighlights}</h2>
+            <h2 class="text-lg font-semibold">{labels.technicalHighlights}</h2>
             <ul class="mt-4 space-y-2">
               {project.highlights.map((point) => (
                 <li class="flex items-start gap-3 text-base-content/75">
@@ -124,7 +110,7 @@ const proseSections = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {l.viewOnGitHub}
+              {labels.viewOnGitHub}
             </a>
           )
         }
@@ -136,12 +122,13 @@ const proseSections = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              {l.liveDemo}
+              {labels.liveDemo}
             </a>
           )
         }
-        <a href={allProjectsHref} class="btn btn-ghost">{l.allProjects}</a>
+        <a href={allProjectsHref} class="btn btn-ghost">{labels.allProjects}</a>
       </div>
     </Section>
   </main>
 </BaseLayout>
+

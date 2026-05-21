@@ -31,7 +31,7 @@ const blogHref = `${base}blog`;
     </a>
   </div>
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {previewPosts.map((post) => <BlogCard post={post} />)}
+    {previewPosts.map((post) => <BlogCard post={post} lang={lang} />)}
   </div>
   <div class="mt-8 md:hidden">
     <a href={blogHref} class="btn btn-outline w-full">

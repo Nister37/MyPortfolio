@@ -42,7 +42,7 @@ import ContactCta from "../components/home/ContactCta.astro";
           <a href="/projects" class="btn btn-primary">View projects</a>
           <a href="/blog" class="btn btn-outline">Read blog</a>
           <a
-            href="/cv.pdf"
+            href={`${base}cv.pdf`}
             class="btn btn-ghost"
             target="_blank"
             rel="noopener noreferrer"
@@ -56,5 +56,6 @@ import ContactCta from "../components/home/ContactCta.astro";
     <ContactCta />
   </main>
 </BaseLayout>
+
 
 
