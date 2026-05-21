@@ -1,0 +1,43 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+interface Props {
+  currentLang: "en" | "pl";
+  /** Current page path without locale prefix, e.g. "/" or "/projects" */
+  path: string;
+}
+
+const { currentLang, path } = Astro.props;
+
+const enUrl = getRelativeLocaleUrl("en", path);
+const plUrl = getRelativeLocaleUrl("pl", path);
+---
+
+<div class="flex items-center gap-1 text-sm font-medium">
+  <a
+    href={enUrl}
+    class:list={[
+      "rounded px-2 py-0.5 transition-colors",
+      currentLang === "en"
+        ? "bg-base-300 text-base-content"
+        : "text-base-content/50 hover:text-base-content",
+    ]}
+    aria-current={currentLang === "en" ? "true" : undefined}
+  >
+    EN
+  </a>
+  <span class="text-base-content/30">/</span>
+  <a
+    href={plUrl}
+    class:list={[
+      "rounded px-2 py-0.5 transition-colors",
+      currentLang === "pl"
+        ? "bg-base-300 text-base-content"
+        : "text-base-content/50 hover:text-base-content",
+    ]}
+    aria-current={currentLang === "pl" ? "true" : undefined}
+  >
+    PL
+  </a>
+</div>
+

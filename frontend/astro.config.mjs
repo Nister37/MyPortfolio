@@ -11,6 +11,13 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: "https://nister37.github.io",
   base: "/MyPortfolio",
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "pl"],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [svelte(), mdx()],
   vite: {
     plugins: [tailwindcss()],

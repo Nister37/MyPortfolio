@@ -1,0 +1,54 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../../components/layout/Section.astro";
+import ContactCta from "../../components/home/ContactCta.astro";
+---
+
+<BaseLayout
+  title="O mnie | Pawel Ryfiak"
+  description="O Pawelu Ryfiaku — Junior Software Engineer specjalizujący się w backendzie, automatyzacji i DevOps."
+  lang="pl"
+  path="/about"
+>
+  <main id="main-content">
+    <Section>
+      <div class="max-w-3xl">
+        <h1 class="text-4xl font-bold tracking-tight">O mnie</h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-base-content/80">
+          Jestem studentem informatyki stosowanej na Karel de Grote Hogeschool w Antwerpii.
+          Skupiam się na systemach backendowych, automatyzacji wdrożeń i praktycznej pracy z infrastrukturą.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          Moja mocna strona to Java i Spring Boot — budowanie REST API, warstw walidacji,
+          integracji JPA i uruchamianie ich w Dockerze. Wdrożyłem pipeline'y CI/CD
+          na Google Cloud przy użyciu GitLab CI, Nginx i strategii blue-green z Docker Compose.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          Rozwijam się w nowoczesnym frontendzie — uczę się Astro, Svelte, Tailwind CSS
+          i Strapi, budując to portfolio od zera. Nie po to, żeby zostać frontend developerem,
+          ale żeby rozumieć cały obraz wdrożenia.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-base-content/70">
+          Szukam stażu IT lub stanowiska junior backend/automatyzacja, gdzie będę mógł
+          wnosić wkład do realnego kodu, uczyć się od doświadczonych inżynierów i rozwijać
+          umiejętności DevOps oraz projektowania systemów. Mieszkam w Antwerpii, otwarty na pracę zdalną i w UE.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={getRelativeLocaleUrl("pl", "/projects")} class="btn btn-primary">Zobacz projekty</a>
+          <a href={getRelativeLocaleUrl("pl", "/blog")} class="btn btn-outline">Czytaj blog</a>
+          <a href={getRelativeLocaleUrl("pl", "/cv.pdf")} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+            Pobierz CV
+          </a>
+        </div>
+      </div>
+    </Section>
+    <ContactCta />
+  </main>
+</BaseLayout>
+
