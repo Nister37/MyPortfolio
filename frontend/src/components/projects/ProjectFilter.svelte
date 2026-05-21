@@ -11,6 +11,12 @@
   };
 
   export let projects: Project[] = [];
+  export let projectBase: string = "/projects/";
+  export let lang: string = "en";
+
+  $: caseStudyLabel = lang === "pl" ? "Szczegóły" : "Case study";
+  $: noProjectsLabel =
+    lang === "pl" ? "Brak projektów w tej kategorii." : "No projects in this category.";
 
   let selected = "All";
 
@@ -70,8 +76,8 @@
           </div>
 
           <div class="card-actions mt-2 flex-wrap gap-2">
-            <a href={`/projects/${project.slug}`} class="btn btn-primary btn-sm">
-              Case study
+            <a href={`${projectBase}${project.slug}`} class="btn btn-primary btn-sm">
+              {caseStudyLabel}
             </a>
             {#if project.githubUrl}
               <a
@@ -100,7 +106,10 @@
   </div>
 
   {#if visibleProjects.length === 0}
-    <p class="py-12 text-center text-base-content/50">No projects in this category.</p>
+    <p class="py-12 text-center text-base-content/50">{noProjectsLabel}</p>
   {/if}
 </div>
+
+
+
 
