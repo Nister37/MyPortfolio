@@ -22,11 +22,11 @@ function isActive(href: string) {
 }
 ---
 <header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-sm">
-  <div class="mx-auto flex max-w-[1120px] items-center justify-between px-4 py-3">
-    <a href={base} class="text-lg font-bold tracking-tight text-primary">
-      Paweł Ryfiak
-    </a>
-    <!-- Desktop navigation -->
+  <div class="mx-auto grid max-w-[1120px] grid-cols-[1fr_auto_1fr] items-center px-4 py-3 md:gap-4">
+    <!-- Left column kept empty on desktop to balance the centered nav. -->
+    <div class="hidden md:block" aria-hidden="true"></div>
+
+    <!-- Desktop navigation: centered between left spacer and right utilities. -->
     <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
       {
         navLinks.map(({ href, label }) => (
@@ -44,21 +44,24 @@ function isActive(href: string) {
           </a>
         ))
       }
+    </nav>
+
+    <!-- Desktop utilities: CV, theme, language — kept on the right. -->
+    <div class="hidden items-center justify-end gap-2 md:flex">
       <a
         href={`${base}cv.pdf`}
-        class="btn btn-primary btn-sm ml-2"
+        class="btn btn-primary btn-sm"
         target="_blank"
         rel="noopener noreferrer"
       >
         {lang === "pl" ? "Pobierz CV" : "Download CV"}
       </a>
-      <div class="ml-2 flex items-center gap-1">
-        <ThemeToggle />
-        <LanguageSwitcher currentLang={lang} path={path} />
-      </div>
-    </nav>
-    <!-- Mobile controls + hamburger -->
-    <div class="flex items-center gap-1 md:hidden">
+      <ThemeToggle />
+      <LanguageSwitcher currentLang={lang} path={path} />
+    </div>
+
+    <!-- Mobile controls + hamburger span the full row on small screens. -->
+    <div class="col-span-3 flex items-center justify-end gap-1 md:hidden">
       <ThemeToggle />
       <LanguageSwitcher currentLang={lang} path={path} />
       <div class="drawer drawer-end">
@@ -126,5 +129,3 @@ function isActive(href: string) {
     </div>
   </div>
 </header>
-
-

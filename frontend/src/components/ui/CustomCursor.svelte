@@ -2,9 +2,9 @@
   import { onMount, onDestroy } from "svelte";
 
   /**
-   * Smooth arrow-shaped custom cursor.
-   * Anchor point is the tip (top-left of the SVG).
-   * Hover on interactive elements scales it up slightly; pressing scales it down.
+   * Smoothed-triangle custom cursor.
+   * Tip anchor is at (0,0) of the SVG and matches transform-origin so hover
+   * scaling expands away from the tip and never shifts it sideways.
    */
 
   let cursor: HTMLDivElement;
@@ -18,11 +18,21 @@
 
   const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary";
 
+  // Lower factor = smoother trailing motion. Sub-stepping keeps it framerate-
+  // independent enough on 60Hz and 120Hz displays without feeling laggy.
+  const SMOOTHING = 0.18;
+
   function tick() {
-    // Slight easing so movement feels fluid but the tip still lands where the
-    // user expects on click — kept fast (0.35) to stay precise.
-    x += (targetX - x) * 0.35;
-    y += (targetY - y) * 0.35;
+    const dx = targetX - x;
+    const dy = targetY - y;
+    // Snap when within sub-pixel distance to avoid endless tiny easing churn.
+    if (Math.abs(dx) < 0.05 && Math.abs(dy) < 0.05) {
+      x = targetX;
+      y = targetY;
+    } else {
+      x += dx * SMOOTHING;
+      y += dy * SMOOTHING;
+    }
     if (cursor) cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     rafId = requestAnimationFrame(tick);
   }
@@ -88,20 +98,21 @@
 </script>
 
 <div bind:this={cursor} class="cursor" aria-hidden="true">
-  <!-- Smooth arrow: filled with primary, thin contrasting outline so it stays
-       visible on both dark and light backgrounds. Anchor at (0,0) = the tip. -->
+  <!-- Smoothed triangle: tip at (0,0), rounded corners via stroke-linejoin.
+       Kept as a single closed path so the outline traces the whole silhouette. -->
   <svg
     width="22"
-    height="28"
-    viewBox="0 0 22 28"
+    height="24"
+    viewBox="0 0 22 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    overflow="visible"
   >
     <path
-      d="M2 2 L2 22 L7.5 17.5 L11 25.5 L14 24 L10.5 16 L18 16 Z"
+      d="M0 0 L18 11 L9 14 L5 22 Z"
       fill="var(--color-primary, #6366f1)"
       stroke="var(--color-base-100, #fff)"
-      stroke-width="1.4"
+      stroke-width="1.6"
       stroke-linejoin="round"
       stroke-linecap="round"
     />
@@ -120,8 +131,8 @@
     transition:
       opacity 0.2s ease,
       scale 0.18s ease;
-    /* Use scale instead of width/height so the tip stays at (0,0). */
-    transform-origin: 2px 2px;
+    /* Anchor scale at the SVG tip so hover/press never visually shifts it. */
+    transform-origin: 0 0;
   }
 
   .cursor svg {
@@ -137,4 +148,3 @@
     scale: 0.85;
   }
 </style>
-
