@@ -38,7 +38,7 @@ export async function getPosts(): Promise<BlogPost[]> {
   try {
     const result = await fetchFromStrapi<StrapiListResponse>({
       path: "blog-posts",
-      query: "?sort=publishedAtCustom:desc",
+      query: "?fields=*&sort=publishedAtCustom:desc",
     });
 
     return result.data.map((item) => ({
@@ -63,3 +63,4 @@ export async function getPostsByLanguage(lang: "en" | "pl"): Promise<BlogPost[]>
   const posts = await getPosts();
   return posts.filter((post) => (post.language ?? "en") === lang);
 }
+
