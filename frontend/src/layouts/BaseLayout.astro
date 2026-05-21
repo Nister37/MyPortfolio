@@ -3,6 +3,7 @@ import "../styles/global.css";
 import "../styles/custom.scss";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
+import CustomCursor from "../components/ui/CustomCursor.svelte";
 
 interface Props {
   title: string;
@@ -63,6 +64,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     <Header lang={lang} path={path} />
     <slot />
     <Footer lang={lang} />
+    <CustomCursor client:load />
     <script>
       // Section reveal — runs once per page load, respects prefers-reduced-motion.
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -83,6 +85,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     </script>
   </body>
 </html>
+
+
 
 
 
