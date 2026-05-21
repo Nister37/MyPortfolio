@@ -98,10 +98,6 @@
 </script>
 
 <div bind:this={cursor} class="cursor" aria-hidden="true">
-  <!-- Halo sits behind the triangle, centered on the tip. Scaling the halo
-       (not the triangle) keeps the visible click point exactly stationary —
-       the tip never appears to drift when entering interactive elements. -->
-  <span class="halo" aria-hidden="true"></span>
   <svg
     width="22"
     height="24"
@@ -111,9 +107,8 @@
     overflow="visible"
   >
     <path
+      class="cursor-path"
       d="M0 0 L18 11 L9 14 L5 22 Z"
-      fill="var(--color-primary, #6366f1)"
-      stroke="var(--color-base-100, #fff)"
       stroke-width="1.6"
       stroke-linejoin="round"
       stroke-linecap="round"
@@ -136,38 +131,34 @@
   .cursor svg {
     display: block;
     filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
-    position: relative;
-    z-index: 1;
+    transition: filter 0.18s ease;
   }
 
-  /* Halo is anchored at the tip (0,0). Centered via negative margins so its
-     own center sits on the tip — scaling it never moves anything visibly. */
-  .halo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 28px;
-    height: 28px;
-    margin: -14px 0 0 -14px;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--color-primary, #6366f1) 32%, transparent);
-    opacity: 0;
-    transform: scale(0.6);
+  /* Default: primary fill, base-100 outline. */
+  .cursor :global(.cursor-path) {
+    fill: var(--color-primary, #6366f1);
+    stroke: var(--color-base-100, #fff);
     transition:
-      opacity 0.18s ease,
-      transform 0.18s ease;
-    pointer-events: none;
+      fill 0.18s ease,
+      stroke 0.18s ease;
   }
 
-  .cursor:global(.hover) .halo {
-    opacity: 1;
-    transform: scale(1);
+  /* Hover/press feedback changes color + glow only — no shape, size, or
+     position change, so the tip stays pixel-stable on interactive elements. */
+  .cursor:global(.hover) svg {
+    filter:
+      drop-shadow(0 0 6px color-mix(in srgb, var(--color-primary, #6366f1) 70%, transparent))
+      drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
+  }
+  .cursor:global(.hover) :global(.cursor-path) {
+    fill: var(--color-base-100, #fff);
+    stroke: var(--color-primary, #6366f1);
   }
 
-  .cursor:global(.press) .halo {
-    opacity: 1;
-    transform: scale(0.8);
-    background: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
+  .cursor:global(.press) :global(.cursor-path) {
+    fill: color-mix(in srgb, var(--color-primary, #6366f1) 75%, #000);
+    stroke: var(--color-base-100, #fff);
   }
 </style>
+
 
