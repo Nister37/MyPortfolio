@@ -2,74 +2,62 @@
   import { onMount, onDestroy } from "svelte";
 
   /**
-   * Custom cursor: a small dot that tracks the mouse exactly, plus a larger ring
-   * that lags behind for a fluid feel. Expands on interactive elements.
+   * Single-element custom cursor: a soft ring that follows the mouse with easing.
+   * Grows on interactive elements, shrinks on press.
    *
-   * Disabled on touch devices and when prefers-reduced-motion is set.
+   * The native cursor is hidden via global CSS in BaseLayout (CSS-only, no flash).
    */
 
-  let dot: HTMLDivElement;
   let ring: HTMLDivElement;
-  let enabled = false;
   let rafId = 0;
   let cleanup: (() => void) | undefined;
 
-  // Target coords (real cursor) and animated ring coords (eased toward target).
   let targetX = 0;
   let targetY = 0;
-  let ringX = 0;
-  let ringY = 0;
+  let x = 0;
+  let y = 0;
 
-  // CSS selector for elements that should make the ring grow.
-  const INTERACTIVE_SELECTOR = "a, button, [role='button'], input, textarea, select, label, summary";
+  const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary";
 
-  function animate() {
-    // Ease ring toward target — lerp factor 0.18 feels responsive without being twitchy.
-    ringX += (targetX - ringX) * 0.18;
-    ringY += (targetY - ringY) * 0.18;
-    ring.style.transform = `translate3d(${ringX - 16}px, ${ringY - 16}px, 0)`;
-    rafId = requestAnimationFrame(animate);
+  function tick() {
+    x += (targetX - x) * 0.22;
+    y += (targetY - y) * 0.22;
+    if (ring) ring.style.transform = `translate3d(${x - 12}px, ${y - 12}px, 0)`;
+    rafId = requestAnimationFrame(tick);
   }
 
   onMount(() => {
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isTouch || reducedMotion) return;
+    const touch = window.matchMedia("(pointer: coarse)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (touch || reduced) return;
 
-    enabled = true;
-    document.documentElement.classList.add("custom-cursor-active");
+    let firstMove = true;
 
     const onMove = (e: PointerEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      dot.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`;
+      if (firstMove) {
+        x = targetX;
+        y = targetY;
+        ring.style.opacity = "1";
+        firstMove = false;
+      }
     };
 
     const onOver = (e: PointerEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest(INTERACTIVE_SELECTOR)) {
-        ring.classList.add("is-hovering");
+      if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
+        ring.classList.add("hover");
       }
     };
-
     const onOut = (e: PointerEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest(INTERACTIVE_SELECTOR)) {
-        ring.classList.remove("is-hovering");
+      if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
+        ring.classList.remove("hover");
       }
     };
-
-    const onDown = () => ring.classList.add("is-pressing");
-    const onUp = () => ring.classList.remove("is-pressing");
-
-    const onLeave = () => {
-      dot.style.opacity = "0";
-      ring.style.opacity = "0";
-    };
-    const onEnter = () => {
-      dot.style.opacity = "1";
-      ring.style.opacity = "1";
-    };
+    const onDown = () => ring.classList.add("press");
+    const onUp = () => ring.classList.remove("press");
+    const onLeave = () => (ring.style.opacity = "0");
+    const onEnter = () => (ring.style.opacity = "1");
 
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerover", onOver);
@@ -79,7 +67,7 @@
     document.addEventListener("mouseleave", onLeave);
     document.addEventListener("mouseenter", onEnter);
 
-    rafId = requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(tick);
 
     cleanup = () => {
       window.removeEventListener("pointermove", onMove);
@@ -89,7 +77,6 @@
       window.removeEventListener("pointerup", onUp);
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
-      document.documentElement.classList.remove("custom-cursor-active");
     };
   });
 
@@ -99,65 +86,39 @@
   });
 </script>
 
-{#if true}
-  <div bind:this={dot} class="cursor-dot" aria-hidden="true" class:enabled></div>
-  <div bind:this={ring} class="cursor-ring" aria-hidden="true" class:enabled></div>
-{/if}
+<div bind:this={ring} class="cursor" aria-hidden="true"></div>
 
 <style>
-  .cursor-dot,
-  .cursor-ring {
+  .cursor {
     position: fixed;
     top: 0;
     left: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    border: 1.5px solid var(--color-primary, #6366f1);
+    background: color-mix(in srgb, var(--color-primary, #6366f1) 10%, transparent);
     pointer-events: none;
     z-index: 9999;
     opacity: 0;
-    will-change: transform, opacity;
-  }
-  .cursor-dot.enabled,
-  .cursor-ring.enabled {
-    opacity: 1;
-  }
-
-  .cursor-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 9999px;
-    background: var(--color-primary, #6366f1);
-    transition: opacity 0.2s ease;
-  }
-
-  .cursor-ring {
-    width: 32px;
-    height: 32px;
-    border-radius: 9999px;
-    border: 1.5px solid var(--color-primary, #6366f1);
+    will-change: transform, opacity, width, height;
     transition:
-      width 0.2s ease,
-      height 0.2s ease,
-      border-color 0.2s ease,
-      background-color 0.2s ease,
+      width 0.18s ease,
+      height 0.18s ease,
+      background-color 0.18s ease,
       opacity 0.2s ease;
-    mix-blend-mode: difference;
   }
 
-  /* Light theme tweak: difference blend can look harsh on pure light backgrounds. */
-  :global([data-theme="portfolio-light"]) .cursor-ring {
-    mix-blend-mode: normal;
-    border-color: rgba(99, 102, 241, 0.6);
+  .cursor:global(.hover) {
+    width: 44px;
+    height: 44px;
+    background: color-mix(in srgb, var(--color-primary, #6366f1) 18%, transparent);
   }
 
-  .cursor-ring:global(.is-hovering) {
-    width: 52px;
-    height: 52px;
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 12%, transparent);
-  }
-
-  .cursor-ring:global(.is-pressing) {
-    width: 22px;
-    height: 22px;
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 25%, transparent);
+  .cursor:global(.press) {
+    width: 18px;
+    height: 18px;
+    background: color-mix(in srgb, var(--color-primary, #6366f1) 35%, transparent);
   }
 </style>
 

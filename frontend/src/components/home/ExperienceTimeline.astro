@@ -10,22 +10,39 @@ type TimelineEntry = {
   title: string;
   organization: string;
   period: string;
-  type: "Education" | "Project" | "Work" | "Hackathon";
-  description: string;
+  description?: string;
 };
 
-// Static timeline — not CMS-sourced for the MVP.
-const timeline: TimelineEntry[] = [
+// Education column — newest first.
+const education: TimelineEntry[] = [
   {
     title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
-    organization: lang === "pl" ? "Karel de Grote Hogeschool, Antwerpia" : "Karel de Grote Hogeschool, Antwerp",
+    organization:
+      lang === "pl"
+        ? "Karel de Grote Hogeschool, Antwerpia"
+        : "Karel de Grote Hogeschool, Antwerp",
     period: lang === "pl" ? "2024 — obecnie" : "2024 — present",
-    type: "Education",
     description:
       lang === "pl"
         ? "Studia anglojęzyczne skoncentrowane na tworzeniu aplikacji, bazach danych, analizie systemów, testowaniu, pracy zespołowej i praktycznych projektach programistycznych."
         : "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
   },
+  {
+    title: lang === "pl" ? "Technik programista" : "Programming Technician",
+    organization:
+      lang === "pl"
+        ? "Zespół Szkół Politechnicznych w Głogowie"
+        : "Polytechnic School Complex in Głogów, Poland",
+    period: "2019 — 2024",
+    description:
+      lang === "pl"
+        ? "Pięcioletnie technikum o profilu programistycznym. Podstawy programowania, baz danych, sieci komputerowych oraz egzaminy zawodowe INF.03 i INF.04."
+        : "Five-year technical secondary school specialising in programming. Foundations of programming, databases, computer networks, and professional certifications INF.03 and INF.04.",
+  },
+];
+
+// Projects & work column — newest first.
+const experience: (TimelineEntry & { type: "Project" | "Work" })[] = [
   {
     title: "Integration 4 CI/CD on Google Cloud",
     organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
@@ -56,68 +73,88 @@ const timeline: TimelineEntry[] = [
         ? "Projekt systemu IoT do monitorowania jakości powietrza w pomieszczeniach. Obejmował zbieranie danych z czujników, backend API, zapis danych oraz proste alerty progowe."
         : "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
   },
+  {
+    title: lang === "pl" ? "Staż programistyczny" : "Programming internship",
+    organization: "NSI",
+    period: "2022",
+    type: "Work",
+    description:
+      lang === "pl"
+        ? "Krótki staż zawodowy w trakcie nauki w technikum — pierwsze zetknięcie z pracą w środowisku IT."
+        : "Short professional internship during secondary school — first exposure to working in an IT environment.",
+  },
 ];
 
-const typeBadge: Record<string, string> = {
-  Education: "badge-accent",
-  Project: "badge-primary",
-  Work: "badge-secondary",
-  Hackathon: "badge-ghost",
-};
+const heading = lang === "pl" ? "Doświadczenie i edukacja" : "Experience & Education";
+const subheading =
+  lang === "pl"
+    ? "Równolegle: edukacja po lewej, projekty i doświadczenie zawodowe po prawej."
+    : "Side by side: education on the left, projects and work experience on the right.";
+const educationLabel = lang === "pl" ? "Edukacja" : "Education";
+const experienceLabel = lang === "pl" ? "Projekty i doświadczenie" : "Projects & Experience";
 
-const typeLabel: Record<string, Record<string, string>> = {
-  en: { Education: "Education", Project: "Project", Work: "Work", Hackathon: "Hackathon" },
-  pl: { Education: "Edukacja", Project: "Projekt", Work: "Praca", Hackathon: "Hackathon" },
-};
+const workTypeLabel = lang === "pl" ? "Praca" : "Work";
+const projectTypeLabel = lang === "pl" ? "Projekt" : "Project";
 ---
 
 <Section id="experience">
-  <h2 class="text-3xl font-bold tracking-tight">
-    {lang === "pl" ? "Doświadczenie i edukacja" : "Experience & Education"}
-  </h2>
-  <p class="mt-2 text-base-content/60">
-    {lang === "pl"
-      ? "Kluczowe projekty i etapy, od najnowszych."
-      : "Key projects and milestones, most recent first."}
-  </p>
+  <h2 class="text-3xl font-bold tracking-tight">{heading}</h2>
+  <p class="mt-2 text-base-content/60">{subheading}</p>
 
-  <ul class="timeline timeline-vertical mt-10">
-    {
-      timeline.map((entry, index) => (
-        <li>
-          {index !== 0 && <hr class="bg-base-300" />}
-          <div class="timeline-start text-sm text-base-content/50 md:text-right">
-            {entry.period}
-          </div>
-          <div class="timeline-middle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="h-5 w-5 text-primary"
-              aria-hidden="true"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-          <div class="timeline-end timeline-box mb-6 bg-base-200">
-            <div class="mb-2 flex flex-wrap items-center gap-2">
-              <span class:list={["badge badge-sm", typeBadge[entry.type]]}>
-                {typeLabel[lang][entry.type]}
-              </span>
-            </div>
-            <h3 class="font-semibold">{entry.title}</h3>
-            <p class="text-sm text-base-content/60">{entry.organization}</p>
-            <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
-          </div>
-          {index !== timeline.length - 1 && <hr class="bg-base-300" />}
-        </li>
-      ))
-    }
-  </ul>
+  <div class="mt-10 grid gap-10 md:grid-cols-2">
+    <!-- Education column -->
+    <div>
+      <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-primary">
+        {educationLabel}
+      </h3>
+      <ul class="space-y-5">
+        {
+          education.map((entry) => (
+            <li class="relative border-l-2 border-primary/30 pl-5">
+              <span class="absolute -left-[7px] top-1.5 block h-3 w-3 rounded-full border-2 border-primary bg-base-100" />
+              <p class="text-xs text-base-content/50">{entry.period}</p>
+              <h4 class="mt-1 font-semibold">{entry.title}</h4>
+              <p class="text-sm text-base-content/60">{entry.organization}</p>
+              {entry.description && (
+                <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Experience column -->
+    <div>
+      <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-primary">
+        {experienceLabel}
+      </h3>
+      <ul class="space-y-5">
+        {
+          experience.map((entry) => (
+            <li class="relative border-l-2 border-primary/30 pl-5">
+              <span class="absolute -left-[7px] top-1.5 block h-3 w-3 rounded-full border-2 border-primary bg-base-100" />
+              <div class="mb-1 flex flex-wrap items-center gap-2">
+                <span class="text-xs text-base-content/50">{entry.period}</span>
+                <span
+                  class:list={[
+                    "badge badge-sm",
+                    entry.type === "Work" ? "badge-secondary" : "badge-primary",
+                  ]}
+                >
+                  {entry.type === "Work" ? workTypeLabel : projectTypeLabel}
+                </span>
+              </div>
+              <h4 class="font-semibold">{entry.title}</h4>
+              <p class="text-sm text-base-content/60">{entry.organization}</p>
+              {entry.description && (
+                <p class="mt-2 text-sm text-base-content/70">{entry.description}</p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
 </Section>
 
