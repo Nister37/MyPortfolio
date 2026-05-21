@@ -8,25 +8,30 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  lang?: "en" | "pl";
+  path?: string;
 }
 
 const {
   title,
   description = "Pawel Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
   ogImage,
+  lang = "en",
+  path = "/",
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryfiak.github.io");
+const base = import.meta.env.BASE_URL;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37.github.io");
 ---
 
 <!doctype html>
-<html lang="en" data-theme="portfolio-dark">
+<html lang={lang} data-theme="portfolio-dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -45,7 +50,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryf
     >
       Skip to content
     </a>
-    <Header />
+    <Header lang={lang} path={path} />
     <slot />
     <Footer />
     <script>
@@ -68,6 +73,10 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryf
     </script>
   </body>
 </html>
+
+
+
+
 
 
 

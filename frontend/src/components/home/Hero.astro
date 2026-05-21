@@ -1,5 +1,6 @@
 ---
 // Hero is the first thing a visitor sees — text and CTAs only, no decorative noise.
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="py-20 md:py-32">
@@ -36,7 +37,7 @@
           Read Blog
         </a>
         <a
-          href="/cv.pdf"
+          href={`${base}cv.pdf`}
           class="btn btn-outline"
           target="_blank"
           rel="noopener noreferrer"
@@ -65,6 +66,8 @@
     </div>
   </div>
 </section>
+
+
 
 
 

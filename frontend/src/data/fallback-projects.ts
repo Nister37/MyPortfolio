@@ -2,29 +2,6 @@ import type { Project } from "../lib/cms/projects";
 
 export const fallbackProjects: Project[] = [
   {
-    title: "Gazetkomania AI Flyer Extraction",
-    slug: "gazetkomania-ai-flyer-extraction",
-    summary:
-      "AI-assisted extraction pipeline for grocery flyer offers with multi-pass Gemini validation and structured PostgreSQL persistence.",
-    categories: ["AI", "Backend", "Automation"],
-    stack: ["Java", "Spring Boot", "Gemini", "Docker", "PostgreSQL", "MinIO"],
-    highlights: [
-      "Multi-pass Gemini extraction with confidence scoring",
-      "Bounding-box based offer clustering to deduplicate entries",
-      "Price sanity checks and manual correction flow",
-    ],
-    problem:
-      "Grocery flyer screenshots contain dozens of offers in varying layouts. Manual data entry is slow and error-prone. The goal was to extract structured offer data automatically from images at scale.",
-    myRole:
-      "Designed and built the full extraction pipeline: image intake, Gemini prompt chain, clustering algorithm, sanity validation, PostgreSQL persistence, and the manual correction REST API.",
-    hardestProblem:
-      "Gemini would confidently return malformed or hallucinated prices. Solving this required a multi-pass approach: a first pass to extract raw text, a second to validate structure, and a sanity layer to flag outlier prices against historical averages.",
-    lessonsLearned:
-      "AI models are not reliable parsers. You need deterministic validation layers around them. Bounding-box overlap detection solved the deduplication problem far more reliably than trying to teach the model to deduplicate itself.",
-    featured: true,
-    order: 1,
-  },
-  {
     title: "Integration 4 CI/CD on Google Cloud",
     slug: "integration4-cicd-google-cloud",
     summary:

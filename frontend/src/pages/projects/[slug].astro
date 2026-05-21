@@ -18,6 +18,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 // Prose sections rendered only when the field contains content
 const proseSections = [
@@ -35,7 +36,7 @@ const proseSections = [
 >
   <main id="main-content">
     <Section>
-      <a class="link link-primary text-sm" href="/projects">← All projects</a>
+      <a class="link link-primary text-sm" href={`${base}projects`}>← All projects</a>
 
       <div class="mt-6 flex flex-wrap gap-2">
         {project.categories.map((cat) => (
@@ -110,8 +111,11 @@ const proseSections = [
             </a>
           )
         }
-        <a href="/projects" class="btn btn-ghost">← All projects</a>
+        <a href={`${base}projects`} class="btn btn-ghost">← All projects</a>
       </div>
     </Section>
   </main>
 </BaseLayout>
+
+
+

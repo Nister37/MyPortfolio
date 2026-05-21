@@ -18,6 +18,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 const formattedDate = post.publishedAt
   ? new Date(post.publishedAt).toLocaleDateString("en-GB", {
@@ -31,7 +32,7 @@ const formattedDate = post.publishedAt
 <BaseLayout title={`${post.title} | Pawel Ryfiak`} description={post.description}>
   <main id="main-content">
     <Section>
-      <a class="link link-primary text-sm" href="/blog">← All posts</a>
+      <a class="link link-primary text-sm" href={`${base}blog`}>← All posts</a>
 
       <div class="mt-6 flex flex-wrap gap-2">
         {(post.tags ?? []).map((tag) => (
@@ -63,5 +64,7 @@ const formattedDate = post.publishedAt
     </Section>
   </main>
 </BaseLayout>
+
+
 
 

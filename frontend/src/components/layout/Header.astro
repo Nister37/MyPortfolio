@@ -1,20 +1,31 @@
----
+﻿---
+import ThemeToggle from "../ui/ThemeToggle.astro";
+import LanguageSwitcher from "../ui/LanguageSwitcher.astro";
+interface Props {
+  lang?: "en" | "pl";
+  path?: string;
+}
+const { lang = "en", path = "/" } = Astro.props;
+const base = import.meta.env.BASE_URL;
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
-  { href: "/about", label: "About" },
+  { href: base, label: lang === "pl" ? "Strona główna" : "Home" },
+  { href: `${base}projects`, label: lang === "pl" ? "Projekty" : "Projects" },
+  { href: `${base}blog`, label: "Blog" },
+  { href: lang === "pl" ? `${base}pl/about` : `${base}about`, label: lang === "pl" ? "O mnie" : "About" },
 ];
-
 const currentPath = Astro.url.pathname;
+const normalizedPath = currentPath.endsWith("/") && currentPath !== base
+  ? currentPath.slice(0, -1)
+  : currentPath;
+function isActive(href: string) {
+  return normalizedPath === href || normalizedPath === href.replace(/\/$/, "");
+}
 ---
-
 <header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-sm">
   <div class="mx-auto flex max-w-[1120px] items-center justify-between px-4 py-3">
-    <a href="/" class="text-lg font-bold tracking-tight text-primary">
+    <a href={base} class="text-lg font-bold tracking-tight text-primary">
       Pawel Ryfiak
     </a>
-
     <!-- Desktop navigation -->
     <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
       {
@@ -23,28 +34,33 @@ const currentPath = Astro.url.pathname;
             href={href}
             class:list={[
               "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-              currentPath === href
+              isActive(href)
                 ? "bg-base-200 text-primary"
                 : "text-base-content/70 hover:bg-base-200 hover:text-base-content",
             ]}
-            aria-current={currentPath === href ? "page" : undefined}
+            aria-current={isActive(href) ? "page" : undefined}
           >
             {label}
           </a>
         ))
       }
       <a
-        href="/cv.pdf"
+        href={`${base}cv.pdf`}
         class="btn btn-primary btn-sm ml-2"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Download CV
+        {lang === "pl" ? "Pobierz CV" : "Download CV"}
       </a>
+      <div class="ml-2 flex items-center gap-1">
+        <ThemeToggle />
+        <LanguageSwitcher currentLang={lang} path={path} />
+      </div>
     </nav>
-
-    <!-- Mobile hamburger using daisyUI drawer -->
-    <div class="md:hidden">
+    <!-- Mobile controls + hamburger -->
+    <div class="flex items-center gap-1 md:hidden">
+      <ThemeToggle />
+      <LanguageSwitcher currentLang={lang} path={path} />
       <div class="drawer drawer-end">
         <input id="mobile-nav" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
@@ -86,23 +102,23 @@ const currentPath = Astro.url.pathname;
                   href={href}
                   class:list={[
                     "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                    currentPath === href
+                    isActive(href)
                       ? "bg-base-300 text-primary"
                       : "text-base-content/70 hover:bg-base-300 hover:text-base-content",
                   ]}
-                  aria-current={currentPath === href ? "page" : undefined}
+                  aria-current={isActive(href) ? "page" : undefined}
                 >
                   {label}
                 </a>
               ))
             }
             <a
-              href="/cv.pdf"
+              href={`${base}cv.pdf`}
               class="btn btn-primary btn-sm mt-4"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Download CV
+              {lang === "pl" ? "Pobierz CV" : "Download CV"}
             </a>
           </nav>
         </div>
@@ -110,4 +126,3 @@ const currentPath = Astro.url.pathname;
     </div>
   </div>
 </header>
-

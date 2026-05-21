@@ -1,11 +1,10 @@
----
+﻿---
 import { getFeaturedProjects } from "../../lib/cms/projects";
 import ProjectCard from "../projects/ProjectCard.astro";
 import Section from "../layout/Section.astro";
-
 const featuredProjects = await getFeaturedProjects();
+const base = import.meta.env.BASE_URL;
 ---
-
 <Section id="projects">
   <div class="mb-10 flex items-end justify-between">
     <div>
@@ -14,17 +13,14 @@ const featuredProjects = await getFeaturedProjects();
         A selection of real systems I built or contributed to significantly.
       </p>
     </div>
-    <a href="/projects" class="btn btn-outline btn-sm hidden md:inline-flex">
-      All projects →
+    <a href={`${base}projects`} class="btn btn-outline btn-sm hidden md:inline-flex">
+      All projects ->
     </a>
   </div>
-
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     {featuredProjects.map((project) => <ProjectCard project={project} />)}
   </div>
-
   <div class="mt-8 md:hidden">
-    <a href="/projects" class="btn btn-outline w-full">All projects →</a>
+    <a href={`${base}projects`} class="btn btn-outline w-full">All projects -></a>
   </div>
 </Section>
-
