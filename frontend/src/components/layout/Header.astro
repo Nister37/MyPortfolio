@@ -20,6 +20,17 @@ const normalizedPath = currentPath.endsWith("/") && currentPath !== base
 function isActive(href: string) {
   return normalizedPath === href || normalizedPath === href.replace(/\/$/, "");
 }
+
+// CV picker dialog labels — kept here so both desktop trigger and mobile
+// trigger share one source of truth.
+const cvButtonLabel = lang === "pl" ? "Pobierz CV" : "Download CV";
+const cvDialogTitle =
+  lang === "pl"
+    ? "W jakiej wersji językowej chcesz pobrać moje CV? 👀"
+    : "Which language version of my CV would you like to download? 👀";
+const cvEnglishLabel = lang === "pl" ? "Wersja angielska" : "English version";
+const cvPolishLabel = lang === "pl" ? "Wersja polska" : "Polish version";
+const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
 ---
 <header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-sm">
   <div class="mx-auto grid max-w-[1120px] grid-cols-[1fr_auto_1fr] items-center px-4 py-3 md:gap-4">
@@ -48,14 +59,9 @@ function isActive(href: string) {
 
     <!-- Desktop utilities: CV, theme, language — kept on the right. -->
     <div class="hidden items-center justify-end gap-2 md:flex">
-      <a
-        href={`${base}cv.pdf`}
-        class="btn btn-primary btn-sm"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {lang === "pl" ? "Pobierz CV" : "Download CV"}
-      </a>
+      <button type="button" class="btn btn-primary btn-sm" data-cv-trigger>
+        {cvButtonLabel}
+      </button>
       <ThemeToggle />
       <LanguageSwitcher currentLang={lang} path={path} />
     </div>
@@ -115,17 +121,152 @@ function isActive(href: string) {
                 </a>
               ))
             }
-            <a
-              href={`${base}cv.pdf`}
-              class="btn btn-primary btn-sm mt-4"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {lang === "pl" ? "Pobierz CV" : "Download CV"}
-            </a>
+            <button type="button" class="btn btn-primary btn-sm mt-4" data-cv-trigger>
+              {cvButtonLabel}
+            </button>
           </nav>
         </div>
       </div>
     </div>
   </div>
 </header>
+
+<!-- CV language picker: native <dialog> for free backdrop + ESC handling. -->
+<dialog id="cv-dialog" class="cv-dialog" aria-labelledby="cv-dialog-title">
+  <div class="cv-dialog__panel">
+    <button
+      type="button"
+      class="cv-dialog__close"
+      data-cv-close
+      aria-label={cvCloseLabel}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <h2 id="cv-dialog-title" class="cv-dialog__title">{cvDialogTitle}</h2>
+
+    <div class="cv-dialog__actions">
+      <a
+        href={`${base}cv-en.pdf`}
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+        download
+      >
+        🇬🇧 {cvEnglishLabel}
+      </a>
+      <a
+        href={`${base}cv-pl.pdf`}
+        class="btn btn-outline"
+        target="_blank"
+        rel="noopener noreferrer"
+        download
+      >
+        🇵🇱 {cvPolishLabel}
+      </a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Wire all triggers (desktop + mobile) to the same dialog. Click on the
+  // backdrop (outside the panel) closes the dialog — native dialog's default
+  // backdrop click does not bubble through, so we check click coordinates.
+  const dialog = document.getElementById("cv-dialog") as HTMLDialogElement | null;
+  if (dialog) {
+    document.querySelectorAll<HTMLButtonElement>("[data-cv-trigger]").forEach((btn) => {
+      btn.addEventListener("click", () => dialog.showModal());
+    });
+    dialog.querySelectorAll<HTMLButtonElement>("[data-cv-close]").forEach((btn) => {
+      btn.addEventListener("click", () => dialog.close());
+    });
+    dialog.addEventListener("click", (event) => {
+      // Close when clicking the dimmed backdrop (the dialog element itself,
+      // outside the inner panel). Panel clicks won't match because event.target
+      // will be the panel or one of its descendants.
+      if (event.target === dialog) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .cv-dialog {
+    /* Reset native dialog defaults so it matches the rest of the UI. */
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: min(420px, 90vw);
+    width: 100%;
+    color: inherit;
+  }
+  .cv-dialog::backdrop {
+    background: rgb(0 0 0 / 0.55);
+    backdrop-filter: blur(2px);
+  }
+  .cv-dialog[open] {
+    animation: cv-dialog-in 0.18s ease-out;
+  }
+  @keyframes cv-dialog-in {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .cv-dialog__panel {
+    position: relative;
+    border-radius: 0.85rem;
+    background: var(--color-base-100, #fff);
+    border: 1px solid var(--color-base-300, #e5e7eb);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35);
+    padding: 1.75rem 1.5rem 1.5rem;
+  }
+
+  .cv-dialog__close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--color-base-content, currentColor);
+    opacity: 0.6;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+  }
+  .cv-dialog__close:hover {
+    opacity: 1;
+    background: color-mix(in srgb, var(--color-base-content, #000) 8%, transparent);
+  }
+
+  .cv-dialog__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin: 0 1.5rem 1.25rem 0;
+  }
+
+  .cv-dialog__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+</style>
+
