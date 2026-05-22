@@ -1,52 +1,90 @@
-name: Deploy Portfolio Frontend to GitHub Pages
-
+﻿name: Deploy Portfolio Frontend to GitHub Pages
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
-# Only one deploy at a time; do not cancel a running deploy.
+# Cancel in-progress runs for PRs (safe to interrupt), never for master deploys.
 concurrency:
-  group: github-pages
-  cancel-in-progress: false
-
+  group: github-pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 jobs:
-  build:
+  # ─── Job 1: type-check + security audit ───────────────────────────────────
+  check:
+    name: Type-check & security audit
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Setup Bun with dependency cache
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: TypeScript / Astro type-check
+        run: bun run check
+      - name: Security audit (fail on high-severity)
+        run: bun audit --audit-level=high
+        # bun audit exits non-zero if any package has high/critical CVEs.
+        # Lower-severity findings are reported but do not block the deploy.
+  # ─── Job 2: build + upload artifact ──────────────────────────────────────
+  build:
+    name: Build Astro site
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Install, build, and upload Astro site
-        uses: withastro/action@v3
+        uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289 # v3
         env:
-          # STRAPI_URL and STRAPI_API_TOKEN are used only at build time to fetch content.
-          # Set them as repository secrets before enabling hosted Strapi.
+          # Build-time only — never exposed to the browser.
           STRAPI_URL: ${{ secrets.STRAPI_URL }}
           STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
         with:
           path: frontend
           package-manager: bun@latest
           node-version: 24
-
+  # ─── Job 3: deploy (master only) ─────────────────────────────────────────
   deploy:
+    name: Deploy to GitHub Pages
     needs: build
+    # Skip on pull requests — build validation is enough.
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
-
-
-
+  # ─── Job 4: Lighthouse audit (master only, after deploy) ─────────────────
+  lighthouse:
+    name: Lighthouse audit
+    needs: deploy
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Run Lighthouse against live site
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
+        with:
+          urls: |
+            https://nister37.github.io/MyPortfolio/
+            https://nister37.github.io/MyPortfolio/projects/
+            https://nister37.github.io/MyPortfolio/blog/
+          # Thresholds: build fails if any score drops below these.
+          budgetPath: .github/lighthouse-budget.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
