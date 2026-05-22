@@ -47,8 +47,16 @@
   <!-- Project grid -->
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     {#each visibleProjects as project (project.slug)}
-      <article class="card bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
-        <div class="card-body gap-4">
+      <article class="card relative bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
+        <!-- Stretched link opens the case study from anywhere on the card.
+             GitHub / Live demo buttons restore pointer-events and raise their
+             z-index so they keep their own click targets. -->
+        <a
+          href={`${projectBase}${project.slug}`}
+          class="absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={`${caseStudyLabel}: ${project.title}`}
+        ></a>
+        <div class="card-body relative z-[1] gap-4 pointer-events-none">
           <div class="flex flex-wrap gap-2">
             {#each project.categories as cat}
               <span class="badge badge-primary badge-sm">{cat}</span>
@@ -75,31 +83,30 @@
             {/each}
           </div>
 
-          <div class="card-actions mt-2 flex-wrap gap-2">
-            <a href={`${projectBase}${project.slug}`} class="btn btn-primary btn-sm">
-              {caseStudyLabel}
-            </a>
-            {#if project.githubUrl}
-              <a
-                href={project.githubUrl}
-                class="btn btn-ghost btn-sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-            {/if}
-            {#if project.liveUrl}
-              <a
-                href={project.liveUrl}
-                class="btn btn-ghost btn-sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Live demo
-              </a>
-            {/if}
-          </div>
+          {#if project.githubUrl || project.liveUrl}
+            <div class="card-actions pointer-events-auto relative z-10 mt-2 flex-wrap gap-2">
+              {#if project.githubUrl}
+                <a
+                  href={project.githubUrl}
+                  class="btn btn-ghost btn-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </a>
+              {/if}
+              {#if project.liveUrl}
+                <a
+                  href={project.liveUrl}
+                  class="btn btn-ghost btn-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {lang === "pl" ? "Wersja live" : "Live demo"}
+                </a>
+              {/if}
+            </div>
+          {/if}
         </div>
       </article>
     {/each}
@@ -109,6 +116,7 @@
     <p class="py-12 text-center text-base-content/50">{noProjectsLabel}</p>
   {/if}
 </div>
+
 
 
 

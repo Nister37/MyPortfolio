@@ -11,7 +11,16 @@ const { lang = "en" } = Astro.props;
 // Filter by post.language if present; posts without a language flag are treated as English.
 const allPosts = await getPosts();
 const localePosts = allPosts.filter((p) => (p.language ?? "en") === lang);
+// Render up to three (matches the widest row at `lg`). Cards beyond row
+// capacity at smaller breakpoints are hidden via Tailwind utilities so the
+// section is always exactly one row tall.
 const previewPosts = localePosts.slice(0, 3);
+
+const visibilityClass = (index: number) => {
+  if (index === 0) return "";
+  if (index === 1) return "hidden md:block";
+  return "hidden lg:block";
+};
 ---
 <Section id="blog">
   <div class="mb-10">
@@ -25,9 +34,14 @@ const previewPosts = localePosts.slice(0, 3);
     </p>
   </div>
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {previewPosts.map((post) => <BlogCard post={post} lang={lang} />)}
+    {previewPosts.map((post, index) => (
+      <div class={visibilityClass(index)}>
+        <BlogCard post={post} lang={lang} />
+      </div>
+    ))}
   </div>
 </Section>
+
 
 
 

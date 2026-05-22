@@ -8,10 +8,21 @@ interface Props {
 
 const { project } = Astro.props;
 const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
+const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
+const caseStudyLabel = lang === "pl" ? "Szczegóły" : "Case study";
 ---
 
-<article class="card bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
-  <div class="card-body gap-4">
+<article class="card relative bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
+  <!-- Stretched link makes the whole card open the case study. Inner action
+       buttons (GitHub, Live demo) raise their own stacking with `relative z-10`
+       so their clicks beat the overlay. -->
+  <a
+    href={caseStudyHref}
+    class="absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+    aria-label={`${caseStudyLabel}: ${project.title}`}
+  ></a>
+
+  <div class="card-body relative z-[1] gap-4 pointer-events-none">
     <div class="flex flex-wrap gap-2">
       {project.categories.map((cat) => (
         <span class="badge badge-primary badge-sm">{cat}</span>
@@ -41,24 +52,32 @@ const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
       ))}
     </div>
 
-    <div class="card-actions mt-2 flex-wrap gap-2">
-      <a href={getRelativeLocaleUrl(lang, `/projects/${project.slug}`)} class="btn btn-primary btn-sm">
-        Case study
-      </a>
-      {
-        project.githubUrl && (
-          <a href={project.githubUrl} class="btn btn-ghost btn-sm" target="_blank" rel="noopener noreferrer">
+    <!-- Action buttons need pointer-events restored AND a higher z-index so
+         they're clickable over the stretched-link overlay. -->
+    {(project.githubUrl || project.liveUrl) && (
+      <div class="card-actions pointer-events-auto relative z-10 mt-2 flex-wrap gap-2">
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub
           </a>
-        )
-      }
-      {
-        project.liveUrl && (
-          <a href={project.liveUrl} class="btn btn-ghost btn-sm" target="_blank" rel="noopener noreferrer">
-            Live demo
+        )}
+        {project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {lang === "pl" ? "Wersja live" : "Live demo"}
           </a>
-        )
-      }
-    </div>
+        )}
+      </div>
+    )}
   </div>
 </article>
+
