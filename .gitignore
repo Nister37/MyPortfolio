@@ -31,3 +31,9 @@ cms/public/uploads/*
 .agentbridge/
 instructions/
 
+# Playwright MCP artefacts
+.playwright-mcp/
+*.png
+*.jpeg
+*.jpg
+
