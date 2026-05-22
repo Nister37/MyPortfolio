@@ -131,9 +131,12 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
   </div>
 </header>
 
-<!-- CV language picker: native <dialog> for free backdrop + ESC handling. -->
-<dialog id="cv-dialog" class="cv-dialog" aria-labelledby="cv-dialog-title">
-  <div class="cv-dialog__panel">
+<!-- CV language picker: custom overlay (NOT native <dialog>) because <dialog>
+     uses the browser top layer which always renders above the custom cursor
+     regardless of z-index. Plain fixed overlay below the cursor's z-index. -->
+<div id="cv-dialog" class="cv-dialog" role="dialog" aria-modal="true" aria-labelledby="cv-dialog-title" aria-hidden="true" hidden>
+  <div class="cv-dialog__backdrop" data-cv-close aria-hidden="true"></div>
+  <div class="cv-dialog__panel" role="document">
     <button
       type="button"
       class="cv-dialog__close"
@@ -180,58 +183,76 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
       </a>
     </div>
   </div>
-</dialog>
+</div>
 
 <script>
-  // Wire all triggers (desktop + mobile) to the same dialog. Click on the
-  // backdrop (outside the panel) closes the dialog — native dialog's default
-  // backdrop click does not bubble through, so we check click coordinates.
-  const dialog = document.getElementById("cv-dialog") as HTMLDialogElement | null;
-  if (dialog) {
+  // Custom overlay control: open/close + ESC + backdrop click. Hidden via the
+  // `hidden` attribute when inactive so it never intercepts events or takes
+  // tab focus. Body scroll is locked while the dialog is open.
+  const overlay = document.getElementById("cv-dialog");
+  if (overlay) {
+    const open = () => {
+      overlay.hidden = false;
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    };
+    const close = () => {
+      overlay.hidden = true;
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    };
     document.querySelectorAll<HTMLButtonElement>("[data-cv-trigger]").forEach((btn) => {
-      btn.addEventListener("click", () => dialog.showModal());
+      btn.addEventListener("click", open);
     });
-    dialog.querySelectorAll<HTMLButtonElement>("[data-cv-close]").forEach((btn) => {
-      btn.addEventListener("click", () => dialog.close());
+    overlay.querySelectorAll<HTMLElement>("[data-cv-close]").forEach((el) => {
+      el.addEventListener("click", close);
     });
-    dialog.addEventListener("click", (event) => {
-      // Close when clicking the dimmed backdrop (the dialog element itself,
-      // outside the inner panel). Panel clicks won't match because event.target
-      // will be the panel or one of its descendants.
-      if (event.target === dialog) dialog.close();
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !overlay.hidden) close();
     });
   }
 </script>
 
 <style>
+  /* z-index sits below the custom cursor (9999) so the triangle remains
+     visible inside the modal. */
   .cv-dialog {
-    /* Reset native dialog defaults so it matches the rest of the UI. */
-    padding: 0;
-    border: none;
-    background: transparent;
-    max-width: min(420px, 90vw);
-    width: 100%;
-    color: inherit;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
   }
-  .cv-dialog::backdrop {
+
+  .cv-dialog__backdrop {
+    position: absolute;
+    inset: 0;
     background: rgb(0 0 0 / 0.55);
     backdrop-filter: blur(2px);
-  }
-  .cv-dialog[open] {
-    animation: cv-dialog-in 0.18s ease-out;
-  }
-  @keyframes cv-dialog-in {
-    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    animation: cv-fade-in 0.18s ease-out;
   }
 
   .cv-dialog__panel {
     position: relative;
+    width: min(480px, 100%);
     border-radius: 0.85rem;
     background: var(--color-base-100, #fff);
+    color: var(--color-base-content, inherit);
     border: 1px solid var(--color-base-300, #e5e7eb);
     box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35);
     padding: 1.75rem 1.5rem 1.5rem;
+    animation: cv-panel-in 0.18s ease-out;
+  }
+
+  @keyframes cv-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes cv-panel-in {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .cv-dialog__close {
@@ -263,10 +284,17 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
     margin: 0 1.5rem 1.25rem 0;
   }
 
+  /* Side-by-side buttons; wrap to two rows only if there isn't room. */
   .cv-dialog__actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.6rem;
   }
+  .cv-dialog__actions > .btn {
+    flex: 1 1 0;
+    min-width: 140px;
+  }
 </style>
+
 
