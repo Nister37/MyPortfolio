@@ -1,18 +1,20 @@
 ---
-// Reads initial theme from localStorage on client; falls back to dark.
+interface Props {
+  // Caller can override size; default keeps desktop header compact.
+  class?: string;
+}
+const { class: className = "btn btn-ghost btn-sm" } = Astro.props;
 ---
 
 <button
-  id="theme-toggle"
-  class="btn btn-ghost btn-sm"
+  class:list={["theme-toggle", className]}
   aria-label="Toggle colour theme"
   title="Toggle light / dark"
 >
   <!-- Sun icon — shown in dark mode -->
   <svg
-    id="icon-sun"
+    class="icon-sun h-4 w-4"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-4 w-4"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -24,9 +26,8 @@
   </svg>
   <!-- Moon icon — shown in light mode -->
   <svg
-    id="icon-moon"
+    class="icon-moon h-4 w-4 hidden"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-4 w-4 hidden"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -43,27 +44,26 @@
   const LIGHT = "portfolio-light";
   const STORAGE_KEY = "portfolio-theme";
 
+  // Updates every toggle button on the page (desktop + mobile instances share
+  // the same document theme, so both icons must stay in sync).
   function applyTheme(theme: string) {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem(STORAGE_KEY, theme);
-    const sun = document.getElementById("icon-sun");
-    const moon = document.getElementById("icon-moon");
-    if (theme === DARK) {
-      sun?.classList.remove("hidden");
-      moon?.classList.add("hidden");
-    } else {
-      sun?.classList.add("hidden");
-      moon?.classList.remove("hidden");
-    }
+    document.querySelectorAll<HTMLElement>(".theme-toggle").forEach((btn) => {
+      btn.querySelector<SVGElement>(".icon-sun")?.classList.toggle("hidden", theme !== DARK);
+      btn.querySelector<SVGElement>(".icon-moon")?.classList.toggle("hidden", theme === DARK);
+    });
   }
 
   // Restore persisted theme before first paint.
   const saved = localStorage.getItem(STORAGE_KEY);
   applyTheme(saved === LIGHT ? LIGHT : DARK);
 
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    applyTheme(current === DARK ? LIGHT : DARK);
+  // Wire every toggle button — querySelectorAll handles both instances.
+  document.querySelectorAll<HTMLButtonElement>(".theme-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      applyTheme(current === DARK ? LIGHT : DARK);
+    });
   });
 </script>
-
