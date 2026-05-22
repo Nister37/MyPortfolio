@@ -22,7 +22,7 @@ const {
   path = "/",
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37.github.io");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryfiak.is-a.dev");
 // Fall back to the site favicon so all pages have a shareable social image.
 const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
 
@@ -30,7 +30,7 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Paweł Ryfiak",
-  url: "https://nister37.github.io/MyPortfolio",
+  url: "https://pawelryfiak.is-a.dev",
   jobTitle: "Junior Software Engineer",
   description: "Junior Software Engineer focused on backend systems, automation, and practical DevOps.",
   sameAs: [
@@ -43,7 +43,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Paweł Ryfiak — Portfolio",
-  url: "https://nister37.github.io/MyPortfolio",
+  url: "https://pawelryfiak.is-a.dev",
 };
 ---
 
