@@ -8,8 +8,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://nister37.github.io",
-  base: "/MyPortfolio",
+  site: "https://pawelryfiak.is-a.dev",
+  base: "/",
   i18n: {
     defaultLocale: "en",
     locales: ["en", "pl"],
