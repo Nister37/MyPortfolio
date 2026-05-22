@@ -5,6 +5,9 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "overrides": {
+    "yaml": "^2.8.3"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -15,14 +18,15 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/mdx": "^5.0.6",
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/svelte": "^8.1.1",
     "@tsparticles/engine": "^4.0.5",
     "@tsparticles/slim": "^4.0.5",
     "@types/dompurify": "^3.2.0",
-    "astro": "^6.3.5",
+    "astro": "^6.3.7",
     "isomorphic-dompurify": "^3.14.0",
     "lucide-svelte": "^1.0.1",
-    "svelte": "^5.55.8",
+    "svelte": "^5.55.9",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
@@ -30,7 +34,7 @@
     "@iconify-json/simple-icons": "^1.2.83",
     "@tailwindcss/vite": "^4.3.0",
     "daisyui": "^5.5.20",
-    "sass": "^1.99.0",
+    "sass": "^1.100.0",
     "tailwindcss": "^4.3.0"
   }
 }

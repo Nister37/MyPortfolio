@@ -2,9 +2,8 @@
 import { defineConfig } from 'astro/config';
 
 import svelte from '@astrojs/svelte';
-
 import mdx from '@astrojs/mdx';
-
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
@@ -18,7 +17,15 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
-  integrations: [svelte(), mdx()],
+  integrations: [svelte(), mdx(), sitemap({
+    i18n: {
+      defaultLocale: "en",
+      locales: {
+        en: "en-GB",
+        pl: "pl-PL",
+      },
+    },
+  })],
   vite: {
     plugins: [tailwindcss()],
   },

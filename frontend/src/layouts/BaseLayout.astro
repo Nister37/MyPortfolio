@@ -25,6 +25,26 @@ const {
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37.github.io");
 // Fall back to the site favicon so all pages have a shareable social image.
 const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Paweł Ryfiak",
+  url: "https://nister37.github.io/MyPortfolio",
+  jobTitle: "Junior Software Engineer",
+  description: "Junior Software Engineer focused on backend systems, automation, and practical DevOps.",
+  sameAs: [
+    "https://github.com/Nister37",
+    "https://www.linkedin.com/in/pawelryfiak2004/",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Paweł Ryfiak — Portfolio",
+  url: "https://nister37.github.io/MyPortfolio",
+};
 ---
 
 <!doctype html>
@@ -32,12 +52,14 @@ const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
+    <meta name="author" content="Paweł Ryfiak" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Paweł Ryfiak — Portfolio" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -48,6 +70,10 @@ const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={resolvedOgImage} />
+
+    <!-- Structured data: Person + WebSite -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <title>{title}</title>
     <!-- Apply saved theme before first paint to prevent flash of wrong theme -->
