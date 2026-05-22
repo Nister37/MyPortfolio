@@ -1,0 +1,89 @@
+- generic [ref=e2]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "is-a.dev Docs" [ref=e8] [cursor=pointer]:
+        - /url: https://docs.is-a.dev/
+        - generic [ref=e10]: is-a.dev Docs
+      - generic [ref=e12]:
+        - navigation [ref=e13]:
+          - list [ref=e14]:
+            - listitem [ref=e15]:
+              - link "Home" [ref=e16] [cursor=pointer]:
+                - /url: /
+                - img [ref=e17]
+                - generic [ref=e19]: Home
+            - listitem [ref=e20]:
+              - link "Website" [ref=e21] [cursor=pointer]:
+                - /url: https://is-a.dev
+                - img [ref=e22]
+                - generic [ref=e24]: Website
+            - listitem [ref=e25]:
+              - link "Register" [ref=e26] [cursor=pointer]:
+                - /url: https://github.com/is-a-dev/register
+                - img [ref=e27]
+                - generic [ref=e29]: Register
+            - listitem [ref=e30]:
+              - link "Donate" [ref=e31] [cursor=pointer]:
+                - /url: https://donate.is-a.dev
+                - img [ref=e32]
+                - generic [ref=e34]: Donate
+        - generic [ref=e35]:
+          - button "Search" [ref=e36] [cursor=pointer]:
+            - img [ref=e37]
+            - generic [ref=e39]: Search
+            - generic [ref=e40]: Ctrl+K
+          - button "Change theme" [ref=e43]:
+            - img [ref=e44]
+          - button "History" [ref=e48]:
+            - img [ref=e49]
+  - generic [ref=e53]:
+    - complementary [ref=e54]:
+      - generic [ref=e56]:
+        - img [ref=e58]
+        - textbox "Filter" [ref=e60]
+      - list [ref=e61]:
+        - region "scrollable content" [ref=e65]:
+          - generic [ref=e66]:
+            - listitem [ref=e67]:
+              - link "Welcome" [ref=e69] [cursor=pointer]:
+                - /url: /
+                - img [ref=e71]
+                - generic [ref=e73]: Welcome
+            - listitem [ref=e74]:
+              - link "Quick Start" [ref=e76] [cursor=pointer]:
+                - /url: /quickstart/
+                - img [ref=e78]
+                - generic [ref=e80]: Quick Start
+            - listitem [ref=e81]:
+              - generic [ref=e82] [cursor=pointer]:
+                - button "Guides" [ref=e83]:
+                  - img [ref=e85]
+                  - generic [ref=e87]: Guides
+                - button [ref=e89]:
+                  - img [ref=e90]
+            - listitem [ref=e92]:
+              - generic [ref=e93] [cursor=pointer]:
+                - button "Useful" [ref=e94]:
+                  - img [ref=e96]
+                  - generic [ref=e98]: Useful
+                - button [ref=e100]:
+                  - img [ref=e101]
+      - link "Powered by" [ref=e105] [cursor=pointer]:
+        - /url: https://retype.com/
+        - generic [ref=e106]: Powered by
+        - img [ref=e107]
+    - generic [ref=e112]:
+      - img [ref=e114]
+      - heading "Oops! The page you’re looking for doesn’t exist." [level=1] [ref=e121]
+      - paragraph [ref=e122]: You may have mistyped the address or the page may have been moved.
+      - link "Go to homepage" [ref=e123] [cursor=pointer]:
+        - /url: /
+  - generic [ref=e126]:
+    - generic [ref=e127]:
+      - img [ref=e129]
+      - textbox "Search" [ref=e131]
+      - generic:
+        - generic:
+          - generic: Ctrl /
+    - button "close Search" [ref=e132]:
+      - img [ref=e133]

@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pawelryfiak.is-a.dev/sitemap-index.xml
+Sitemap: https://nister37.github.io/MyPortfolio/sitemap-index.xml
+
 
 
