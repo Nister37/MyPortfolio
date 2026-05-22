@@ -26,14 +26,16 @@ const categoryLabel: Record<string, Record<string, string>> = {
 ---
 
 <Section id="skills">
-  <h2 class="text-3xl font-bold tracking-tight">
-    {lang === "pl" ? "Umiejętności techniczne" : "Skills"}
-  </h2>
-  <p class="mt-2 text-base-content/60">
-    {lang === "pl"
-      ? "Technologie pogrupowane według obszaru."
-      : "Grouped by domain. No fake percentages — labels show real relative confidence."}
-  </p>
+  <div data-reveal>
+    <h2 class="text-3xl font-bold tracking-tight">
+      {lang === "pl" ? "Umiejętności techniczne" : "Skills"}
+    </h2>
+    <p class="mt-2 text-base-content/60">
+      {lang === "pl"
+        ? "Technologie pogrupowane według obszaru."
+        : "Grouped by domain. No fake percentages — labels show real relative confidence."}
+    </p>
+  </div>
 
   <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
     {

@@ -23,6 +23,8 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37.github.io");
+// Fall back to the site favicon so all pages have a shareable social image.
+const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
 ---
 
 <!doctype html>
@@ -39,7 +41,13 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={resolvedOgImage} />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
 
     <title>{title}</title>
     <!-- Apply saved theme before first paint to prevent flash of wrong theme -->

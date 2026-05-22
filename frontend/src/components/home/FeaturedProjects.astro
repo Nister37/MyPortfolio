@@ -13,7 +13,7 @@ const featuredProjects = (await getProjects()).filter((p) => p.featured);
 const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
 ---
 <Section id="projects">
-  <div class="mb-10 flex items-end justify-between">
+  <div class="mb-10 flex items-end justify-between" data-reveal>
     <div>
       <h2 class="text-3xl font-bold tracking-tight">
         {lang === "pl" ? "Wyróżnione projekty" : "Featured Projects"}

@@ -1,5 +1,6 @@
 ---
 import ParticlesBackground from "../ui/ParticlesBackground.svelte";
+import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
 }
@@ -11,12 +12,16 @@ const copy = {
     subtitle: "Junior Software Engineer focused on backend, automation, and practical DevOps.",
     body: "I build Spring Boot systems, deployment pipelines, AI-assisted data extraction tools, and infrastructure scripts. Currently learning Astro, Svelte, Strapi, and modern frontend workflows by building this portfolio.",
     openTo: "Open to: IT internship, junior backend, automation, DevOps-oriented roles · Antwerp / remote / EU",
+    viewProjects: "View projects",
+    downloadCv: "Download CV",
   },
   pl: {
     available: "OTWARTY NA STAŻE I ROLE JUNIORSKIE",
     subtitle: "Student Applied Computer Science — backend Java/Spring, automatyzacja i podstawy deploymentu.",
     body: "Tworzę aplikacje backendowe w Spring Boot, pracuję z bazami danych, REST API, Dockerem i Linuksem oraz buduję narzędzia automatyzujące powtarzalne procesy. Aktualnie uczę się Astro, Svelte, Strapi i nowoczesnego frontendu, budując to portfolio.",
     openTo: "Szukam: stażu programistycznego, roli junior backend lub zadań związanych z automatyzacją · Antwerpia / okolice Głogowa / zdalnie / UE",
+    viewProjects: "Zobacz projekty",
+    downloadCv: "Pobierz CV",
   },
 };
 const c = copy[lang];
@@ -45,6 +50,18 @@ const c = copy[lang];
       <p class="mt-3 text-sm text-base-content/50">
         {c.openTo}
       </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={lang === "pl" ? `${base}pl/projects` : `${base}projects`}
+          class="btn btn-primary"
+        >
+          {c.viewProjects}
+        </a>
+        <button type="button" class="btn btn-outline" data-cv-trigger>
+          {c.downloadCv}
+        </button>
+      </div>
     </div>
   </div>
 </section>

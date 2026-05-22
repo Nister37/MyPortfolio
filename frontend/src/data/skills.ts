@@ -2,7 +2,6 @@ export type SkillLevel = "Strong" | "Good" | "Learning";
 
 export type Skill = {
   name: string;
-  icon?: string;
   level: SkillLevel;
 };
 
@@ -31,7 +30,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Linux", level: "Good" },
       { name: "Nginx", level: "Good" },
       { name: "Google Cloud", level: "Good" },
-      { name: "GitHub Actions", level: "Learning" },
+      { name: "GitHub Actions", level: "Good" },
     ],
   },
   {
