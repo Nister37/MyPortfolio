@@ -1,12 +1,12 @@
 ---
 import ThemeToggle from "../ui/ThemeToggle.astro";
 import LanguageSwitcher from "../ui/LanguageSwitcher.astro";
+import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
   path?: string;
 }
 const { lang = "en", path = "/" } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const navLinks = [
   { href: lang === "pl" ? `${base}pl` : base, label: lang === "pl" ? "Strona główna" : "Home" },
   { href: lang === "pl" ? `${base}pl/projects` : `${base}projects`, label: lang === "pl" ? "Projekty" : "Projects" },
@@ -299,6 +299,8 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
     min-width: 140px;
   }
 </style>
+
+
 
 
 

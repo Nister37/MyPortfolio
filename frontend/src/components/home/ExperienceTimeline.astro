@@ -1,12 +1,12 @@
 ---
 import Section from "../layout/Section.astro";
+import { base } from "../../lib/url";
 
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const blogBase = lang === "pl" ? `${base}pl/blog/` : `${base}blog/`;
 
 type EntryType = "Education" | "Project" | "Work";
@@ -197,5 +197,7 @@ const columns = [
     box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
   }
 </style>
+
+
 
 

@@ -18,9 +18,10 @@
     "@astrojs/svelte": "^8.1.1",
     "@tsparticles/engine": "^4.0.5",
     "@tsparticles/slim": "^4.0.5",
+    "@types/dompurify": "^3.2.0",
     "astro": "^6.3.5",
+    "isomorphic-dompurify": "^3.14.0",
     "lucide-svelte": "^1.0.1",
-    "motion": "^12.39.0",
     "svelte": "^5.55.8",
     "typescript": "^6.0.3"
   },

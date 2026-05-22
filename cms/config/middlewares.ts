@@ -20,9 +20,13 @@ const config: Core.Config.Middlewares = [
   {
     name: 'strapi::cors',
     config: {
-      // Allow GitHub Actions build server and your frontend domain to call the API
-      origin: ['*'],
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+      // Locked to the actual frontend and CMS origins.
+      // DO NOT use '*' — that allows unauthenticated mutations from any origin.
+      origin: [
+        'https://nister37.github.io',
+        'https://myportfolio-production-38ce.up.railway.app',
+      ],
+      methods: ['GET', 'HEAD', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
       keepHeaderOnError: true,
     },

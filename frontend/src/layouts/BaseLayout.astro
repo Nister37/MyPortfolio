@@ -4,6 +4,7 @@ import "../styles/custom.scss";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import CustomCursor from "../components/ui/CustomCursor.svelte";
+import { base } from "../lib/url";
 
 interface Props {
   title: string;
@@ -21,7 +22,6 @@ const {
   path = "/",
 } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37.github.io");
 ---
 
@@ -85,6 +85,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://nister37
     </script>
   </body>
 </html>
+
+
 
 
 

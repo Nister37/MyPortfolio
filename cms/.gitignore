@@ -1,0 +1,4 @@
+
+# Strapi admin build cache
+.strapi/
+.strapi-updater.json

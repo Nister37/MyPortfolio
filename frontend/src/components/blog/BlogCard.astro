@@ -1,11 +1,11 @@
 ---
 import type { BlogPost } from "../../lib/cms/posts";
+import { base } from "../../lib/url";
 interface Props {
   post: BlogPost;
   lang?: "en" | "pl";
 }
 const { post, lang = "en" } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const postHref = lang === "pl" ? `${base}pl/blog/${post.slug}` : `${base}blog/${post.slug}`;
 const formattedDate = post.publishedAt
   ? new Date(post.publishedAt).toLocaleDateString(lang === "pl" ? "pl-PL" : "en-GB", {

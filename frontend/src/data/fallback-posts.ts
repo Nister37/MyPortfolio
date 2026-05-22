@@ -19,10 +19,10 @@ production without anyone manually SSH-ing into the machine. That ruled out FTP 
 <h2>The stack I chose</h2>
 <p>The deployment pipeline has four moving parts:</p>
 <ul>
-  <li><strong>GitLab CI/CD</strong> â€” the pipeline runner, triggered on every push to <code>main</code>.</li>
-  <li><strong>Docker</strong> â€” packages the Spring Boot JAR and its JRE into a reproducible image.</li>
-  <li><strong>GitLab Container Registry</strong> â€” stores tagged images, so the VM never needs to build locally.</li>
-  <li><strong>Google Compute Engine (e2-micro)</strong> â€” a single Linux VM that pulls the image and restarts the container.</li>
+  <li><strong>GitLab CI/CD</strong> — the pipeline runner, triggered on every push to <code>main</code>.</li>
+  <li><strong>Docker</strong> — packages the Spring Boot JAR and its JRE into a reproducible image.</li>
+  <li><strong>GitLab Container Registry</strong> — stores tagged images, so the VM never needs to build locally.</li>
+  <li><strong>Google Compute Engine (e2-micro)</strong> — a single Linux VM that pulls the image and restarts the container.</li>
 </ul>
 
 <h2>The Dockerfile</h2>
@@ -65,7 +65,7 @@ adding that user to the <code>docker</code> group and re-logging in. The pipelin
 <h2>What I would do differently</h2>
 <p>For a production service I would add a health-check endpoint, configure Docker to use a restart policy, and
 front the API with a managed HTTPS load balancer instead of exposing port 8080 directly. For a student project
-on the free tier this setup was good enough â€” it ran reliably for the full semester without manual intervention.</p>
+on the free tier this setup was good enough — it ran reliably for the full semester without manual intervention.</p>
     `.trim(),
   },
   {
@@ -82,8 +82,8 @@ on the free tier this setup was good enough â€” it ran reliably for the ful
 <p>Every time I start a new project I feel the pull to reach for the full toolkit: microservices, an event bus,
 a CQRS read model, a dedicated API gateway. These are real patterns that solve real problems. The trap is
 reaching for them before the problem exists.</p>
-<p>I fell into this on my second year project. I split a student scheduling tool into four services â€” auth,
-users, timetables, notifications â€” before I had written a single business rule. Deploying locally required
+<p>I fell into this on my second year project. I split a student scheduling tool into four services — auth,
+users, timetables, notifications — before I had written a single business rule. Deploying locally required
 Docker Compose files, shared secrets, and inter-service retries. A bug in the auth token format broke
 everything silently. Debugging took three times longer than it would have on a monolith.</p>
 
@@ -91,7 +91,7 @@ everything silently. Debugging took three times longer than it would have on a m
 <p>Start with the simplest structure that could work. For a backend that means:</p>
 <ul>
   <li>One deployable unit.</li>
-  <li>Clear package boundaries (controller â†’ service â†’ repository) that could be split later if needed.</li>
+  <li>Clear package boundaries (controller → service → repository) that could be split later if needed.</li>
   <li>No infrastructure component I cannot run with a single <code>docker run</code> command.</li>
 </ul>
 <p>This is not "write bad code." Package structure, naming, and test coverage matter just as much in a
@@ -111,13 +111,11 @@ exist. The key is recognising which situation you are in.</p>
 <h2>What this means for portfolio code</h2>
 <p>A hiring manager reviewing a student portfolio project should be able to understand the architecture from
 the README in under two minutes. If your project requires a diagram with six boxes and four message queues to
-explain, it is probably over-engineered â€” and the complexity will be the first thing a technical reviewer asks
+explain, it is probably over-engineered — and the complexity will be the first thing a technical reviewer asks
 you to justify.</p>
 <p>Simple code is not junior code. It is code that respects the reader's time.</p>
     `.trim(),
   },
 ];
-
-
 
 
