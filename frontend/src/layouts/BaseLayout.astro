@@ -76,6 +76,27 @@ const websiteSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <title>{title}</title>
+    <!-- Redirect legacy GitHub Pages project URLs to the custom domain.
+         Those pages still render static HTML, but root-relative Svelte chunks
+         like /_astro/CustomCursor... 404 under nister37.github.io/MyPortfolio. -->
+    <script is:inline>
+      (function () {
+        var legacyHost = "nister37.github.io";
+        var legacyBase = "/MyPortfolio";
+        if (window.location.hostname !== legacyHost) return;
+        if (
+          window.location.pathname !== legacyBase &&
+          !window.location.pathname.startsWith(legacyBase + "/")
+        ) {
+          return;
+        }
+
+        var path = window.location.pathname.slice(legacyBase.length) || "/";
+        window.location.replace(
+          "https://pawelryfiak.is-a.dev" + path + window.location.search + window.location.hash
+        );
+      })();
+    </script>
     <!-- Apply saved theme before first paint to prevent flash of wrong theme -->
     <script is:inline>
       (function () {
