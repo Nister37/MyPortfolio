@@ -8,6 +8,8 @@ export type Project = {
   categories: string[];
   stack: string[];
   highlights: string[];
+  tags?: string[];
+  readingTime?: number;
   problem?: string;
   myRole?: string;
   architecture?: string;
@@ -29,6 +31,8 @@ type StrapiProjectItem = {
   categories?: string[];
   stack?: string[];
   highlights?: string[];
+  tags?: string[];
+  readingTime?: number;
   problem?: string;
   myRole?: string;
   architecture?: string;
@@ -66,6 +70,8 @@ export async function getProjects(): Promise<Project[]> {
       categories: item.categories ?? [],
       stack: item.stack ?? [],
       highlights: item.highlights ?? [],
+      tags: item.tags,
+      readingTime: item.readingTime,
       problem: item.problem,
       myRole: item.myRole,
       architecture: item.architecture,

@@ -58,6 +58,12 @@
     "coverImageUrl": {
       "type": "string"
     },
+    "tags": {
+      "type": "json"
+    },
+    "readingTime": {
+      "type": "integer"
+    },
     "featured": {
       "type": "boolean",
       "default": false,
