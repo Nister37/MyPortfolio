@@ -19,6 +19,8 @@ type TimelineEntry = {
   description?: string;
   /** When set, the entire entry becomes a link to /blog/{blogSlug}. */
   blogSlug?: string;
+  /** When set (and no blogSlug), the entry links directly to this URL. */
+  githubUrl?: string;
 };
 
 // One merged timeline, newest first. Add `blogSlug` to any entry to make it
@@ -35,24 +37,48 @@ const entries: TimelineEntry[] = [
         : "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
   },
   {
-    title: "ServicePulse Link Monitor",
+    title: "ServicePulse",
     organization: lang === "pl" ? "Projekt własny" : "Personal project",
     period: "2026",
     type: "Project",
+    githubUrl: "https://github.com/Nister37/ServicePulse",
     description:
       lang === "pl"
-        ? "Aplikacja Spring Boot do monitorowania dostępności endpointów HTTP. Projekt łączy backend, PostgreSQL, Docker Compose, reverse proxy Caddy oraz podstawy deploymentu na serwerze."
-        : "HTTP endpoint monitoring service with configurable schedules, failure alerting, and persistent history — built with Spring Boot and Docker.",
+        ? "Aplikacja Spring Boot do monitorowania dostępności endpointów HTTP z historią sprawdzeń, live dashboardem, Redis, PostgreSQL, Thymeleaf UI, Docker Compose, reverse proxy Caddy, Adminer, GitLab CI i skryptami deployment na GCP."
+        : "Spring Boot HTTP endpoint monitor with check history, live dashboard, PostgreSQL persistence, Redis caching, Thymeleaf UI, Docker Compose, Caddy HTTPS reverse proxy, Adminer, GitLab CI, and GCP deployment scripts.",
   },
   {
-    title: "Roometrix IoT Air Quality System",
+    title: "Traffic Lights Management System",
+    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
+    period: "2026",
+    type: "Project",
+    githubUrl: "https://github.com/Nister37/TrafficLights",
+    description:
+      lang === "pl"
+        ? "Aplikacja Spring Boot do zarządzania skrzyżowaniami, sygnalizatorami, dziennikami serwisowymi i firmami konserwacyjnymi. Thymeleaf MVC, REST API, PostgreSQL, Spring Security, AJAX, import CSV, cache, testy, GitLab CI."
+        : "Spring Boot web app for managing intersections, traffic lights, maintenance logs, and maintenance companies. Thymeleaf MVC, REST APIs, PostgreSQL, Spring Security, AJAX, CSV import, caching, tests, and GitLab CI.",
+  },
+  {
+    title: "KdGRides",
+    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
+    period: "2026",
+    type: "Project",
+    githubUrl: "https://github.com/Nister37/KdGRides",
+    description:
+      lang === "pl"
+        ? "Platforma Spring Boot do współdzielenia przejazdów i aktywności dla studentów KdG. Czat STOMP/WebSocket w czasie rzeczywistym, głosowania, znajomości, mapy, integracja z Google Calendar, OAuth2, Docker, GitLab CI/CD."
+        : "Spring Boot ride-sharing and activity platform for KdG students. Real-time STOMP/WebSocket chat, voting, friendships, maps/routes, Google Calendar integration, OAuth2 login, PostgreSQL, Thymeleaf, Docker, and GitLab CI/CD.",
+  },
+  {
+    title: "Roometrix",
     organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
     period: "2025",
     type: "Project",
+    githubUrl: "https://github.com/Nister37/Roometrix-web-application",
     description:
       lang === "pl"
-        ? "Projekt systemu IoT do monitorowania jakości powietrza w pomieszczeniach. Obejmował zbieranie danych z czujników, backend API, zapis danych oraz proste alerty progowe."
-        : "MQTT-based sensor data ingestion for air quality monitoring with REST API and threshold alerting.",
+        ? "Platforma Spring Boot do monitorowania inteligentnych pomieszczeń w czasie rzeczywistym — temperatura, wilgotność, CO₂, hałas, TVOC i zajętość. Dashboardy analityczne, alerty progowe, wielopokojowa obsługa, RBAC, PostgreSQL, Bootstrap, Chart.js."
+        : "Spring Boot IoT smart room monitoring platform for real-time temperature, humidity, CO₂, noise, TVOC and occupancy tracking. Analytics dashboards, threshold alerts, multi-room support, role-based access, PostgreSQL, Thymeleaf, Bootstrap and Chart.js.",
   },
   {
     title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
@@ -134,8 +160,12 @@ const columns = [
           </h3>
           <ol class="timeline-list space-y-4 border-l-2 border-base-300 pl-8">
             {column.entries.map((entry) => {
-              const Tag = entry.blogSlug ? "a" : "div";
-              const href = entry.blogSlug ? `${blogBase}${entry.blogSlug}` : undefined;
+              const isLinked = !!(entry.blogSlug || entry.githubUrl);
+              const Tag = isLinked ? "a" : "div";
+              const href = entry.blogSlug
+                ? `${blogBase}${entry.blogSlug}`
+                : entry.githubUrl;
+              const isExternal = !entry.blogSlug && !!entry.githubUrl;
               return (
                 <li class="relative">
                   <span
@@ -144,9 +174,11 @@ const columns = [
                   />
                   <Tag
                     {href}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
                     class:list={[
                       "timeline-card block rounded-lg border border-base-300 bg-base-200/40 p-5 transition-all",
-                      entry.blogSlug && "timeline-card--linked cursor-pointer",
+                      isLinked && "timeline-card--linked cursor-pointer",
                     ]}
                   >
                     <div class="mb-1 flex flex-wrap items-center gap-2">
@@ -161,6 +193,11 @@ const columns = [
                       {entry.blogSlug && (
                         <span class="ml-auto text-xs text-primary/80">
                           {lang === "pl" ? "Przeczytaj artykuł →" : "Read article →"}
+                        </span>
+                      )}
+                      {isExternal && (
+                        <span class="ml-auto text-xs text-primary/80">
+                          GitHub →
                         </span>
                       )}
                     </div>
