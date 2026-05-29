@@ -1,5 +1,6 @@
 import { fetchFromStrapi } from "./strapi";
 import { fallbackPosts } from "../../data/fallback-posts";
+import { strapiBlocksToHtml } from "./strapi-blocks-to-html";
 
 export type BlogPost = {
   title: string;
@@ -20,7 +21,8 @@ type StrapiPostItem = {
   title: string;
   slug: string;
   description: string;
-  content?: string;
+  // Strapi v5 "blocks" fields arrive as a JSON array, not a plain string.
+  content?: unknown;
   tags?: string[];
   publishedAtCustom?: string;
   publishedAt?: string;
@@ -45,7 +47,8 @@ export async function getPosts(): Promise<BlogPost[]> {
       title: item.title,
       slug: item.slug,
       description: item.description,
-      content: item.content,
+      // Convert Strapi v5 block JSON to an HTML string before it leaves this layer.
+      content: strapiBlocksToHtml(item.content),
       tags: item.tags ?? [],
       publishedAt: item.publishedAtCustom ?? item.publishedAt,
       coverImageUrl: item.coverImageUrl,
