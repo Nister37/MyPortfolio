@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Section from "../components/layout/Section.astro";
 import ContactCta from "../components/home/ContactCta.astro";
-import { base } from "../lib/url";
 ---
 
 <BaseLayout
@@ -39,13 +38,6 @@ import { base } from "../lib/url";
           contribute to a real codebase, learn from experienced engineers, and keep improving
           my DevOps and system design skills. Based in Antwerp, open to remote and EU roles.
         </p>
-
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href={`${base}projects`} class="btn btn-primary">View projects</a>
-          <a href={`${base}blog`} class="btn btn-outline">Read blog</a>
-          <!-- Opens the CV language picker rendered by Header -->
-          <button type="button" class="btn btn-ghost" data-cv-trigger>Download CV</button>
-        </div>
       </div>
     </Section>
 

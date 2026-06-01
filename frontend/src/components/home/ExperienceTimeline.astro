@@ -130,12 +130,12 @@ const typeBadgeClass: Record<EntryType, string> = {
   Work: "badge-secondary",
 };
 
-// Two lifelines: education on the left, work + projects on the right.
-const educationEntries = entries.filter((entry) => entry.type === "Education");
-const experienceEntries = entries.filter((entry) => entry.type !== "Education");
+// Two lifelines: education + professional experience on the left, projects on the right.
+const educationEntries = entries.filter((entry) => entry.type === "Education" || entry.type === "Work");
+const experienceEntries = entries.filter((entry) => entry.type === "Project");
 
-const educationHeading = lang === "pl" ? "Edukacja" : "Education";
-const experienceHeading = lang === "pl" ? "Doświadczenie" : "Experience";
+const educationHeading = lang === "pl" ? "Edukacja i doświadczenie zawodowe" : "Education and Professional Experience";
+const experienceHeading = lang === "pl" ? "Projekty" : "Projects";
 
 const columns = [
   { heading: educationHeading, entries: educationEntries },

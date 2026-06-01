@@ -1,6 +1,6 @@
 ---
 import Section from "../layout/Section.astro";
-import { skillCategories } from "../../data/skills";
+import { getSkillLevel, skillCategories } from "../../data/skills";
 import type { SkillLevel } from "../../data/skills";
 
 interface Props {
@@ -11,19 +11,49 @@ const { lang = "en" } = Astro.props;
 const levels = [1, 2, 3, 4, 5] as const;
 
 const categoryLabel: Record<string, Record<string, string>> = {
-  en: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI & Automation", Frontend: "Frontend", Database: "Database" },
-  pl: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI i automatyzacja", Frontend: "Frontend", Database: "Bazy danych" },
+  en: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI & Automation", Frontend: "Frontend", Database: "Database", Languages: "Languages" },
+  pl: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI i automatyzacja", Frontend: "Frontend", Database: "Bazy danych", Languages: "Języki programowania" },
 };
 
 const legendLabels: Record<"en" | "pl", string[]> = {
-  en: [">6 months", ">1 year", ">2 years", ">3 years", ">4 years"],
-  pl: [">6 miesięcy", ">1 rok", ">2 lata", ">3 lata", ">4 lata"],
+  en: ["0-5 months", "6+ months", "1+ year", "2+ years", "3+ years"],
+  pl: ["0-5 miesięcy", "6+ miesięcy", "1+ rok", "2+ lata", "3+ lata"],
 };
 
-function meterLabel(level: SkillLevel) {
+function formatExperience(months: number) {
+  if (lang === "pl") {
+    if (months === 18) return "1,5 roku";
+    if (months % 12 === 0) {
+      const years = months / 12;
+      if (years === 1) return "1 rok";
+      if (years >= 2 && years <= 4) return `${years} lata`;
+      return `${years} lat`;
+    }
+
+    const lastDigit = months % 10;
+    const lastTwoDigits = months % 100;
+    const monthWord =
+      lastDigit >= 2 && lastDigit <= 4 && !(lastTwoDigits >= 12 && lastTwoDigits <= 14)
+        ? "miesiące"
+        : "miesięcy";
+
+    return months === 1 ? "1 miesiąc" : `${months} ${monthWord}`;
+  }
+
+  if (months === 18) return "1.5 years";
+  if (months % 12 === 0) {
+    const years = months / 12;
+    return years === 1 ? "1 year" : `${years} years`;
+  }
+
+  return months === 1 ? "1 month" : `${months} months`;
+}
+
+function meterLabel(level: SkillLevel, months: number) {
+  const experience = formatExperience(months);
   return lang === "pl"
-    ? `${level} z 5 pasków doświadczenia: ${legendLabels.pl[level - 1]}`
-    : `${level} of 5 experience bars: ${legendLabels.en[level - 1]}`;
+    ? `${level} z 5 pasków doświadczenia: ${experience} (${legendLabels.pl[level - 1]})`
+    : `${level} of 5 experience bars: ${experience} (${legendLabels.en[level - 1]})`;
 }
 ---
 
@@ -37,6 +67,31 @@ function meterLabel(level: SkillLevel) {
         ? "Wybierz obszar, aby zobaczyć technologie i czas doświadczenia."
         : "Select a domain to see technologies and hands-on experience."}
     </p>
+  </div>
+
+  <div class="mt-6 rounded-xl border border-base-300 bg-base-200/50 p-5">
+    <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/70">
+      {lang === "pl" ? "Legenda doświadczenia" : "Experience legend"}
+    </h3>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        levels.map((level) => (
+          <div class="flex items-center gap-3">
+            <span class="skill-meter" data-level={level} aria-hidden="true">
+              {levels.map((bar) => (
+                <span
+                  class:list={[
+                    "skill-meter__bar",
+                    bar <= level && "skill-meter__bar--active",
+                  ]}
+                />
+              ))}
+            </span>
+            <span class="text-xs text-base-content/65">{legendLabels[lang][level - 1]}</span>
+          </div>
+        ))
+      }
+    </div>
   </div>
 
   <div class="mt-10 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -64,57 +119,40 @@ function meterLabel(level: SkillLevel) {
             </svg>
           </summary>
           <ul class="space-y-3 border-t border-base-300 px-5 py-4">
-            {skills.map(({ name, level }) => (
-              <li class="flex items-center justify-between gap-3">
-                <span class="text-sm font-medium text-base-content">{name}</span>
-                <span
-                  class="skill-meter"
-                  data-level={level}
-                  role="img"
-                  aria-label={meterLabel(level)}
-                  title={meterLabel(level)}
-                >
-                  {levels.map((bar) => (
-                    <span
-                      class:list={[
-                        "skill-meter__bar",
-                        bar <= level && "skill-meter__bar--active",
-                      ]}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </span>
-              </li>
-            ))}
+            {skills.map(({ name, months }) => {
+              const level = getSkillLevel(months);
+              const experience = formatExperience(months);
+
+              return (
+                <li class="flex items-center justify-between gap-3">
+                  <div class="min-w-0">
+                    <span class="text-sm font-medium text-base-content">{name}</span>
+                    <span class="mt-0.5 block text-xs text-base-content/50">{experience}</span>
+                  </div>
+                  <span
+                    class="skill-meter"
+                    data-level={level}
+                    role="img"
+                    aria-label={meterLabel(level, months)}
+                    title={meterLabel(level, months)}
+                  >
+                    {levels.map((bar) => (
+                      <span
+                        class:list={[
+                          "skill-meter__bar",
+                          bar <= level && "skill-meter__bar--active",
+                        ]}
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </details>
       ))
     }
-  </div>
-
-  <div class="mt-6 rounded-xl border border-base-300 bg-base-200/50 p-5">
-    <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/70">
-      {lang === "pl" ? "Legenda doświadczenia" : "Experience legend"}
-    </h3>
-    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-      {
-        levels.map((level) => (
-          <div class="flex items-center gap-3">
-            <span class="skill-meter" data-level={level} aria-hidden="true">
-              {levels.map((bar) => (
-                <span
-                  class:list={[
-                    "skill-meter__bar",
-                    bar <= level && "skill-meter__bar--active",
-                  ]}
-                />
-              ))}
-            </span>
-            <span class="text-xs text-base-content/65">{legendLabels[lang][level - 1]}</span>
-          </div>
-        ))
-      }
-    </div>
   </div>
 </Section>
 

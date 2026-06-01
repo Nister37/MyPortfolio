@@ -2,7 +2,6 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/layout/Section.astro";
 import ContactCta from "../../components/home/ContactCta.astro";
-import { base } from "../../lib/url";
 ---
 
 <BaseLayout
@@ -41,12 +40,6 @@ import { base } from "../../lib/url";
           oraz rozwijać umiejętności w zakresie projektowania systemów i podstaw deploymentu.
           Obecnie mieszkam w Antwerpii, jestem dostępny zdalnie oraz w Polsce i UE.
         </p>
-
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href={`${base}pl/projects`} class="btn btn-primary">Zobacz projekty</a>
-          <a href={`${base}pl/blog`} class="btn btn-outline">Przeczytaj blog</a>
-          <button type="button" class="btn btn-ghost" data-cv-trigger>Pobierz CV</button>
-        </div>
       </div>
     </Section>
     <ContactCta lang="pl" />
