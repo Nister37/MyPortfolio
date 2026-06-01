@@ -1,26 +1,30 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getPostsByLanguage } from "../../../lib/cms/posts";
+import { getBlogPostLocalePaths, getPosts } from "../../../lib/cms/posts";
 import type { BlogPost } from "../../../lib/cms/posts";
+import MermaidDiagrams from "../../../components/blog/MermaidDiagrams.astro";
 import Section from "../../../components/layout/Section.astro";
 import DOMPurify from "isomorphic-dompurify";
 import { base } from "../../../lib/url";
 
 export async function getStaticPaths() {
-  const posts = await getPostsByLanguage("pl");
+  const allPosts = await getPosts();
+  const posts = allPosts.filter((post) => (post.language ?? "en") === "pl");
 
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post, localePaths: getBlogPostLocalePaths(post, allPosts) },
   }));
 }
 
 interface Props {
   post: BlogPost;
+  localePaths: Record<"en" | "pl", string>;
 }
 
-const { post } = Astro.props;
+const { post, localePaths } = Astro.props;
 const safeContent = post.content ? DOMPurify.sanitize(post.content) : null;
+const hasMermaidDiagrams = safeContent?.includes('class="mermaid"') ?? false;
 const formattedDate = post.publishedAt
   ? new Date(post.publishedAt).toLocaleDateString("pl-PL", {
       day: "numeric",
@@ -35,6 +39,7 @@ const formattedDate = post.publishedAt
   description={post.description}
   lang="pl"
   path={`/blog/${post.slug}`}
+  localePaths={localePaths}
 >
   <main id="main-content">
     <Section>
@@ -68,6 +73,7 @@ const formattedDate = post.publishedAt
         )
       }
     </Section>
+    {hasMermaidDiagrams && <MermaidDiagrams />}
   </main>
 </BaseLayout>
 

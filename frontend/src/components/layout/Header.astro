@@ -5,8 +5,9 @@ import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
   path?: string;
+  localePaths?: Partial<Record<"en" | "pl", string>>;
 }
-const { lang = "en", path = "/" } = Astro.props;
+const { lang = "en", path = "/", localePaths } = Astro.props;
 const navLinks = [
   { href: lang === "pl" ? `${base}pl` : base, label: lang === "pl" ? "Strona główna" : "Home" },
   { href: lang === "pl" ? `${base}pl/projects` : `${base}projects`, label: lang === "pl" ? "Projekty" : "Projects" },
@@ -63,14 +64,14 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
         {cvButtonLabel}
       </button>
       <ThemeToggle />
-      <LanguageSwitcher currentLang={lang} path={path} />
+      <LanguageSwitcher currentLang={lang} path={path} localePaths={localePaths} />
     </div>
 
     <!-- Mobile controls + hamburger span the full row on small screens. -->
     <div class="col-span-3 flex items-center justify-end gap-2 md:hidden">
       <!-- Larger class keeps the touch target ≥ 44 px on mobile. -->
       <ThemeToggle class="btn btn-ghost" />
-      <LanguageSwitcher currentLang={lang} path={path} />
+      <LanguageSwitcher currentLang={lang} path={path} localePaths={localePaths} />
       <div class="drawer drawer-end">
         <input id="mobile-nav" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">

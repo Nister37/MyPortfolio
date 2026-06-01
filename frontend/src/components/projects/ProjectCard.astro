@@ -9,37 +9,41 @@ interface Props {
 const { project } = Astro.props;
 const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
 const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
-const caseStudyLabel = lang === "pl" ? "Szczegóły" : "Case study";
-
-// Cards with a GitHub URL navigate directly to the repo; others open the case study.
-const primaryHref = project.githubUrl ?? caseStudyHref;
-const isExternal = !!project.githubUrl;
-const primaryLabel = isExternal
-  ? `GitHub: ${project.title}`
-  : `${caseStudyLabel}: ${project.title}`;
+const caseStudyLabel = lang === "pl" ? "Studium przypadku" : "Case study";
+const detailsLabel = lang === "pl" ? "Pokaż szczegóły" : "Show details";
+const hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
 ---
 
-<article class="card relative bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
-  <!-- Stretched link — opens GitHub when githubUrl is set, otherwise the case study. -->
-  <a
-    href={primaryHref}
-    class="absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-    aria-label={primaryLabel}
-    target={isExternal ? "_blank" : undefined}
-    rel={isExternal ? "noopener noreferrer" : undefined}
-  ></a>
+<details class="project-card group card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
+  <summary class="cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+    <div class="card-body gap-4">
+      <div class="flex flex-wrap gap-2">
+        {project.categories.map((cat) => (
+          <span class="badge badge-primary badge-sm">{cat}</span>
+        ))}
+      </div>
 
-  <div class="card-body relative z-[1] gap-4 pointer-events-none">
-    <div class="flex flex-wrap gap-2">
-      {project.categories.map((cat) => (
-        <span class="badge badge-primary badge-sm">{cat}</span>
-      ))}
+      <h3 class="card-title text-lg leading-snug">{project.title}</h3>
+      <p class="text-sm text-base-content/70">{project.summary}</p>
+
+      <span class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary">
+        <span class="project-card__show-label">{detailsLabel}</span>
+        <span class="project-card__hide-label">{hideDetailsLabel}</span>
+        <svg
+          class="project-card__chevron h-3.5 w-3.5 transition-transform"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+        </svg>
+      </span>
     </div>
+  </summary>
 
-    <h3 class="card-title text-lg leading-snug">{project.title}</h3>
-
-    <p class="text-sm text-base-content/70">{project.summary}</p>
-
+  <div class="card-body gap-4 border-t border-base-300 pt-4">
     {
       project.highlights.length > 0 && (
         <ul class="space-y-1 text-sm text-base-content/60">
@@ -59,10 +63,19 @@ const primaryLabel = isExternal
       ))}
     </div>
 
-    <!-- Live demo button needs pointer-events restored AND a higher z-index so
-         it's clickable over the stretched-link overlay. -->
-    {project.liveUrl && (
-      <div class="card-actions pointer-events-auto relative z-10 mt-2 flex-wrap gap-2">
+    <div class="card-actions mt-2 flex-wrap gap-2">
+      <a href={caseStudyHref} class="btn btn-primary btn-sm">{caseStudyLabel}</a>
+      {project.githubUrl && (
+        <a
+          href={project.githubUrl}
+          class="btn btn-ghost btn-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+      )}
+      {project.liveUrl && (
         <a
           href={project.liveUrl}
           class="btn btn-ghost btn-sm"
@@ -71,8 +84,34 @@ const primaryLabel = isExternal
         >
           {lang === "pl" ? "Wersja live" : "Live demo"}
         </a>
-      </div>
-    )}
+      )}
+    </div>
   </div>
-</article>
+</details>
 
+<style>
+  .project-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .project-card[open] {
+    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
+    box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
+  }
+
+  .project-card__hide-label {
+    display: none;
+  }
+
+  .project-card[open] .project-card__show-label {
+    display: none;
+  }
+
+  .project-card[open] .project-card__hide-label {
+    display: inline;
+  }
+
+  .project-card[open] .project-card__chevron {
+    transform: rotate(180deg);
+  }
+</style>

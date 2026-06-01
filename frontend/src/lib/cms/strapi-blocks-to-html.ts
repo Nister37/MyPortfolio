@@ -88,6 +88,20 @@ function renderInline(nodes: InlineNode[]): string {
     .join("");
 }
 
+function renderPlainText(nodes: InlineNode[]): string {
+  return nodes
+    .map((node) => (node.type === "link" ? renderPlainText(node.children) : node.text))
+    .join("");
+}
+
+function getMermaidSource(block: CodeBlock): string | null {
+  const source = renderPlainText(block.children);
+  if (block.language?.toLowerCase() === "mermaid") return source;
+
+  const [directive, ...diagramLines] = source.split(/\r?\n/);
+  return directive.trim().toLowerCase() === "mermaid" ? diagramLines.join("\n") : null;
+}
+
 // ---------------------------------------------------------------------------
 // Block renderer
 // ---------------------------------------------------------------------------
@@ -112,6 +126,11 @@ function renderBlock(block: StrapiBlock): string {
       return `<blockquote>${renderInline(block.children)}</blockquote>`;
 
     case "code": {
+      const mermaidSource = getMermaidSource(block);
+      if (mermaidSource !== null) {
+        return `<pre class="mermaid">${escapeHtml(mermaidSource)}</pre>`;
+      }
+
       const lang = block.language ? ` class="language-${escapeHtml(block.language)}"` : "";
       const code = renderInline(block.children);
       return `<pre><code${lang}>${code}</code></pre>`;

@@ -5,12 +5,14 @@ interface Props {
   currentLang: "en" | "pl";
   /** Current page path without locale prefix, e.g. "/" or "/projects" */
   path: string;
+  /** Optional locale-specific paths for translated pages with different slugs. */
+  localePaths?: Partial<Record<"en" | "pl", string>>;
 }
 
-const { currentLang, path } = Astro.props;
+const { currentLang, path, localePaths } = Astro.props;
 
-const enUrl = getRelativeLocaleUrl("en", path);
-const plUrl = getRelativeLocaleUrl("pl", path);
+const enUrl = getRelativeLocaleUrl("en", localePaths?.en ?? path);
+const plUrl = getRelativeLocaleUrl("pl", localePaths?.pl ?? path);
 ---
 
 <div class="flex items-center gap-1 text-sm font-medium">

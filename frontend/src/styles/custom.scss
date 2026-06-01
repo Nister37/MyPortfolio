@@ -99,6 +99,18 @@
     overflow-x: auto;
   }
 
+  pre.mermaid {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--color-base-200);
+
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+  }
+
   img {
     border-radius: 1rem;
   }

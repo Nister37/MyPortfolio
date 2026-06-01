@@ -28,7 +28,7 @@ const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`
       {lang === "pl" ? "Wszystkie projekty ->" : "All projects ->"}
     </a>
   </div>
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
     {featuredProjects.map((project) => <ProjectCard project={project} />)}
   </div>
   <div class="mt-8 md:hidden">

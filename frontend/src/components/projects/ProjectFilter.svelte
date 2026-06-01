@@ -14,7 +14,9 @@
   export let projectBase: string = "/projects/";
   export let lang: string = "en";
 
-  $: caseStudyLabel = lang === "pl" ? "Szczegóły" : "Case study";
+  $: caseStudyLabel = lang === "pl" ? "Studium przypadku" : "Case study";
+  $: detailsLabel = lang === "pl" ? "Pokaż szczegóły" : "Show details";
+  $: hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
   $: noProjectsLabel =
     lang === "pl" ? "Brak projektów w tej kategorii." : "No projects in this category.";
 
@@ -29,7 +31,6 @@
 </script>
 
 <div class="space-y-8">
-  <!-- Filter buttons -->
   <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
     {#each categories as category}
       <button
@@ -44,28 +45,38 @@
     {/each}
   </div>
 
-  <!-- Project grid -->
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
     {#each visibleProjects as project (project.slug)}
-      <article class="card relative bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
-        <!-- Stretched link opens the case study from anywhere on the card.
-             GitHub / Live demo buttons restore pointer-events and raise their
-             z-index so they keep their own click targets. -->
-        <a
-          href={`${projectBase}${project.slug}`}
-          class="absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label={`${caseStudyLabel}: ${project.title}`}
-        ></a>
-        <div class="card-body relative z-[1] gap-4 pointer-events-none">
-          <div class="flex flex-wrap gap-2">
-            {#each project.categories as cat}
-              <span class="badge badge-primary badge-sm">{cat}</span>
-            {/each}
+      <details class="project-card card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
+        <summary class="cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          <div class="card-body gap-4">
+            <div class="flex flex-wrap gap-2">
+              {#each project.categories as cat}
+                <span class="badge badge-primary badge-sm">{cat}</span>
+              {/each}
+            </div>
+
+            <h3 class="card-title text-lg leading-snug">{project.title}</h3>
+            <p class="text-sm text-base-content/70">{project.summary}</p>
+
+            <span class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary">
+              <span class="project-card__show-label">{detailsLabel}</span>
+              <span class="project-card__hide-label">{hideDetailsLabel}</span>
+              <svg
+                class="project-card__chevron h-3.5 w-3.5 transition-transform"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+              </svg>
+            </span>
           </div>
+        </summary>
 
-          <h3 class="card-title text-lg leading-snug">{project.title}</h3>
-          <p class="text-sm text-base-content/70">{project.summary}</p>
-
+        <div class="card-body gap-4 border-t border-base-300 pt-4">
           {#if project.highlights.length > 0}
             <ul class="space-y-1 text-sm text-base-content/60">
               {#each project.highlights as point}
@@ -83,32 +94,33 @@
             {/each}
           </div>
 
-          {#if project.githubUrl || project.liveUrl}
-            <div class="card-actions pointer-events-auto relative z-10 mt-2 flex-wrap gap-2">
-              {#if project.githubUrl}
-                <a
-                  href={project.githubUrl}
-                  class="btn btn-ghost btn-sm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                </a>
-              {/if}
-              {#if project.liveUrl}
-                <a
-                  href={project.liveUrl}
-                  class="btn btn-ghost btn-sm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {lang === "pl" ? "Wersja live" : "Live demo"}
-                </a>
-              {/if}
-            </div>
-          {/if}
+          <div class="card-actions mt-2 flex-wrap gap-2">
+            <a href={`${projectBase}${project.slug}`} class="btn btn-primary btn-sm">
+              {caseStudyLabel}
+            </a>
+            {#if project.githubUrl}
+              <a
+                href={project.githubUrl}
+                class="btn btn-ghost btn-sm"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+            {/if}
+            {#if project.liveUrl}
+              <a
+                href={project.liveUrl}
+                class="btn btn-ghost btn-sm"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {lang === "pl" ? "Wersja live" : "Live demo"}
+              </a>
+            {/if}
+          </div>
         </div>
-      </article>
+      </details>
     {/each}
   </div>
 
@@ -117,7 +129,29 @@
   {/if}
 </div>
 
+<style>
+  .project-card summary::-webkit-details-marker {
+    display: none;
+  }
 
+  .project-card[open] {
+    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
+    box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
+  }
 
+  .project-card__hide-label {
+    display: none;
+  }
 
+  .project-card[open] .project-card__show-label {
+    display: none;
+  }
 
+  .project-card[open] .project-card__hide-label {
+    display: inline;
+  }
+
+  .project-card[open] .project-card__chevron {
+    transform: rotate(180deg);
+  }
+</style>

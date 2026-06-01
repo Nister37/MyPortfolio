@@ -5,6 +5,7 @@ import { strapiBlocksToHtml } from "./strapi-blocks-to-html";
 export type BlogPost = {
   title: string;
   slug: string;
+  translationKey?: string;
   description: string;
   content?: string;
   tags?: string[];
@@ -20,6 +21,7 @@ type StrapiPostItem = {
   documentId?: string;
   title: string;
   slug: string;
+  translationKey?: string;
   description: string;
   // Strapi v5 "blocks" fields arrive as a JSON array, not a plain string.
   content?: unknown;
@@ -46,6 +48,7 @@ export async function getPosts(): Promise<BlogPost[]> {
     return result.data.map((item) => ({
       title: item.title,
       slug: item.slug,
+      translationKey: item.translationKey,
       description: item.description,
       // Convert Strapi v5 block JSON to an HTML string before it leaves this layer.
       content: strapiBlocksToHtml(item.content),
@@ -65,5 +68,34 @@ export async function getPosts(): Promise<BlogPost[]> {
 export async function getPostsByLanguage(lang: "en" | "pl"): Promise<BlogPost[]> {
   const posts = await getPosts();
   return posts.filter((post) => (post.language ?? "en") === lang);
+}
+
+export function getBlogPostLocalePaths(
+  post: BlogPost,
+  posts: BlogPost[],
+): Record<"en" | "pl", string> {
+  const currentLanguage = post.language ?? "en";
+  const translationKey = post.translationKey?.trim();
+  const localePaths: Record<"en" | "pl", string> = {
+    en: "/blog",
+    pl: "/blog",
+  };
+
+  localePaths[currentLanguage] = `/blog/${post.slug}`;
+
+  for (const candidate of posts) {
+    const candidateLanguage = candidate.language ?? "en";
+    const isTranslation =
+      candidateLanguage !== currentLanguage &&
+      (translationKey
+        ? candidate.translationKey?.trim() === translationKey
+        : candidate.slug === post.slug);
+
+    if (isTranslation) {
+      localePaths[candidateLanguage] = `/blog/${candidate.slug}`;
+    }
+  }
+
+  return localePaths;
 }
 

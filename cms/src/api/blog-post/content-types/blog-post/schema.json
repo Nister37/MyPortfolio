@@ -21,6 +21,9 @@
       "targetField": "title",
       "required": true
     },
+    "translationKey": {
+      "type": "string"
+    },
     "description": {
       "type": "text",
       "required": true

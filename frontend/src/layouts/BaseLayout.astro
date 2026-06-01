@@ -12,6 +12,7 @@ interface Props {
   ogImage?: string;
   lang?: "en" | "pl";
   path?: string;
+  localePaths?: Partial<Record<"en" | "pl", string>>;
 }
 
 const {
@@ -20,6 +21,7 @@ const {
   ogImage,
   lang = "en",
   path = "/",
+  localePaths,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryfiak.is-a.dev");
@@ -116,7 +118,7 @@ const websiteSchema = {
     >
       Skip to content
     </a>
-    <Header lang={lang} path={path} />
+    <Header lang={lang} path={path} localePaths={localePaths} />
     <slot />
     <Footer lang={lang} />
     <CustomCursor client:load />
