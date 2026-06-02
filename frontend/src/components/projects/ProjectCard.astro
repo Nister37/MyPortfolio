@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { projectCardCopy } from "../../data/site-copy";
+import { isGroupProject } from "../../lib/project-flags";
 import type { Project } from "../../lib/cms/projects";
 import "../../styles/components/project-card.css";
 
@@ -12,6 +13,7 @@ const { project } = Astro.props;
 const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
 const copy = projectCardCopy[lang];
 const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
+const groupProject = isGroupProject(project);
 ---
 
 <details class="project-card group card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
@@ -19,8 +21,9 @@ const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
     <div class="card-body gap-4">
       <div class="flex flex-wrap gap-2">
         {project.categories.map((cat) => (
-          <span class="badge badge-primary badge-sm">{cat}</span>
+          <span class="badge badge-outline badge-sm">{cat}</span>
         ))}
+        {groupProject && <span class="badge badge-sm badge-primary">{copy.groupProject}</span>}
       </div>
 
       <h3 class="card-title text-lg leading-snug">{project.title}</h3>

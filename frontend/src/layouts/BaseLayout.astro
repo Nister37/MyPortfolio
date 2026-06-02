@@ -4,6 +4,7 @@ import "../styles/custom.scss";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import CustomCursor from "../components/ui/CustomCursor.svelte";
+import ScrollProgress from "../components/ui/ScrollProgress.astro";
 import { layoutCopy, siteMetadata } from "../data/site-copy";
 import { base } from "../lib/url";
 
@@ -110,6 +111,7 @@ const websiteSchema = {
     </script>
   </head>
   <body class="min-h-screen bg-base-100 text-base-content antialiased">
+    <ScrollProgress />
     <!-- Skip nav for keyboard users -->
     <a
       href="#main-content"
@@ -122,6 +124,7 @@ const websiteSchema = {
     <Footer lang={lang} />
     <CustomCursor client:load />
     <script>
+      import "../scripts/details-animations";
       import "../scripts/reveal";
     </script>
   </body>

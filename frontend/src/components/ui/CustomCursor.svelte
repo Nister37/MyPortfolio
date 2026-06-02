@@ -9,18 +9,38 @@
 
   let cursor: HTMLDivElement;
   let rafId = 0;
+  let hoverSyncRaf = 0;
   let cleanup: (() => void) | undefined;
 
   let targetX = 0;
   let targetY = 0;
   let x = 0;
   let y = 0;
+  let hasPointer = false;
 
-  const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary";
+  const INTERACTIVE =
+    "a, button, [role='button'], input, textarea, select, label, summary, details, .skill-card, .project-card, .timeline-card, .certificate-card";
 
   // Lower factor = smoother trailing motion. Sub-stepping keeps it framerate-
   // independent enough on 60Hz and 120Hz displays without feeling laggy.
   const SMOOTHING = 0.18;
+
+  function syncHoverState() {
+    hoverSyncRaf = 0;
+    if (!cursor) return;
+    if (!hasPointer) {
+      cursor.classList.remove("hover");
+      return;
+    }
+
+    const elementAtPointer = document.elementFromPoint(targetX, targetY) as HTMLElement | null;
+    cursor.classList.toggle("hover", Boolean(elementAtPointer?.closest(INTERACTIVE)));
+  }
+
+  function queueHoverSync() {
+    if (hoverSyncRaf) return;
+    hoverSyncRaf = requestAnimationFrame(syncHoverState);
+  }
 
   function tick() {
     const dx = targetX - x;
@@ -45,34 +65,37 @@
     let firstMove = true;
 
     const onMove = (e: PointerEvent) => {
+      hasPointer = true;
       targetX = e.clientX;
       targetY = e.clientY;
       if (firstMove) {
         x = targetX;
         y = targetY;
-        cursor.style.opacity = "1";
         firstMove = false;
       }
+      cursor.style.opacity = "1";
+      queueHoverSync();
     };
 
-    const onOver = (e: PointerEvent) => {
-      if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
-        cursor.classList.add("hover");
-      }
-    };
-    const onOut = (e: PointerEvent) => {
-      if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) {
-        cursor.classList.remove("hover");
-      }
+    const onViewportShift = () => {
+      cursor.classList.remove("hover");
+      queueHoverSync();
     };
     const onDown = () => cursor.classList.add("press");
     const onUp = () => cursor.classList.remove("press");
-    const onLeave = () => (cursor.style.opacity = "0");
-    const onEnter = () => (cursor.style.opacity = "1");
+    const onLeave = () => {
+      hasPointer = false;
+      cursor.style.opacity = "0";
+      cursor.classList.remove("hover", "press");
+    };
+    const onEnter = () => {
+      if (hasPointer) cursor.style.opacity = "1";
+      queueHoverSync();
+    };
 
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerover", onOver);
-    window.addEventListener("pointerout", onOut);
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("scroll", onViewportShift, { passive: true });
+    window.addEventListener("resize", onViewportShift);
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
     document.addEventListener("mouseleave", onLeave);
@@ -82,8 +105,8 @@
 
     cleanup = () => {
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerover", onOver);
-      window.removeEventListener("pointerout", onOut);
+      window.removeEventListener("scroll", onViewportShift);
+      window.removeEventListener("resize", onViewportShift);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.removeEventListener("mouseleave", onLeave);
@@ -93,6 +116,7 @@
 
   onDestroy(() => {
     if (rafId) cancelAnimationFrame(rafId);
+    if (hoverSyncRaf) cancelAnimationFrame(hoverSyncRaf);
     cleanup?.();
   });
 </script>

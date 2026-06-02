@@ -2,6 +2,13 @@
   display: none;
 }
 
+.skill-card:hover {
+  border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary, #6366f1) 7%, transparent);
+  box-shadow: 0 12px 30px -20px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
+  transform: translateY(-2px);
+}
+
 .skill-card[open] {
   border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
   box-shadow: 0 12px 30px -20px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { isGroupProject } from "../../lib/project-flags";
+
   type Project = {
     title: string;
     slug: string;
@@ -17,6 +19,7 @@
   $: caseStudyLabel = lang === "pl" ? "Studium przypadku" : "Case study";
   $: detailsLabel = lang === "pl" ? "Pokaż szczegóły" : "Show details";
   $: hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
+  $: groupProjectLabel = lang === "pl" ? "Projekt grupowy" : "Group project";
   $: noProjectsLabel =
     lang === "pl" ? "Brak projektów w tej kategorii." : "No projects in this category.";
 
@@ -52,8 +55,11 @@
           <div class="card-body gap-4">
             <div class="flex flex-wrap gap-2">
               {#each project.categories as cat}
-                <span class="badge badge-primary badge-sm">{cat}</span>
+                <span class="badge badge-outline badge-sm">{cat}</span>
               {/each}
+              {#if isGroupProject(project)}
+                <span class="badge badge-sm badge-primary">{groupProjectLabel}</span>
+              {/if}
             </div>
 
             <h3 class="card-title text-lg leading-snug">{project.title}</h3>

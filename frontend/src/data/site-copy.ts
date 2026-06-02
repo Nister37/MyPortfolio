@@ -307,12 +307,14 @@ export const projectCardCopy = {
     showDetails: "Show details",
     hideDetails: "Hide details",
     liveDemo: "Live demo",
+    groupProject: "Group project",
   },
   pl: {
     caseStudy: "Studium przypadku",
     showDetails: "Pokaż szczegóły",
     hideDetails: "Ukryj szczegóły",
     liveDemo: "Wersja live",
+    groupProject: "Projekt grupowy",
   },
 } as const satisfies Record<Lang, Record<string, string>>;
 
@@ -327,6 +329,7 @@ export const projectDetailCopy = {
     lessonsLearned: "What I learned",
     viewOnGitHub: "View on GitHub",
     liveDemo: "Live demo",
+    groupProject: "Group project",
   },
   pl: {
     allProjects: "← Wszystkie projekty",
@@ -338,6 +341,7 @@ export const projectDetailCopy = {
     lessonsLearned: "Wnioski",
     viewOnGitHub: "Zobacz na GitHub",
     liveDemo: "Demo na żywo",
+    groupProject: "Projekt grupowy",
   },
 } as const satisfies Record<Lang, Record<string, string>>;
 
