@@ -2,6 +2,16 @@
 
 Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
 
+## Railway uploads
+
+The local Strapi upload provider stores media in `public/uploads`. Railway service
+filesystems are ephemeral, so the CMS service needs a Railway Volume mounted at
+`/app/public/uploads`.
+
+Attach the volume before uploading production media. Files uploaded before the
+volume is attached must be uploaded again because their database records can
+survive a redeploy while the files themselves do not.
+
 ### `develop`
 
 Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
