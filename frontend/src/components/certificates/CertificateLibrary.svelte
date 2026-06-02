@@ -44,68 +44,57 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="space-y-8">
-  <div class="space-y-4 rounded-lg border border-base-300 bg-base-200 p-4">
+  <div class="grid gap-4 rounded-lg border border-base-300 bg-base-200 p-4 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end">
     <div>
-      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/55">
-        {$labels.type}
-      </p>
-      <div class="flex flex-wrap gap-2" role="group" aria-label={$labels.type}>
+      <label class="label pb-1" for="certificate-kind-filter">
+        <span class="label-text">{$labels.type}</span>
+      </label>
+      <select
+        id="certificate-kind-filter"
+        class="select select-bordered w-full"
+        bind:value={$selectedKind}
+      >
         {#each $kindOptions as kind}
-          <button
-            type="button"
-            class="btn btn-sm"
-            class:btn-primary={$selectedKind === kind}
-            class:btn-outline={$selectedKind !== kind}
-            aria-pressed={$selectedKind === kind}
-            on:click={() => selectedKind.set(kind)}
-          >
+          <option value={kind}>
             {kind === "all" ? $labels.all : getCertificateKindLabel(kind, $labels)}
-          </button>
+          </option>
         {/each}
-      </div>
+      </select>
     </div>
 
     <div>
-      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/55">
-        {$labels.category}
-      </p>
-      <div class="flex flex-wrap gap-2" role="group" aria-label={$labels.category}>
+      <label class="label pb-1" for="certificate-category-filter">
+        <span class="label-text">{$labels.category}</span>
+      </label>
+      <select
+        id="certificate-category-filter"
+        class="select select-bordered w-full"
+        bind:value={$selectedCategory}
+      >
         {#each $categoryOptions as category}
-          <button
-            type="button"
-            class="btn btn-sm"
-            class:btn-primary={$selectedCategory === category}
-            class:btn-outline={$selectedCategory !== category}
-            aria-pressed={$selectedCategory === category}
-            on:click={() => selectedCategory.set(category)}
-          >
+          <option value={category}>
             {category === "all" ? $labels.all : category}
-          </button>
+          </option>
         {/each}
-      </div>
+      </select>
     </div>
 
     <div>
-      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/55">
-        {$labels.sort}
-      </p>
-      <div class="flex flex-wrap gap-2" role="group" aria-label={$labels.sort}>
+      <label class="label pb-1" for="certificate-sort">
+        <span class="label-text">{$labels.sort}</span>
+      </label>
+      <select
+        id="certificate-sort"
+        class="select select-bordered w-full"
+        bind:value={$sortBy}
+      >
         {#each $sortOptions as option}
-          <button
-            type="button"
-            class="btn btn-sm"
-            class:btn-primary={$sortBy === option.value}
-            class:btn-outline={$sortBy !== option.value}
-            aria-pressed={$sortBy === option.value}
-            on:click={() => sortBy.set(option.value)}
-          >
-            {option.label}
-          </button>
+          <option value={option.value}>{option.label}</option>
         {/each}
-      </div>
+      </select>
     </div>
 
-    <p class="text-sm text-base-content/60">
+    <p class="pb-3 text-sm text-base-content/60 md:text-right">
       {$labels.visibleCount} {$visibleCertificates.length} {$labels.of} {certificates.length}
     </p>
   </div>
@@ -200,13 +189,13 @@
     role="dialog"
     aria-modal="true"
     aria-labelledby="certificate-preview-title"
-    on:click={closePreview}
+    on:click|self={closePreview}
   >
     <div class="certificate-overlay__hint" aria-live="polite">
       {$labels.closeHint}
     </div>
 
-    <section class="certificate-preview" role="document" on:click|stopPropagation>
+    <section class="certificate-preview" role="document">
       <header class="certificate-preview__header">
         <div class="min-w-0">
           <p class="text-xs font-medium uppercase tracking-wide text-primary">
@@ -229,16 +218,6 @@
           >
             {$labels.openInNewTab}
           </a>
-          {#if $selectedCertificate.credentialUrl}
-            <a
-              class="btn btn-ghost btn-sm"
-              href={$selectedCertificate.credentialUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {$labels.credential}
-            </a>
-          {/if}
         </div>
       </header>
 

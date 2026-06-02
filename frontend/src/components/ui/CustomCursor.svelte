@@ -20,6 +20,7 @@
 
   const INTERACTIVE =
     "a, button, [role='button'], input, textarea, select, label, summary, details, .skill-card, .project-card, .timeline-card, .certificate-card";
+  const NATIVE_CURSOR = "select, option";
 
   // Lower factor = smoother trailing motion. Sub-stepping keeps it framerate-
   // independent enough on 60Hz and 120Hz displays without feeling laggy.
@@ -29,12 +30,14 @@
     hoverSyncRaf = 0;
     if (!cursor) return;
     if (!hasPointer) {
-      cursor.classList.remove("hover");
+      cursor.classList.remove("hover", "native");
       return;
     }
 
     const elementAtPointer = document.elementFromPoint(targetX, targetY) as HTMLElement | null;
-    cursor.classList.toggle("hover", Boolean(elementAtPointer?.closest(INTERACTIVE)));
+    const usesNativeCursor = Boolean(elementAtPointer?.closest(NATIVE_CURSOR));
+    cursor.classList.toggle("native", usesNativeCursor);
+    cursor.classList.toggle("hover", !usesNativeCursor && Boolean(elementAtPointer?.closest(INTERACTIVE)));
   }
 
   function queueHoverSync() {
@@ -86,7 +89,7 @@
     const onLeave = () => {
       hasPointer = false;
       cursor.style.opacity = "0";
-      cursor.classList.remove("hover", "press");
+      cursor.classList.remove("hover", "press", "native");
     };
     const onEnter = () => {
       if (hasPointer) cursor.style.opacity = "1";
@@ -182,6 +185,10 @@
   .cursor:global(.press) :global(.cursor-path) {
     fill: color-mix(in srgb, var(--color-primary, #6366f1) 75%, #000);
     stroke: var(--color-base-100, #fff);
+  }
+
+  .cursor:global(.native) {
+    opacity: 0 !important;
   }
 </style>
 

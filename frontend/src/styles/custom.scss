@@ -29,6 +29,11 @@
   html * {
     cursor: none !important;
   }
+
+  html select,
+  html option {
+    cursor: pointer !important;
+  }
 }
 
 html {
@@ -62,80 +67,38 @@ body::-webkit-scrollbar {
   }
 }
 
-details > :not(summary) {
-  transform-origin: top center;
-}
-
 details.details-opening > :not(summary) {
-  animation: details-content-in 0.17s ease-out both;
+  animation: details-content-in 0.15s ease-out both;
 }
 
 details.details-closing > :not(summary) {
   pointer-events: none;
-  animation: details-content-out 0.13s ease-in both;
-}
-
-details.details-opening > :not(summary) li {
-  animation: details-list-item-in 0.18s ease-out both;
-}
-
-details.details-closing > :not(summary) li {
-  animation: details-list-item-out 0.12s ease-in both;
+  animation: details-content-out 0.12s ease-in both;
 }
 
 @keyframes details-content-in {
   from {
     opacity: 0;
-    transform: translateY(-0.35rem) scaleY(0.98);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
   }
 }
 
 @keyframes details-content-out {
   from {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
   }
 
   to {
     opacity: 0;
-    transform: translateY(-0.25rem) scaleY(0.98);
-  }
-}
-
-@keyframes details-list-item-in {
-  from {
-    opacity: 0;
-    transform: translateX(-0.25rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes details-list-item-out {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-0.2rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   details.details-opening > :not(summary),
-  details.details-closing > :not(summary),
-  details.details-opening > :not(summary) li,
-  details.details-closing > :not(summary) li {
+  details.details-closing > :not(summary) {
     animation: none;
   }
 }
