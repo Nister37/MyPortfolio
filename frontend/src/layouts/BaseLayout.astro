@@ -4,6 +4,7 @@ import "../styles/custom.scss";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import CustomCursor from "../components/ui/CustomCursor.svelte";
+import { layoutCopy, siteMetadata } from "../data/site-copy";
 import { base } from "../lib/url";
 
 interface Props {
@@ -17,35 +18,33 @@ interface Props {
 
 const {
   title,
-  description = "Paweł Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
+  description = siteMetadata.defaultDescription,
   ogImage,
   lang = "en",
   path = "/",
   localePaths,
 } = Astro.props;
+const copy = layoutCopy[lang];
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://pawelryfiak.is-a.dev");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteMetadata.url);
 // Fall back to the site favicon so all pages have a shareable social image.
 const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
 
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Paweł Ryfiak",
-  url: "https://pawelryfiak.is-a.dev",
-  jobTitle: "Junior Software Engineer",
-  description: "Junior Software Engineer focused on backend systems, automation, and practical DevOps.",
-  sameAs: [
-    "https://github.com/Nister37",
-    "https://www.linkedin.com/in/pawelryfiak2004/",
-  ],
+  name: siteMetadata.name,
+  url: siteMetadata.url,
+  jobTitle: siteMetadata.jobTitle,
+  description: siteMetadata.personDescription,
+  sameAs: siteMetadata.sameAs,
 };
 
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Paweł Ryfiak — Portfolio",
-  url: "https://pawelryfiak.is-a.dev",
+  name: siteMetadata.portfolioName,
+  url: siteMetadata.url,
 };
 ---
 
@@ -54,14 +53,14 @@ const websiteSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="author" content="Paweł Ryfiak" />
+    <meta name="author" content={siteMetadata.name} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Paweł Ryfiak — Portfolio" />
+    <meta property="og:site_name" content={siteMetadata.portfolioName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -74,8 +73,8 @@ const websiteSchema = {
     <meta name="twitter:image" content={resolvedOgImage} />
 
     <!-- Structured data: Person + WebSite -->
-    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <title>{title}</title>
     <!-- Redirect legacy GitHub Pages project URLs to the custom domain.
@@ -116,29 +115,14 @@ const websiteSchema = {
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content"
     >
-      Skip to content
+      {copy.skipToContent}
     </a>
     <Header lang={lang} path={path} localePaths={localePaths} />
     <slot />
     <Footer lang={lang} />
     <CustomCursor client:load />
     <script>
-      // Section reveal — runs once per page load, respects prefers-reduced-motion.
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!prefersReducedMotion) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("revealed");
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.12 },
-        );
-        document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
-      }
+      import "../scripts/reveal";
     </script>
   </body>
 </html>

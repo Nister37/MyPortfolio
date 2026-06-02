@@ -479,6 +479,50 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCertificateCertificate extends Struct.CollectionTypeSchema {
+  collectionName: 'certificates';
+  info: {
+    description: 'Certificate or course PDF displayed on the portfolio';
+    displayName: 'Certificate';
+    pluralName: 'certificates';
+    singularName: 'certificate';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Schema.Attribute.String & Schema.Attribute.DefaultTo<'General'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    credentialUrl: Schema.Attribute.String;
+    issuedAt: Schema.Attribute.Date;
+    issuer: Schema.Attribute.String & Schema.Attribute.Required;
+    kind: Schema.Attribute.Enumeration<['certificate', 'course']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'certificate'>;
+    language: Schema.Attribute.Enumeration<['en', 'pl']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'en'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::certificate.certificate'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    pdf: Schema.Attribute.Media<'files'> & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    skills: Schema.Attribute.JSON;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    summary: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
   collectionName: 'experiences';
   info: {
@@ -1142,6 +1186,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
+      'api::certificate.certificate': ApiCertificateCertificate;
       'api::experience.experience': ApiExperienceExperience;
       'api::project.project': ApiProjectProject;
       'api::site-setting.site-setting': ApiSiteSettingSiteSetting;

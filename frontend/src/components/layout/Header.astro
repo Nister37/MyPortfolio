@@ -1,18 +1,22 @@
 ---
 import ThemeToggle from "../ui/ThemeToggle.astro";
 import LanguageSwitcher from "../ui/LanguageSwitcher.astro";
+import { headerCopy } from "../../data/site-copy";
 import { base } from "../../lib/url";
+import "../../styles/components/cv-dialog.css";
 interface Props {
   lang?: "en" | "pl";
   path?: string;
   localePaths?: Partial<Record<"en" | "pl", string>>;
 }
 const { lang = "en", path = "/", localePaths } = Astro.props;
+const copy = headerCopy[lang];
 const navLinks = [
-  { href: lang === "pl" ? `${base}pl` : base, label: lang === "pl" ? "Strona główna" : "Home" },
-  { href: lang === "pl" ? `${base}pl/projects` : `${base}projects`, label: lang === "pl" ? "Projekty" : "Projects" },
-  { href: lang === "pl" ? `${base}pl/blog` : `${base}blog`, label: "Blog" },
-  { href: lang === "pl" ? `${base}pl/about` : `${base}about`, label: lang === "pl" ? "O mnie" : "About" },
+  { href: lang === "pl" ? `${base}pl` : base, label: copy.nav.home },
+  { href: lang === "pl" ? `${base}pl/projects` : `${base}projects`, label: copy.nav.projects },
+  { href: lang === "pl" ? `${base}pl/certificates` : `${base}certificates`, label: copy.nav.certificates },
+  { href: lang === "pl" ? `${base}pl/blog` : `${base}blog`, label: copy.nav.blog },
+  { href: lang === "pl" ? `${base}pl/about` : `${base}about`, label: copy.nav.about },
 ];
 const currentPath = Astro.url.pathname;
 const normalizedPath = currentPath.endsWith("/") && currentPath !== base
@@ -22,16 +26,6 @@ function isActive(href: string) {
   return normalizedPath === href || normalizedPath === href.replace(/\/$/, "");
 }
 
-// CV picker dialog labels — kept here so both desktop trigger and mobile
-// trigger share one source of truth.
-const cvButtonLabel = lang === "pl" ? "Pobierz CV" : "Download CV";
-const cvDialogTitle =
-  lang === "pl"
-    ? "W jakiej wersji językowej chcesz pobrać moje CV? 👀"
-    : "Which language version of my CV would you like to download? 👀";
-const cvEnglishLabel = lang === "pl" ? "Wersja angielska" : "English version";
-const cvPolishLabel = lang === "pl" ? "Wersja polska" : "Polish version";
-const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
 ---
 <header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-sm">
   <div class="mx-auto grid max-w-[1120px] grid-cols-[1fr_auto_1fr] items-center px-4 py-3 md:gap-4">
@@ -61,7 +55,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
     <!-- Desktop utilities: CV, theme, language — kept on the right. -->
     <div class="hidden items-center justify-end gap-2 md:flex">
       <button type="button" class="btn btn-primary btn-sm" data-cv-trigger>
-        {cvButtonLabel}
+        {copy.cvButton}
       </button>
       <ThemeToggle />
       <LanguageSwitcher currentLang={lang} path={path} localePaths={localePaths} />
@@ -78,7 +72,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
           <label
             for="mobile-nav"
             class="btn btn-ghost"
-            aria-label="Open navigation menu"
+            aria-label={copy.openNavigation}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +94,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
         <div class="drawer-side">
           <label
             for="mobile-nav"
-            aria-label="Close navigation menu"
+            aria-label={copy.closeNavigation}
             class="drawer-overlay"
           ></label>
           <nav
@@ -124,7 +118,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
               ))
             }
             <button type="button" class="btn btn-primary mt-4" data-cv-trigger>
-              {cvButtonLabel}
+              {copy.cvButton}
             </button>
           </nav>
         </div>
@@ -143,7 +137,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
       type="button"
       class="cv-dialog__close"
       data-cv-close
-      aria-label={cvCloseLabel}
+      aria-label={copy.close}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +156,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
       </svg>
     </button>
 
-    <h2 id="cv-dialog-title" class="cv-dialog__title">{cvDialogTitle}</h2>
+    <h2 id="cv-dialog-title" class="cv-dialog__title">{copy.cvDialogTitle}</h2>
 
     <div class="cv-dialog__actions">
       <a
@@ -172,7 +166,7 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
         rel="noopener noreferrer"
         download
       >
-        🇬🇧 {cvEnglishLabel}
+        🇬🇧 {copy.cvEnglish}
       </a>
       <a
         href={`${base}cv-pl.pdf`}
@@ -181,126 +175,15 @@ const cvCloseLabel = lang === "pl" ? "Zamknij" : "Close";
         rel="noopener noreferrer"
         download
       >
-        🇵🇱 {cvPolishLabel}
+        🇵🇱 {copy.cvPolish}
       </a>
     </div>
   </div>
 </div>
 
 <script>
-  // Custom overlay control: open/close + ESC + backdrop click. Hidden via the
-  // `hidden` attribute when inactive so it never intercepts events or takes
-  // tab focus. Body scroll is locked while the dialog is open.
-  const overlay = document.getElementById("cv-dialog");
-  if (overlay) {
-    const open = () => {
-      overlay.hidden = false;
-      overlay.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    };
-    const close = () => {
-      overlay.hidden = true;
-      overlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    };
-    document.querySelectorAll<HTMLButtonElement>("[data-cv-trigger]").forEach((btn) => {
-      btn.addEventListener("click", open);
-    });
-    overlay.querySelectorAll<HTMLElement>("[data-cv-close]").forEach((el) => {
-      el.addEventListener("click", close);
-    });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !overlay.hidden) close();
-    });
-  }
+  import "../../scripts/cv-dialog";
 </script>
-
-<style>
-  /* z-index sits below the custom cursor (9999) so the triangle remains
-     visible inside the modal. */
-  .cv-dialog {
-    position: fixed;
-    inset: 0;
-    z-index: 9000;
-  }
-
-  .cv-dialog__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 0.55);
-    backdrop-filter: blur(2px);
-    animation: cv-fade-in 0.18s ease-out;
-  }
-
-  /* Absolute centering via top/left 50% + translate is bulletproof against
-     flexbox/grid quirks and parent containing-block surprises. */
-  .cv-dialog__panel {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(480px, calc(100vw - 2rem));
-    border-radius: 0.85rem;
-    background: var(--color-base-100, #fff);
-    color: var(--color-base-content, inherit);
-    border: 1px solid var(--color-base-300, #e5e7eb);
-    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35);
-    padding: 1.75rem 1.5rem 1.5rem;
-    animation: cv-panel-in 0.18s ease-out;
-  }
-
-  @keyframes cv-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  /* Centering transform is preserved in both keyframes so the animation does
-     not knock the panel off-center mid-tween. */
-  @keyframes cv-panel-in {
-    from { opacity: 0; transform: translate(-50%, calc(-50% - 6px)) scale(0.98); }
-    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  }
-
-  .cv-dialog__close {
-    position: absolute;
-    top: 0.6rem;
-    right: 0.6rem;
-    width: 2rem;
-    height: 2rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    background: transparent;
-    color: var(--color-base-content, currentColor);
-    opacity: 0.6;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.15s ease, background-color 0.15s ease;
-  }
-  .cv-dialog__close:hover {
-    opacity: 1;
-    background: color-mix(in srgb, var(--color-base-content, #000) 8%, transparent);
-  }
-
-  .cv-dialog__title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.45;
-    margin: 0 1.5rem 1.25rem 0;
-  }
-
-  /* Side-by-side buttons; wrap to two rows only if there isn't room. */
-  .cv-dialog__actions {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-  .cv-dialog__actions > .btn {
-    flex: 1 1 0;
-    min-width: 140px;
-  }
-</style>
 
 
 

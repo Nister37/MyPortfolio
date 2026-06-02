@@ -1,6 +1,8 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { projectCardCopy } from "../../data/site-copy";
 import type { Project } from "../../lib/cms/projects";
+import "../../styles/components/project-card.css";
 
 interface Props {
   project: Project;
@@ -8,10 +10,8 @@ interface Props {
 
 const { project } = Astro.props;
 const lang = (Astro.currentLocale ?? "en") as "en" | "pl";
+const copy = projectCardCopy[lang];
 const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
-const caseStudyLabel = lang === "pl" ? "Studium przypadku" : "Case study";
-const detailsLabel = lang === "pl" ? "Pokaż szczegóły" : "Show details";
-const hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
 ---
 
 <details class="project-card group card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
@@ -27,8 +27,8 @@ const hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
       <p class="text-sm text-base-content/70">{project.summary}</p>
 
       <span class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary">
-        <span class="project-card__show-label">{detailsLabel}</span>
-        <span class="project-card__hide-label">{hideDetailsLabel}</span>
+        <span class="project-card__show-label">{copy.showDetails}</span>
+        <span class="project-card__hide-label">{copy.hideDetails}</span>
         <svg
           class="project-card__chevron h-3.5 w-3.5 transition-transform"
           viewBox="0 0 24 24"
@@ -64,7 +64,7 @@ const hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
     </div>
 
     <div class="card-actions mt-2 flex-wrap gap-2">
-      <a href={caseStudyHref} class="btn btn-primary btn-sm">{caseStudyLabel}</a>
+      <a href={caseStudyHref} class="btn btn-primary btn-sm">{copy.caseStudy}</a>
       {project.githubUrl && (
         <a
           href={project.githubUrl}
@@ -82,36 +82,9 @@ const hideDetailsLabel = lang === "pl" ? "Ukryj szczegóły" : "Hide details";
           target="_blank"
           rel="noopener noreferrer"
         >
-          {lang === "pl" ? "Wersja live" : "Live demo"}
+          {copy.liveDemo}
         </a>
       )}
     </div>
   </div>
 </details>
-
-<style>
-  .project-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .project-card[open] {
-    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
-    box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
-  }
-
-  .project-card__hide-label {
-    display: none;
-  }
-
-  .project-card[open] .project-card__show-label {
-    display: none;
-  }
-
-  .project-card[open] .project-card__hide-label {
-    display: inline;
-  }
-
-  .project-card[open] .project-card__chevron {
-    transform: rotate(180deg);
-  }
-</style>

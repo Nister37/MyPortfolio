@@ -1,30 +1,12 @@
 ---
 import ParticlesBackground from "../ui/ParticlesBackground.svelte";
+import { homeCopy, siteMetadata } from "../../data/site-copy";
 import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
-
-const copy = {
-  en: {
-    available: "Available for opportunities",
-    subtitle: "Junior Software Engineer focused on backend, automation, and practical DevOps.",
-    body: "I build Spring Boot systems, deployment pipelines, AI-assisted data extraction tools, and infrastructure scripts. Currently learning Astro, Svelte, Strapi, and modern frontend workflows by building this portfolio.",
-    openTo: "Open to: IT internship, junior backend, automation, DevOps-oriented roles · Antwerp / remote / EU",
-    viewProjects: "View projects",
-    downloadCv: "Download CV",
-  },
-  pl: {
-    available: "OTWARTY NA STAŻE I ROLE JUNIORSKIE",
-    subtitle: "Student Applied Computer Science — backend Java/Spring, automatyzacja i podstawy deploymentu.",
-    body: "Tworzę aplikacje backendowe w Spring Boot, pracuję z bazami danych, REST API, Dockerem i Linuksem oraz buduję narzędzia automatyzujące powtarzalne procesy. Aktualnie uczę się Astro, Svelte, Strapi i nowoczesnego frontendu, budując to portfolio.",
-    openTo: "Szukam: stażu programistycznego, roli junior backend lub zadań związanych z automatyzacją · Antwerpia / okolice Głogowa / zdalnie / UE",
-    viewProjects: "Zobacz projekty",
-    downloadCv: "Pobierz CV",
-  },
-};
-const c = copy[lang];
+const c = homeCopy[lang].hero;
 ---
 
 <section class="relative overflow-hidden py-20 md:py-32">
@@ -36,7 +18,7 @@ const c = copy[lang];
       </p>
 
       <h1 class="text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-        Paweł Ryfiak
+        {siteMetadata.name}
       </h1>
 
       <p class="mt-4 text-xl font-medium text-base-content/80 md:text-2xl">

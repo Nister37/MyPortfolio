@@ -1,50 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Section from "../../components/layout/Section.astro";
-import ContactCta from "../../components/home/ContactCta.astro";
+import AboutPage from "../../components/pages/AboutPage.astro";
 ---
 
-<BaseLayout
-  title="O mnie | Paweł Ryfiak"
-  description="Student informatyki stosowanej na Karel de Grote w Antwerpii. Spring Boot, Docker, GitLab CI i automatyzacja AI. Szukam stażu programistycznego lub roli junior backend."
-  lang="pl"
-  path="/about"
->
-  <main id="main-content">
-    <Section>
-      <div class="max-w-3xl" data-reveal>
-        <h1 class="text-4xl font-bold tracking-tight">O mnie</h1>
-
-        <p class="mt-6 text-lg leading-relaxed text-base-content/80">
-          Jestem studentem informatyki stosowanej na Karel de Grote Hogeschool w Antwerpii.
-          Skupiam się na backendzie w Javie i Spring Boot, automatyzacji powtarzalnych procesów
-          oraz podstawach deploymentu aplikacji.
-        </p>
-
-        <p class="mt-4 leading-relaxed text-base-content/70">
-          Najpewniej czuję się w Javie i Spring Boot — projektuję REST API, warstwy walidacji,
-          integracje z bazą danych przez JPA i uruchamiam aplikacje w Dockerze. Pracowałem też
-          nad procesem CI/CD na Google Cloud z użyciem GitLab CI, Nginx i strategii blue-green
-          deployment z Docker Compose.
-        </p>
-
-        <p class="mt-4 leading-relaxed text-base-content/70">
-          Równolegle uczę się nowoczesnego frontendu — Astro, Svelte, Tailwind CSS i Strapi —
-          budując to portfolio od podstaw. Nie zamierzam zostać frontend developerem, ale chcę
-          rozumieć cały proces wdrożenia aplikacji.
-        </p>
-
-        <p class="mt-4 leading-relaxed text-base-content/70">
-          Szukam stażu programistycznego lub roli junior backend / automatyzacja, w której będę
-          mógł wnosić wkład do realnego kodu, uczyć się od bardziej doświadczonych inżynierów
-          oraz rozwijać umiejętności w zakresie projektowania systemów i podstaw deploymentu.
-          Obecnie mieszkam w Antwerpii, jestem dostępny zdalnie oraz w Polsce i UE.
-        </p>
-      </div>
-    </Section>
-    <ContactCta lang="pl" />
-  </main>
-</BaseLayout>
+<AboutPage lang="pl" />
 
 
 

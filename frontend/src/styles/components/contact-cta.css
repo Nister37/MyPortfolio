@@ -1,0 +1,14 @@
+.contact-icons a {
+  color: var(--color-base-content, currentColor);
+  opacity: 0.65;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.contact-icons a:hover {
+  color: var(--color-primary, #6366f1);
+  opacity: 1;
+  transform: translateY(-2px);
+}

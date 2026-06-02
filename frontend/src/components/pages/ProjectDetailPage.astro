@@ -1,0 +1,110 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../layout/Section.astro";
+import { projectDetailCopy, siteMetadata } from "../../data/site-copy";
+import type { Lang } from "../../data/site-copy";
+import type { Project } from "../../lib/cms/projects";
+import { base } from "../../lib/url";
+
+interface Props {
+  project: Project;
+  lang?: Lang;
+}
+
+const { project, lang = "en" } = Astro.props;
+const copy = projectDetailCopy[lang];
+const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
+
+const proseSections = [
+  { heading: copy.problem, content: project.problem },
+  { heading: copy.myRole, content: project.myRole },
+  { heading: copy.architecture, content: project.architecture },
+  { heading: copy.hardestProblem, content: project.hardestProblem },
+  { heading: copy.lessonsLearned, content: project.lessonsLearned },
+].filter((section) => section.content);
+---
+
+<BaseLayout
+  title={`${project.title} | ${siteMetadata.name}`}
+  description={project.summary}
+  lang={lang}
+  path={`/projects/${project.slug}`}
+>
+  <main id="main-content">
+    <Section>
+      <a class="link link-primary text-sm" href={allProjectsHref}>{copy.allProjects}</a>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {project.categories.map((cat) => (
+          <span class="badge badge-primary">{cat}</span>
+        ))}
+      </div>
+
+      <h1 class="mt-4 text-4xl font-bold tracking-tight">{project.title}</h1>
+      <p class="mt-4 max-w-3xl text-lg text-base-content/70">{project.summary}</p>
+
+      <div class="mt-5 flex flex-wrap gap-2">
+        {project.stack.map((item) => (
+          <span class="badge badge-outline">{item}</span>
+        ))}
+      </div>
+
+      {
+        project.highlights.length > 0 && (
+          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-6">
+            <h2 class="text-lg font-semibold">{copy.technicalHighlights}</h2>
+            <ul class="mt-4 space-y-2">
+              {project.highlights.map((point) => (
+                <li class="flex items-start gap-3 text-base-content/75">
+                  <span class="mt-0.5 text-primary" aria-hidden="true">▸</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        proseSections.length > 0 && (
+          <div class="mt-10 max-w-3xl space-y-10">
+            {proseSections.map(({ heading, content }) => (
+              <div>
+                <h2 class="text-xl font-semibold">{heading}</h2>
+                <p class="mt-3 leading-relaxed text-base-content/75">{content}</p>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      <div class="mt-12 flex flex-wrap gap-3">
+        {
+          project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {copy.viewOnGitHub}
+            </a>
+          )
+        }
+        {
+          project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              class="btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {copy.liveDemo}
+            </a>
+          )
+        }
+        <a href={allProjectsHref} class="btn btn-ghost">{copy.allProjects}</a>
+      </div>
+    </Section>
+  </main>
+</BaseLayout>

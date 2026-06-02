@@ -1,0 +1,72 @@
+---
+import DOMPurify from "isomorphic-dompurify";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MermaidDiagrams from "../blog/MermaidDiagrams.astro";
+import Section from "../layout/Section.astro";
+import { blogCopy, siteMetadata } from "../../data/site-copy";
+import type { Lang } from "../../data/site-copy";
+import type { BlogPost } from "../../lib/cms/posts";
+import { base } from "../../lib/url";
+
+interface Props {
+  post: BlogPost;
+  localePaths: Record<Lang, string>;
+  lang?: Lang;
+}
+
+const { post, localePaths, lang = "en" } = Astro.props;
+const copy = blogCopy[lang];
+const safeContent = post.content ? DOMPurify.sanitize(post.content) : null;
+const hasMermaidDiagrams = safeContent?.includes('class="mermaid"') ?? false;
+const formattedDate = post.publishedAt
+  ? new Date(post.publishedAt).toLocaleDateString(lang === "pl" ? "pl-PL" : "en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  : null;
+const allPostsHref = lang === "pl" ? `${base}pl/blog` : `${base}blog`;
+---
+
+<BaseLayout
+  title={`${post.title} | ${siteMetadata.name}`}
+  description={post.description}
+  lang={lang}
+  path={`/blog/${post.slug}`}
+  localePaths={localePaths}
+>
+  <main id="main-content">
+    <Section>
+      <a class="link link-primary text-sm" href={allPostsHref}>{copy.allPosts}</a>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {(post.tags ?? []).map((tag) => (
+          <span class="badge badge-outline">{tag}</span>
+        ))}
+      </div>
+
+      <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight">{post.title}</h1>
+
+      <div class="mt-3 flex items-center gap-3 text-sm text-base-content/50">
+        {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
+        {post.readingTime && <span>&bull; {post.readingTime} {copy.minRead}</span>}
+      </div>
+
+      <p class="mt-6 max-w-3xl text-lg text-base-content/70">{post.description}</p>
+
+      {
+        safeContent ? (
+          <div
+            class="prose-portfolio prose mt-10 max-w-3xl text-base-content"
+            set:html={safeContent}
+          />
+        ) : (
+          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-8 text-center text-base-content/50">
+            {copy.fallbackContent}
+          </div>
+        )
+      }
+    </Section>
+    {hasMermaidDiagrams && <MermaidDiagrams />}
+  </main>
+</BaseLayout>

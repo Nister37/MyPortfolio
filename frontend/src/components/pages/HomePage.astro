@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../home/Hero.astro";
+import SkillsOverview from "../home/SkillsOverview.astro";
+import ExperienceTimeline from "../home/ExperienceTimeline.astro";
+import BlogPreview from "../home/BlogPreview.astro";
+import ContactCta from "../home/ContactCta.astro";
+import { pageCopy } from "../../data/site-copy";
+import type { Lang } from "../../data/site-copy";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const copy = pageCopy[lang].home;
+---
+
+<BaseLayout title={copy.title} description={copy.description} lang={lang} path="/">
+  <main id="main-content">
+    <Hero lang={lang} />
+    <SkillsOverview lang={lang} />
+    <ExperienceTimeline lang={lang} />
+    <BlogPreview lang={lang} />
+    <ContactCta lang={lang} />
+  </main>
+</BaseLayout>

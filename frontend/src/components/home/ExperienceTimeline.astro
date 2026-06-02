@@ -1,130 +1,21 @@
 ---
 import Section from "../layout/Section.astro";
+import { homeCopy } from "../../data/site-copy";
+import { getTimelineEntries } from "../../data/timeline";
+import type { TimelineEntryType } from "../../data/timeline";
 import { base } from "../../lib/url";
+import "../../styles/components/experience-timeline.css";
 
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
+const copy = homeCopy[lang].experience;
 
 const blogBase = lang === "pl" ? `${base}pl/blog/` : `${base}blog/`;
+const entries = getTimelineEntries(lang);
 
-type EntryType = "Education" | "Project" | "Work";
-
-type TimelineEntry = {
-  title: string;
-  organization: string;
-  period: string;
-  type: EntryType;
-  description?: string;
-  /** When set, the entire entry becomes a link to /blog/{blogSlug}. */
-  blogSlug?: string;
-  /** When set (and no blogSlug), the entry links directly to this URL. */
-  githubUrl?: string;
-};
-
-// One merged timeline, newest first. Add `blogSlug` to any entry to make it
-// clickable — the slug must match a published Blog Post entry in Strapi.
-const entries: TimelineEntry[] = [
-  {
-    title: "Integration 4 CI/CD on Google Cloud",
-    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
-    period: "2026",
-    type: "Project",
-    description:
-      lang === "pl"
-        ? "Projekt wdrożeniowy obejmujący GitLab CI, Docker, Google Compute Engine, Nginx, HTTPS oraz strategię blue-green deployment. Skupiał się na automatyzacji deploymentu i ograniczeniu przestojów aplikacji."
-        : "Full CI/CD pipeline on GCE with GitLab CI, Docker, and Nginx. Blue-green deployment strategy with automated health checks.",
-  },
-  {
-    title: "ServicePulse",
-    organization: lang === "pl" ? "Projekt własny" : "Personal project",
-    period: "2026",
-    type: "Project",
-    githubUrl: "https://github.com/Nister37/ServicePulse",
-    description:
-      lang === "pl"
-        ? "Aplikacja Spring Boot do monitorowania dostępności endpointów HTTP z historią sprawdzeń, live dashboardem, Redis, PostgreSQL, Thymeleaf UI, Docker Compose, reverse proxy Caddy, Adminer, GitLab CI i skryptami deployment na GCP."
-        : "Spring Boot HTTP endpoint monitor with check history, live dashboard, PostgreSQL persistence, Redis caching, Thymeleaf UI, Docker Compose, Caddy HTTPS reverse proxy, Adminer, GitLab CI, and GCP deployment scripts.",
-  },
-  {
-    title: "Traffic Lights Management System",
-    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
-    period: "2026",
-    type: "Project",
-    githubUrl: "https://github.com/Nister37/TrafficLights",
-    description:
-      lang === "pl"
-        ? "Aplikacja Spring Boot do zarządzania skrzyżowaniami, sygnalizatorami, dziennikami serwisowymi i firmami konserwacyjnymi. Thymeleaf MVC, REST API, PostgreSQL, Spring Security, AJAX, import CSV, cache, testy, GitLab CI."
-        : "Spring Boot web app for managing intersections, traffic lights, maintenance logs, and maintenance companies. Thymeleaf MVC, REST APIs, PostgreSQL, Spring Security, AJAX, CSV import, caching, tests, and GitLab CI.",
-  },
-  {
-    title: "KdGRides",
-    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
-    period: "2026",
-    type: "Project",
-    githubUrl: "https://github.com/Nister37/KdGRides",
-    description:
-      lang === "pl"
-        ? "Platforma Spring Boot do współdzielenia przejazdów i aktywności dla studentów KdG. Czat STOMP/WebSocket w czasie rzeczywistym, głosowania, znajomości, mapy, integracja z Google Calendar, OAuth2, Docker, GitLab CI/CD."
-        : "Spring Boot ride-sharing and activity platform for KdG students. Real-time STOMP/WebSocket chat, voting, friendships, maps/routes, Google Calendar integration, OAuth2 login, PostgreSQL, Thymeleaf, Docker, and GitLab CI/CD.",
-  },
-  {
-    title: "Roometrix",
-    organization: lang === "pl" ? "Projekt uczelniany" : "Academic project",
-    period: "2025",
-    type: "Project",
-    githubUrl: "https://github.com/Nister37/Roometrix-web-application",
-    description:
-      lang === "pl"
-        ? "Platforma Spring Boot do monitorowania inteligentnych pomieszczeń w czasie rzeczywistym — temperatura, wilgotność, CO₂, hałas, TVOC i zajętość. Dashboardy analityczne, alerty progowe, wielopokojowa obsługa, RBAC, PostgreSQL, Bootstrap, Chart.js."
-        : "Spring Boot IoT smart room monitoring platform for real-time temperature, humidity, CO₂, noise, TVOC and occupancy tracking. Analytics dashboards, threshold alerts, multi-room support, role-based access, PostgreSQL, Thymeleaf, Bootstrap and Chart.js.",
-  },
-  {
-    title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
-    organization:
-      lang === "pl"
-        ? "Karel de Grote Hogeschool, Antwerpia"
-        : "Karel de Grote Hogeschool, Antwerp",
-    period: lang === "pl" ? "2024 — obecnie" : "2024 — present",
-    type: "Education",
-    description:
-      lang === "pl"
-        ? "Studia anglojęzyczne skoncentrowane na tworzeniu aplikacji, bazach danych, analizie systemów, testowaniu, pracy zespołowej i praktycznych projektach programistycznych."
-        : "Backend development, databases, networking, and project management. Focus on practical engineering over theory.",
-  },
-  {
-    title: lang === "pl" ? "Staż programistyczny" : "Programming internship",
-    organization: "NSI",
-    period: "2022",
-    type: "Work",
-    description:
-      lang === "pl"
-        ? "Krótki staż zawodowy w trakcie nauki w technikum — pierwsze zetknięcie z pracą w środowisku IT."
-        : "Short professional internship during secondary school — first exposure to working in an IT environment.",
-  },
-  {
-    title: lang === "pl" ? "Technik programista" : "Programming Technician",
-    organization:
-      lang === "pl"
-        ? "Zespół Szkół Politechnicznych w Głogowie"
-        : "Polytechnic School Complex in Głogów, Poland",
-    period: "2019 — 2024",
-    type: "Education",
-    description:
-      lang === "pl"
-        ? "Pięcioletnie technikum o profilu programistycznym. Podstawy programowania, baz danych, sieci komputerowych oraz egzaminy zawodowe INF.03 i INF.04."
-        : "Five-year technical secondary school specialising in programming. Foundations of programming, databases, computer networks, and professional certifications INF.03 and INF.04.",
-  },
-];
-
-const heading = lang === "pl" ? "Doświadczenie i edukacja" : "Experience & Education";
-const subheading =
-  lang === "pl"
-    ? "Najnowsze na górze. Wybierz wpis, aby zobaczyć więcej szczegółów."
-    : "Most recent first. Select an item to see more details.";
-
-const typeBadgeClass: Record<EntryType, string> = {
+const typeBadgeClass: Record<TimelineEntryType, string> = {
   Education: "badge-accent",
   Project: "badge-primary",
   Work: "badge-secondary",
@@ -134,19 +25,22 @@ const typeBadgeClass: Record<EntryType, string> = {
 const educationEntries = entries.filter((entry) => entry.type === "Education" || entry.type === "Work");
 const experienceEntries = entries.filter((entry) => entry.type === "Project");
 
-const educationHeading = lang === "pl" ? "Edukacja i doświadczenie zawodowe" : "Education and Professional Experience";
-const experienceHeading = lang === "pl" ? "Projekty" : "Projects";
-
 const columns = [
-  { heading: educationHeading, entries: educationEntries },
-  { heading: experienceHeading, entries: experienceEntries },
+  { heading: copy.educationHeading, entries: educationEntries },
+  { heading: copy.projectsHeading, entries: experienceEntries },
 ];
+
+function typeLabel(type: TimelineEntryType) {
+  if (type === "Education") return copy.labels.education;
+  if (type === "Project") return copy.labels.project;
+  return copy.labels.work;
+}
 ---
 
 <Section id="experience">
   <div data-reveal>
-    <h2 class="text-3xl font-bold tracking-tight">{heading}</h2>
-    <p class="mt-2 text-base-content/60">{subheading}</p>
+    <h2 class="text-3xl font-bold tracking-tight">{copy.heading}</h2>
+    <p class="mt-2 text-base-content/60">{copy.subheading}</p>
   </div>
 
   <!-- Stacked on mobile (with the per-column subheading above each list);
@@ -164,7 +58,6 @@ const columns = [
                 ? `${blogBase}${entry.blogSlug}`
                 : entry.githubUrl;
               const isExternal = !entry.blogSlug && !!entry.githubUrl;
-              const detailsLabel = lang === "pl" ? "Więcej szczegółów" : "More details";
               return (
                 <li class="relative">
                   <span
@@ -176,14 +69,10 @@ const columns = [
                       <div class="mb-1 flex flex-wrap items-center gap-2">
                         <span class="text-xs text-base-content/50">{entry.period}</span>
                         <span class:list={["badge badge-sm", typeBadgeClass[entry.type]]}>
-                          {entry.type === "Education"
-                            ? lang === "pl" ? "Edukacja" : "Education"
-                            : entry.type === "Project"
-                              ? lang === "pl" ? "Projekt" : "Project"
-                              : lang === "pl" ? "Praca" : "Work"}
+                          {typeLabel(entry.type)}
                         </span>
                         <span class="ml-auto inline-flex items-center gap-1 text-xs text-primary/80">
-                          {detailsLabel}
+                          {copy.labels.moreDetails}
                           <svg
                             class="timeline-card__chevron h-3.5 w-3.5 transition-transform"
                             viewBox="0 0 24 24"
@@ -212,8 +101,8 @@ const columns = [
                             class="btn btn-ghost btn-sm mt-3"
                           >
                             {entry.blogSlug
-                              ? lang === "pl" ? "Przeczytaj artykuł →" : "Read article →"
-                              : "GitHub →"}
+                              ? copy.labels.readArticle
+                              : copy.labels.github}
                           </a>
                         )}
                       </div>
@@ -228,36 +117,6 @@ const columns = [
     }
   </div>
 </Section>
-
-<style>
-  .timeline-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  /* Hover and expanded states highlight the item against its lifeline. */
-  .timeline-list :global(li:hover .timeline-dot),
-  .timeline-list :global(li:has(.timeline-card[open]) .timeline-dot) {
-    background-color: var(--color-primary, #6366f1);
-    border-color: var(--color-primary, #6366f1);
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary, #6366f1) 22%, transparent);
-  }
-
-  .timeline-list :global(.timeline-card:hover) {
-    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 7%, transparent);
-  }
-
-  .timeline-list :global(.timeline-card[open]) {
-    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 7%, transparent);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
-  }
-
-  .timeline-list :global(.timeline-card[open] .timeline-card__chevron) {
-    transform: rotate(180deg);
-  }
-</style>
 
 
 

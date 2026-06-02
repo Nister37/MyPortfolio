@@ -1,11 +1,7 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BlogPostPage from "../../../components/pages/BlogPostPage.astro";
 import { getBlogPostLocalePaths, getPosts } from "../../../lib/cms/posts";
 import type { BlogPost } from "../../../lib/cms/posts";
-import MermaidDiagrams from "../../../components/blog/MermaidDiagrams.astro";
-import Section from "../../../components/layout/Section.astro";
-import DOMPurify from "isomorphic-dompurify";
-import { base } from "../../../lib/url";
 
 export async function getStaticPaths() {
   const allPosts = await getPosts();
@@ -23,59 +19,9 @@ interface Props {
 }
 
 const { post, localePaths } = Astro.props;
-const safeContent = post.content ? DOMPurify.sanitize(post.content) : null;
-const hasMermaidDiagrams = safeContent?.includes('class="mermaid"') ?? false;
-const formattedDate = post.publishedAt
-  ? new Date(post.publishedAt).toLocaleDateString("pl-PL", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })
-  : null;
 ---
 
-<BaseLayout
-  title={`${post.title} | Paweł Ryfiak`}
-  description={post.description}
-  lang="pl"
-  path={`/blog/${post.slug}`}
-  localePaths={localePaths}
->
-  <main id="main-content">
-    <Section>
-      <a class="link link-primary text-sm" href={`${base}pl/blog`}>← Wszystkie wpisy</a>
-
-      <div class="mt-6 flex flex-wrap gap-2">
-        {(post.tags ?? []).map((tag) => (
-          <span class="badge badge-outline">{tag}</span>
-        ))}
-      </div>
-
-      <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight">{post.title}</h1>
-
-      <div class="mt-3 flex items-center gap-3 text-sm text-base-content/50">
-        {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
-        {post.readingTime && <span>&bull; {post.readingTime} min czytania</span>}
-      </div>
-
-      <p class="mt-6 max-w-3xl text-lg text-base-content/70">{post.description}</p>
-
-      {
-        safeContent ? (
-          <div
-            class="prose-portfolio prose mt-10 max-w-3xl text-base-content"
-            set:html={safeContent}
-          />
-        ) : (
-          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-8 text-center text-base-content/50">
-            Pełna treść artykułu pojawi się po pobraniu z Strapi.
-          </div>
-        )
-      }
-    </Section>
-    {hasMermaidDiagrams && <MermaidDiagrams />}
-  </main>
-</BaseLayout>
+<BlogPostPage post={post} localePaths={localePaths} lang="pl" />
 
 
 

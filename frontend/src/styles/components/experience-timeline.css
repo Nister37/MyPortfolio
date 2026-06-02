@@ -1,0 +1,26 @@
+.timeline-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.timeline-list li:hover .timeline-dot,
+.timeline-list li:has(.timeline-card[open]) .timeline-dot {
+  background-color: var(--color-primary, #6366f1);
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary, #6366f1) 22%, transparent);
+}
+
+.timeline-list .timeline-card:hover {
+  border-color: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary, #6366f1) 7%, transparent);
+}
+
+.timeline-list .timeline-card[open] {
+  border-color: color-mix(in srgb, var(--color-primary, #6366f1) 55%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary, #6366f1) 7%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
+}
+
+.timeline-list .timeline-card[open] .timeline-card__chevron {
+  transform: rotate(180deg);
+}

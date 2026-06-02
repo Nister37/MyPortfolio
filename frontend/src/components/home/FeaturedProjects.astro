@@ -2,12 +2,14 @@
 import { getProjects } from "../../lib/cms/projects";
 import ProjectCard from "../projects/ProjectCard.astro";
 import Section from "../layout/Section.astro";
+import { homeCopy } from "../../data/site-copy";
 import { base } from "../../lib/url";
 
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
+const copy = homeCopy[lang].featuredProjects;
 
 const featuredProjects = (await getProjects()).filter((p) => p.featured);
 const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
@@ -16,16 +18,14 @@ const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`
   <div class="mb-10 flex items-end justify-between" data-reveal>
     <div>
       <h2 class="text-3xl font-bold tracking-tight">
-        {lang === "pl" ? "Wyróżnione projekty" : "Featured Projects"}
+        {copy.heading}
       </h2>
       <p class="mt-2 text-base-content/60">
-        {lang === "pl"
-          ? "Wybrane projekty, które zbudowałem lub znacząco współtworzyłem."
-          : "A selection of real systems I built or contributed to significantly."}
+        {copy.subheading}
       </p>
     </div>
     <a href={allProjectsHref} class="btn btn-outline btn-sm hidden md:inline-flex">
-      {lang === "pl" ? "Wszystkie projekty ->" : "All projects ->"}
+      {copy.allProjects}
     </a>
   </div>
   <div class="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -33,7 +33,7 @@ const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`
   </div>
   <div class="mt-8 md:hidden">
     <a href={allProjectsHref} class="btn btn-outline w-full">
-      {lang === "pl" ? "Wszystkie projekty ->" : "All projects ->"}
+      {copy.allProjects}
     </a>
   </div>
 </Section>

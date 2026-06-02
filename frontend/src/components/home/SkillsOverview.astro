@@ -2,46 +2,39 @@
 import Section from "../layout/Section.astro";
 import { getSkillLevel, skillCategories } from "../../data/skills";
 import type { SkillLevel } from "../../data/skills";
+import { homeCopy } from "../../data/site-copy";
+import "../../styles/components/skills-overview.css";
 
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
+const copy = homeCopy[lang].skills;
 
 const levels = [1, 2, 3, 4, 5] as const;
 
-const categoryLabel: Record<string, Record<string, string>> = {
-  en: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI & Automation", Frontend: "Frontend", Database: "Database" },
-  pl: { Backend: "Backend", DevOps: "DevOps", "AI & Automation": "AI i automatyzacja", Frontend: "Frontend", Database: "Bazy danych" },
-};
-
-const legendLabels: Record<"en" | "pl", string[]> = {
-  en: ["0-5 months", "6+ months", "1+ year", "2+ years", "3+ years"],
-  pl: ["0-5 miesięcy", "6+ miesięcy", "1+ rok", "2+ lata", "3+ lata"],
-};
-
 function meterLabel(level: SkillLevel) {
-  return lang === "pl"
-    ? `${level} z 5 pasków doświadczenia: ${legendLabels.pl[level - 1]}`
-    : `${level} of 5 experience bars: ${legendLabels.en[level - 1]}`;
+  return `${level} ${copy.meterTemplate}: ${copy.levelLabels[level - 1]}`;
+}
+
+function categoryName(category: string) {
+  return copy.categoryLabels[category as keyof typeof copy.categoryLabels] ?? category;
 }
 ---
 
 <Section id="skills">
   <div data-reveal>
     <h2 class="text-3xl font-bold tracking-tight">
-      {lang === "pl" ? "Umiejętności techniczne" : "Skills"}
+      {copy.heading}
     </h2>
     <p class="mt-2 text-base-content/60">
-      {lang === "pl"
-        ? "Wybierz obszar, aby zobaczyć technologie i czas doświadczenia."
-        : "Select a domain to see technologies and hands-on experience."}
+      {copy.subheading}
     </p>
   </div>
 
   <div class="mt-6 rounded-xl border border-base-300 bg-base-200/50 p-5">
     <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/70">
-      {lang === "pl" ? "Legenda doświadczenia" : "Experience legend"}
+      {copy.legendHeading}
     </h3>
     <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
       {
@@ -57,7 +50,7 @@ function meterLabel(level: SkillLevel) {
                 />
               ))}
             </span>
-            <span class="text-xs text-base-content/65">{legendLabels[lang][level - 1]}</span>
+            <span class="text-xs text-base-content/65">{copy.levelLabels[level - 1]}</span>
           </div>
         ))
       }
@@ -71,10 +64,10 @@ function meterLabel(level: SkillLevel) {
           <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
             <div>
               <h3 class="text-sm font-semibold uppercase tracking-wider text-primary">
-                {categoryLabel[lang][category] ?? category}
+                {categoryName(category)}
               </h3>
               <p class="mt-1 text-xs text-base-content/50">
-                {skills.length} {lang === "pl" ? "technologii" : "technologies"}
+                {skills.length} {copy.technologies}
               </p>
             </div>
             <svg
@@ -121,59 +114,3 @@ function meterLabel(level: SkillLevel) {
     }
   </div>
 </Section>
-
-<style>
-  .skill-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .skill-card[open] {
-    border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
-    box-shadow: 0 12px 30px -20px color-mix(in srgb, var(--color-primary, #6366f1) 65%, transparent);
-  }
-
-  .skill-card[open] .skill-card__chevron {
-    transform: rotate(180deg);
-  }
-
-  .skill-meter {
-    display: flex;
-    width: 6.5rem;
-    flex-shrink: 0;
-    gap: 0.25rem;
-  }
-
-  .skill-meter__bar {
-    height: 0.45rem;
-    min-width: 0;
-    flex: 1 1 0%;
-    border-radius: 9999px;
-    background-color: color-mix(in srgb, var(--color-base-content, #94a3b8) 14%, transparent);
-    box-shadow: none;
-  }
-
-  .skill-meter[data-level="1"] .skill-meter__bar--active {
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 52%, transparent);
-    box-shadow: 0 0 4px color-mix(in srgb, var(--color-primary, #6366f1) 24%, transparent);
-  }
-
-  .skill-meter[data-level="2"] .skill-meter__bar--active {
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 64%, transparent);
-    box-shadow: 0 0 5px color-mix(in srgb, var(--color-primary, #6366f1) 32%, transparent);
-  }
-
-  .skill-meter[data-level="3"] .skill-meter__bar--active {
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 76%, transparent);
-    box-shadow: 0 0 6px color-mix(in srgb, var(--color-primary, #6366f1) 40%, transparent);
-  }
-
-  .skill-meter[data-level="4"] .skill-meter__bar--active {
-    background-color: color-mix(in srgb, var(--color-primary, #6366f1) 88%, transparent);
-    box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary, #6366f1) 50%, transparent);
-  }
-
-  .skill-meter[data-level="5"] .skill-meter__bar--active {
-    background-color: var(--color-primary, #6366f1);
-    box-shadow: 0 0 10px color-mix(in srgb, var(--color-primary, #6366f1) 62%, transparent);
-  }
-</style>

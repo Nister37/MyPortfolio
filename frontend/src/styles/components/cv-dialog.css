@@ -1,0 +1,94 @@
+.cv-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+}
+
+.cv-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(2px);
+  animation: cv-fade-in 0.18s ease-out;
+}
+
+.cv-dialog__panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100vw - 2rem));
+  border-radius: 0.85rem;
+  background: var(--color-base-100, #fff);
+  color: var(--color-base-content, inherit);
+  border: 1px solid var(--color-base-300, #e5e7eb);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35);
+  padding: 1.75rem 1.5rem 1.5rem;
+  animation: cv-panel-in 0.18s ease-out;
+}
+
+@keyframes cv-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cv-panel-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 6px)) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.cv-dialog__close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--color-base-content, currentColor);
+  opacity: 0.6;
+  border: none;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.cv-dialog__close:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--color-base-content, #000) 8%, transparent);
+}
+
+.cv-dialog__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 0 1.5rem 1.25rem 0;
+}
+
+.cv-dialog__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cv-dialog__actions > .btn {
+  flex: 1 1 0;
+  min-width: 140px;
+}

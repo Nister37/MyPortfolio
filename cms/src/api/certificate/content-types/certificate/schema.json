@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "certificates",
+  "info": {
+    "singularName": "certificate",
+    "pluralName": "certificates",
+    "displayName": "Certificate",
+    "description": "Certificate or course PDF displayed on the portfolio"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "issuer": {
+      "type": "string",
+      "required": true
+    },
+    "kind": {
+      "type": "enumeration",
+      "default": "certificate",
+      "enum": [
+        "certificate",
+        "course"
+      ],
+      "required": true
+    },
+    "category": {
+      "type": "string",
+      "default": "General"
+    },
+    "summary": {
+      "type": "text"
+    },
+    "issuedAt": {
+      "type": "date"
+    },
+    "skills": {
+      "type": "json"
+    },
+    "pdf": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "credentialUrl": {
+      "type": "string"
+    },
+    "language": {
+      "type": "enumeration",
+      "default": "en",
+      "enum": [
+        "en",
+        "pl"
+      ],
+      "required": true
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogCard from "../blog/BlogCard.astro";
+import Section from "../layout/Section.astro";
+import { pageCopy } from "../../data/site-copy";
+import type { Lang } from "../../data/site-copy";
+import { getPostsByLanguage } from "../../lib/cms/posts";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const posts = await getPostsByLanguage(lang);
+const copy = pageCopy[lang].blog;
+---
+
+<BaseLayout title={copy.title} description={copy.description} lang={lang} path="/blog">
+  <main id="main-content">
+    <Section>
+      <div data-reveal>
+        <h1 class="text-4xl font-bold tracking-tight">{copy.heading}</h1>
+        <p class="mt-3 max-w-2xl text-base-content/65">
+          {copy.intro}
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => <BlogCard post={post} lang={lang} />)}
+      </div>
+
+      {
+        posts.length === 0 && (
+          <p class="mt-12 text-center text-base-content/50">
+            {copy.empty}
+          </p>
+        )
+      }
+    </Section>
+  </main>
+</BaseLayout>

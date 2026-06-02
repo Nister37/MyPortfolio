@@ -1,4 +1,5 @@
 ---
+import { blogCopy } from "../../data/site-copy";
 import type { BlogPost } from "../../lib/cms/posts";
 import { base } from "../../lib/url";
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
   lang?: "en" | "pl";
 }
 const { post, lang = "en" } = Astro.props;
+const copy = blogCopy[lang];
 const postHref = lang === "pl" ? `${base}pl/blog/${post.slug}` : `${base}blog/${post.slug}`;
 const formattedDate = post.publishedAt
   ? new Date(post.publishedAt).toLocaleDateString(lang === "pl" ? "pl-PL" : "en-GB", {
@@ -37,7 +39,7 @@ const formattedDate = post.publishedAt
     <div class="mt-1 flex items-center gap-3 text-xs text-base-content/45">
       {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
       {post.readingTime && (
-        <span>{post.readingTime} {lang === "pl" ? "min czytania" : "min read"}</span>
+        <span>{post.readingTime} {copy.minRead}</span>
       )}
     </div>
   </div>

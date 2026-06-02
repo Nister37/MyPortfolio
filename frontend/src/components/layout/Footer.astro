@@ -1,14 +1,12 @@
 ---
+import { footerCopy, siteMetadata } from "../../data/site-copy";
+
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
 const year = new Date().getFullYear();
-
-const copyright =
-  lang === "pl"
-    ? `© ${year} Paweł Ryfiak. Zbudowane przy użyciu Astro, Svelte, Tailwind CSS i Strapi.`
-    : `© ${year} Paweł Ryfiak. Built with Astro, Svelte, Tailwind CSS, and Strapi.`;
+const copyright = `© ${year} ${siteMetadata.name}. ${footerCopy[lang].builtWith}`;
 ---
 
 <footer class="border-t border-base-300 bg-base-200">

@@ -1,8 +1,12 @@
 ---
+import { homeCopy } from "../../data/site-copy";
+import "../../styles/components/contact-cta.css";
+
 interface Props {
   lang?: "en" | "pl";
 }
 const { lang = "en" } = Astro.props;
+const copy = homeCopy[lang].contact;
 ---
 
 <div class="bg-base-200">
@@ -10,18 +14,16 @@ const { lang = "en" } = Astro.props;
     <div class="mx-auto max-w-[1120px] px-4" data-reveal>
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold tracking-tight">
-          {lang === "pl" ? "Skontaktuj się" : "Get in touch"}
+          {copy.heading}
         </h2>
         <p class="mt-4 text-base-content/65">
-          {lang === "pl"
-            ? "Jestem otwarty na staże programistyczne, role junior backend, projekty automatyzacyjne oraz zadania związane z podstawami deploymentu. Obecnie mieszkam w Antwerpii, ale jestem dostępny także zdalnie oraz w Polsce."
-            : "I am open to IT internships, junior backend positions, automation roles, and DevOps-oriented opportunities. Based in Antwerp — available for remote and EU roles."}
+          {copy.body}
         </p>
 
         <!-- Social icons — same set as footer at 3x size, primary-blue on hover. -->
         <nav
           class="contact-icons mt-10 flex items-center justify-center gap-10"
-          aria-label={lang === "pl" ? "Linki kontaktowe" : "Contact links"}
+          aria-label={copy.navLabel}
         >
           <a
             href="https://github.com/Nister37"
@@ -63,7 +65,7 @@ const { lang = "en" } = Astro.props;
             </svg>
           </a>
 
-          <a href="mailto:pawelryfiak2004@gmail.com" aria-label={lang === "pl" ? "Wyślij e-mail" : "Send email"}>
+          <a href="mailto:pawelryfiak2004@gmail.com" aria-label={copy.emailLabel}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="60"
@@ -85,23 +87,3 @@ const { lang = "en" } = Astro.props;
     </div>
   </section>
 </div>
-
-<style>
-  .contact-icons a {
-    color: var(--color-base-content, currentColor);
-    opacity: 0.65;
-    transition:
-      color 0.2s ease,
-      opacity 0.2s ease,
-      transform 0.2s ease;
-  }
-  .contact-icons a:hover {
-    color: var(--color-primary, #6366f1);
-    opacity: 1;
-    transform: translateY(-2px);
-  }
-</style>
-
-
-
-

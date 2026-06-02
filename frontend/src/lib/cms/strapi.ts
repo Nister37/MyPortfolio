@@ -1,4 +1,4 @@
-const STRAPI_URL = import.meta.env.STRAPI_URL ?? "http://localhost:1337";
+export const STRAPI_URL = import.meta.env.STRAPI_URL ?? "http://localhost:1337";
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN as string | undefined;
 
 type FetchOptions = {
@@ -24,3 +24,11 @@ export async function fetchFromStrapi<T>({ path, query = "" }: FetchOptions): Pr
   return response.json() as Promise<T>;
 }
 
+export function resolveStrapiMediaUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (/^https?:\/\//i.test(url)) return url;
+
+  const root = STRAPI_URL.replace(/\/$/, "");
+  const path = url.startsWith("/") ? url : `/${url}`;
+  return `${root}${path}`;
+}
