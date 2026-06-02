@@ -35,7 +35,11 @@ async function triggerGitHubDeploy(strapiInstance: Core.Strapi) {
   }
 }
 
-const WATCHED_UIDS = ['api::blog-post.blog-post', 'api::project.project'];
+const WATCHED_UIDS = [
+  'api::blog-post.blog-post',
+  'api::project.project',
+  'api::certificate.certificate',
+];
 
 export default {
   register() {},
