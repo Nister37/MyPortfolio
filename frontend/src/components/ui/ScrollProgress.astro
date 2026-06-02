@@ -1,10 +1,41 @@
 ---
 import "../../styles/components/scroll-progress.css";
+
+interface Props {
+  lang?: "en" | "pl";
+}
+
+const { lang = "en" } = Astro.props;
+const scrollTopLabel = lang === "pl" ? "Wróć na górę" : "Back to top";
 ---
 
 <div class="scroll-progress" aria-hidden="true">
   <span class="scroll-progress__bar" data-scroll-progress></span>
 </div>
+
+<button
+  type="button"
+  class="scroll-to-top"
+  data-scroll-top
+  aria-label={scrollTopLabel}
+  title={scrollTopLabel}
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="m18 15-6-6-6 6"></path>
+  </svg>
+</button>
 
 <script>
   import "../../scripts/scroll-progress";

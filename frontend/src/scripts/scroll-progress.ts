@@ -1,4 +1,5 @@
 const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
+const scrollTopButton = document.querySelector<HTMLButtonElement>("[data-scroll-top]");
 
 if (progressBar) {
   const bar = progressBar;
@@ -15,7 +16,15 @@ if (progressBar) {
 
   function update() {
     rafId = 0;
-    bar.style.transform = `scaleX(${progress()})`;
+    const currentProgress = progress();
+    bar.style.transform = `scaleX(${currentProgress})`;
+
+    if (scrollTopButton) {
+      const isVisible = currentProgress >= 1 / 3;
+      scrollTopButton.classList.toggle("scroll-to-top--visible", isVisible);
+      scrollTopButton.setAttribute("aria-hidden", String(!isVisible));
+      scrollTopButton.tabIndex = isVisible ? 0 : -1;
+    }
   }
 
   function queueUpdate() {
@@ -37,6 +46,13 @@ if (progressBar) {
   }
 
   update();
+  const resizeObserver = new ResizeObserver(queueUpdate);
+  resizeObserver.observe(document.body);
+
+  scrollTopButton?.addEventListener("click", () => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  });
   window.addEventListener("scroll", handleScroll, { passive: true });
   window.addEventListener("resize", queueUpdate);
 }
