@@ -2,6 +2,18 @@
   display: none;
 }
 
+.timeline-item[data-reveal] {
+  transform: translateX(-1.5rem);
+}
+
+.timeline-item[data-reveal][data-reveal-side="right"] {
+  transform: translateX(1.5rem);
+}
+
+.timeline-item[data-reveal].revealed {
+  transform: translateX(0);
+}
+
 .timeline-list li:hover .timeline-dot,
 .timeline-list li:has(.timeline-card[open]) .timeline-dot {
   background-color: var(--color-primary, #6366f1);
@@ -23,4 +35,14 @@
 
 .timeline-list .timeline-card[open] .timeline-card__chevron {
   transform: rotate(180deg);
+}
+
+@media (max-width: 767px) {
+  .timeline-item[data-reveal][data-reveal-side="right"] {
+    transform: translateX(-1.5rem);
+  }
+
+  .timeline-item[data-reveal].revealed {
+    transform: translateX(0);
+  }
 }

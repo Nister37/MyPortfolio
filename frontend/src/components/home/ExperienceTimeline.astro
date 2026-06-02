@@ -26,8 +26,8 @@ const educationEntries = entries.filter((entry) => entry.type === "Education" ||
 const experienceEntries = entries.filter((entry) => entry.type === "Project");
 
 const columns = [
-  { heading: copy.educationHeading, entries: educationEntries },
-  { heading: copy.projectsHeading, entries: experienceEntries },
+  { heading: copy.educationHeading, entries: educationEntries, revealSide: "left" },
+  { heading: copy.projectsHeading, entries: experienceEntries, revealSide: "right" },
 ];
 
 function typeLabel(type: TimelineEntryType) {
@@ -59,7 +59,7 @@ function typeLabel(type: TimelineEntryType) {
                 : entry.githubUrl;
               const isExternal = !entry.blogSlug && !!entry.githubUrl;
               return (
-                <li class="relative">
+                <li class="timeline-item relative" data-reveal data-reveal-side={column.revealSide}>
                   <span
                     class="timeline-dot absolute -left-10 top-5 block h-3.5 w-3.5 rounded-full border-2 border-primary bg-base-100 transition-all"
                     aria-hidden="true"
