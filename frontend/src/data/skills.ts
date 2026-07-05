@@ -34,6 +34,10 @@ export const skillCategories: SkillCategory[] = [
       { name: "JPA", months: 9 },
       { name: "Gradle", months: 9 },
       { name: "Strapi", months: 1 },
+      { name: "NestJS", months: 1 },
+      { name: "Django", months: 1 },
+      { name: "Postman", months: 1 },
+      { name: "OpenAPI", months: 1 },
     ],
   },
   {
@@ -47,6 +51,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Kubernetes", months: 1 },
       { name: "Caddy", months: 1 },
       { name: "Railway", months: 1 },
+      { name: "Jenkins", months: 1 },
     ],
   },
   {
@@ -67,9 +72,16 @@ export const skillCategories: SkillCategory[] = [
       { name: "jQuery", months: 12 },
       { name: "TypeScript", months: 6 },
       { name: "Vue", months: 6 },
-      { name: "React", months: 3 },
+      { name: "React", months: 6 },
       { name: "Astro", months: 1 },
       { name: "Svelte", months: 1 },
+      { name: "Angular", months: 1 },
+      { name: "NX", months: 1 },
+      { name: "Cypress", months: 1 },
+      { name: "npm", months: 1 },
+      { name: "ESLint", months: 1 },
+      { name: "dprint", months: 1 },
+      { name: "Prettier", months: 1 },
     ],
   },
   {
@@ -80,6 +92,16 @@ export const skillCategories: SkillCategory[] = [
       { name: "MySQL", months: 24 },
       { name: "H2", months: 9 },
       { name: "MongoDB", months: 1 },
+    ],
+  },
+  {
+    category: "Business",
+    skills: [
+      { name: "BPMN", months: 1 },
+      { name: "TRIZ", months: 1 },
+      { name: "SIPOC", months: 1 },
+      { name: "5 Whys", months: 1 },
+      { name: "RACI", months: 1 },
     ],
   },
 ];

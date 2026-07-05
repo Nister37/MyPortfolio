@@ -64,7 +64,7 @@ function categoryName(category: string) {
     </div>
   </div>
 
-  <div class="mt-10 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="skills-grid mt-10" data-skills-grid>
     {
       skillCategories.map(({ category, skills }) => (
         <details class="skill-card group border-base-300 bg-base-200 rounded-xl border transition-all">
@@ -126,4 +126,38 @@ function categoryName(category: string) {
       ))
     }
   </div>
+
+  <script>
+    const skillsGrids =
+      document.querySelectorAll<HTMLElement>("[data-skills-grid]");
+
+    skillsGrids.forEach((grid) => {
+      const cards = Array.from(
+        grid.querySelectorAll<HTMLDetailsElement>("details.skill-card"),
+      );
+
+      const updateExpandedState = () => {
+        grid.classList.toggle(
+          "skills-grid--expanded",
+          cards.some((card) => card.open),
+        );
+      };
+
+      cards.forEach((card) => {
+        card.addEventListener("toggle", () => {
+          if (card.open) {
+            cards.forEach((otherCard) => {
+              if (otherCard !== card) {
+                otherCard.open = false;
+              }
+            });
+          }
+
+          updateExpandedState();
+        });
+      });
+
+      updateExpandedState();
+    });
+  </script>
 </Section>

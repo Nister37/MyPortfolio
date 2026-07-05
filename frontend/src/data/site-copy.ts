@@ -107,6 +107,7 @@ export const homeCopy = {
         "AI & Automation": "AI & Automation",
         Frontend: "Frontend",
         Database: "Database",
+        Business: "Business",
       },
       levelLabels: [
         "0-5 months",
@@ -172,6 +173,7 @@ export const homeCopy = {
         "AI & Automation": "AI i automatyzacja",
         Frontend: "Frontend",
         Database: "Bazy danych",
+        Business: "Biznes",
       },
       levelLabels: [
         "0-5 miesięcy",
