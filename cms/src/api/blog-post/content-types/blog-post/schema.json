@@ -50,10 +50,7 @@
     "language": {
       "type": "enumeration",
       "default": "en",
-      "enum": [
-        "en",
-        "pl"
-      ]
+      "enum": ["en", "pl"]
     }
   }
 }

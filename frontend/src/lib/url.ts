@@ -5,4 +5,3 @@
  * `.astro`, `.ts`, and `.svelte` files, so this import is safe anywhere in `src/`.
  */
 export const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-

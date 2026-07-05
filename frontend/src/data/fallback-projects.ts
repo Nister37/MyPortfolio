@@ -7,7 +7,14 @@ export const fallbackProjects: Project[] = [
     summary:
       "Full CI/CD pipeline on Google Cloud Platform for a Java microservices project with Docker, GitLab CI, and Compute Engine deployment.",
     categories: ["DevOps", "Backend"],
-    stack: ["Java", "Spring Boot", "Docker", "GitLab CI", "Google Cloud", "Linux"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "Docker",
+      "GitLab CI",
+      "Google Cloud",
+      "Linux",
+    ],
     highlights: [
       "Blue-green deployment strategy with Docker Compose",
       "Automated GitLab CI pipeline from commit to live",
@@ -30,7 +37,17 @@ export const fallbackProjects: Project[] = [
     summary:
       "Spring Boot HTTP endpoint monitor with check history, live dashboard, PostgreSQL persistence, Redis caching, Thymeleaf UI, Docker Compose setup, Caddy HTTPS reverse proxy, Adminer, GitLab CI, and GCP deployment scripts.",
     categories: ["Backend", "DevOps"],
-    stack: ["Java", "Spring Boot", "PostgreSQL", "Redis", "Docker", "Thymeleaf", "Caddy", "GitLab CI", "Google Cloud"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "Thymeleaf",
+      "Caddy",
+      "GitLab CI",
+      "Google Cloud",
+    ],
     highlights: [
       "Live dashboard with real-time endpoint check history",
       "Redis caching layer with PostgreSQL persistence",
@@ -52,7 +69,14 @@ export const fallbackProjects: Project[] = [
     summary:
       "Spring Boot web app for managing intersections, traffic lights, maintenance logs, and maintenance companies. Includes Thymeleaf MVC pages, REST APIs, PostgreSQL, Spring Security, AJAX, CSV import, caching, tests, and GitLab CI.",
     categories: ["Backend", "Web"],
-    stack: ["Java", "Spring Boot", "PostgreSQL", "Thymeleaf", "Spring Security", "GitLab CI"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "Thymeleaf",
+      "Spring Security",
+      "GitLab CI",
+    ],
     highlights: [
       "Full CRUD for intersections, lights, maintenance logs, and companies",
       "CSV import, AJAX-driven UI updates, and Spring Security role-based access",
@@ -74,7 +98,17 @@ export const fallbackProjects: Project[] = [
     summary:
       "Spring Boot ride-sharing and activity platform for KdG students, featuring travel groups, activities, real-time STOMP/WebSocket chat, voting, friendships, maps/routes, Google Calendar integration, OAuth2 login, PostgreSQL persistence, Thymeleaf UI, tests, Docker, and GitLab CI/CD.",
     categories: ["Backend", "Web"],
-    stack: ["Java", "Spring Boot", "PostgreSQL", "WebSocket", "STOMP", "OAuth2", "Docker", "GitLab CI", "Thymeleaf"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "WebSocket",
+      "STOMP",
+      "OAuth2",
+      "Docker",
+      "GitLab CI",
+      "Thymeleaf",
+    ],
     highlights: [
       "Real-time group chat via STOMP/WebSocket with voting and friendship system",
       "Google Calendar integration and maps/routes for trip planning",
@@ -96,7 +130,14 @@ export const fallbackProjects: Project[] = [
     summary:
       "Spring Boot IoT smart room monitoring platform for real-time temperature, humidity, CO₂, noise, TVOC and occupancy tracking. Includes analytics dashboards, threshold alerts, multi-room support, role-based access, device store/subscriptions, PostgreSQL, Thymeleaf, Bootstrap and Chart.js.",
     categories: ["IoT", "Backend"],
-    stack: ["Java", "Spring Boot", "PostgreSQL", "Thymeleaf", "Bootstrap", "Chart.js"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "Thymeleaf",
+      "Bootstrap",
+      "Chart.js",
+    ],
     highlights: [
       "Real-time tracking of temperature, humidity, CO₂, noise, TVOC, and occupancy",
       "Analytics dashboards with Chart.js and threshold-based alerts",

@@ -27,7 +27,10 @@ const {
 } = Astro.props;
 const copy = layoutCopy[lang];
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteMetadata.url);
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  Astro.site ?? siteMetadata.url,
+);
 // Fall back to the site favicon so all pages have a shareable social image.
 const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
 
@@ -74,8 +77,16 @@ const websiteSchema = {
     <meta name="twitter:image" content={resolvedOgImage} />
 
     <!-- Structured data: Person + WebSite -->
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(personSchema)}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteSchema)}
+    />
 
     <title>{title}</title>
     <!-- Redirect legacy GitHub Pages project URLs to the custom domain.
@@ -83,8 +94,8 @@ const websiteSchema = {
          like /_astro/CustomCursor... 404 under nister37.github.io/MyPortfolio. -->
     <script is:inline>
       (function () {
-        var legacyHost = "nister37.github.io";
-        var legacyBase = "/MyPortfolio";
+        const legacyHost = "nister37.github.io";
+        const legacyBase = "/MyPortfolio";
         if (window.location.hostname !== legacyHost) return;
         if (
           window.location.pathname !== legacyBase &&
@@ -93,29 +104,32 @@ const websiteSchema = {
           return;
         }
 
-        var path = window.location.pathname.slice(legacyBase.length) || "/";
+        const path = window.location.pathname.slice(legacyBase.length) || "/";
         window.location.replace(
-          "https://pawelryfiak.is-a.dev" + path + window.location.search + window.location.hash
+          "https://pawelryfiak.is-a.dev" +
+            path +
+            window.location.search +
+            window.location.hash,
         );
       })();
     </script>
     <!-- Apply saved theme before first paint to prevent flash of wrong theme -->
     <script is:inline>
       (function () {
-        var saved = localStorage.getItem("portfolio-theme");
+        const saved = localStorage.getItem("portfolio-theme");
         document.documentElement.setAttribute(
           "data-theme",
-          saved === "portfolio-light" ? "portfolio-light" : "portfolio-dark"
+          saved === "portfolio-light" ? "portfolio-light" : "portfolio-dark",
         );
       })();
     </script>
   </head>
-  <body class="min-h-screen bg-base-100 text-base-content antialiased">
+  <body class="bg-base-100 text-base-content min-h-screen antialiased">
     <ScrollProgress lang={lang} />
     <!-- Skip nav for keyboard users -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content"
+      class="focus:bg-primary focus:text-primary-content sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:px-4 focus:py-2"
     >
       {copy.skipToContent}
     </a>
@@ -129,21 +143,3 @@ const websiteSchema = {
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

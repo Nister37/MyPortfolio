@@ -1,0 +1,8 @@
+build
+dist
+.cache
+.tmp
+.strapi
+node_modules
+package-lock.json
+types/generated

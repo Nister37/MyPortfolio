@@ -13,9 +13,11 @@ if (overlay) {
     document.body.style.overflow = "";
   };
 
-  document.querySelectorAll<HTMLButtonElement>("[data-cv-trigger]").forEach((btn) => {
-    btn.addEventListener("click", open);
-  });
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-cv-trigger]")
+    .forEach((btn) => {
+      btn.addEventListener("click", open);
+    });
 
   overlay.querySelectorAll<HTMLElement>("[data-cv-close]").forEach((el) => {
     el.addEventListener("click", close);

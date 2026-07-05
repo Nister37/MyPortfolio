@@ -63,7 +63,8 @@ const CERTIFICATE_LABELS = {
   },
 } as const;
 
-export type CertificateLabels = (typeof CERTIFICATE_LABELS)[CertificateLanguage];
+export type CertificateLabels =
+  (typeof CERTIFICATE_LABELS)[CertificateLanguage];
 
 function getDateTime(value?: string) {
   if (!value) return 0;
@@ -102,7 +103,10 @@ export function formatCertificateDate(
   }).format(date);
 }
 
-export function getCertificateKindLabel(kind: string, labels: CertificateLabels) {
+export function getCertificateKindLabel(
+  kind: string,
+  labels: CertificateLabels,
+) {
   if (kind === "certificate") return labels.certificate;
   if (kind === "course") return labels.course;
   return kind;
@@ -124,14 +128,21 @@ export function createCertificateLibrary() {
   const zoom = writable(1);
   const zoomOrigin = writable("50% 50%");
 
-  const labels = derived(language, ($language) => CERTIFICATE_LABELS[$language]);
+  const labels = derived(
+    language,
+    ($language) => CERTIFICATE_LABELS[$language],
+  );
   const kindOptions = derived(certificates, ($certificates) => [
     "all" as const,
-    ...new Set($certificates.map((certificate) => certificate.kind).filter(Boolean)),
+    ...new Set(
+      $certificates.map((certificate) => certificate.kind).filter(Boolean),
+    ),
   ]);
   const categoryOptions = derived(certificates, ($certificates) => [
     "all",
-    ...new Set($certificates.map((certificate) => certificate.category).filter(Boolean)),
+    ...new Set(
+      $certificates.map((certificate) => certificate.category).filter(Boolean),
+    ),
   ]);
   const sortOptions = derived(labels, ($labels) => [
     { value: "newest" as const, label: $labels.newest },
@@ -144,11 +155,13 @@ export function createCertificateLibrary() {
     ([$certificates, $selectedKind, $selectedCategory, $sortBy, $language]) =>
       $certificates
         .filter(
-          (certificate) => $selectedKind === "all" || certificate.kind === $selectedKind,
+          (certificate) =>
+            $selectedKind === "all" || certificate.kind === $selectedKind,
         )
         .filter(
           (certificate) =>
-            $selectedCategory === "all" || certificate.category === $selectedCategory,
+            $selectedCategory === "all" ||
+            certificate.category === $selectedCategory,
         )
         .slice()
         .sort((a, b) => compareCertificates(a, b, $sortBy, $language)),
@@ -158,20 +171,25 @@ export function createCertificateLibrary() {
   let previousBodyOverflow: string | null = null;
 
   function lockBodyScroll() {
-    if (typeof document === "undefined" || previousBodyOverflow !== null) return;
+    if (typeof document === "undefined" || previousBodyOverflow !== null)
+      return;
 
     previousBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
   }
 
   function restoreBodyScroll() {
-    if (typeof document === "undefined" || previousBodyOverflow === null) return;
+    if (typeof document === "undefined" || previousBodyOverflow === null)
+      return;
 
     document.body.style.overflow = previousBodyOverflow;
     previousBodyOverflow = null;
   }
 
-  function setInput(nextCertificates: Certificate[], nextLanguage: CertificateLanguage) {
+  function setInput(
+    nextCertificates: Certificate[],
+    nextLanguage: CertificateLanguage,
+  ) {
     certificates.set(nextCertificates);
     language.set(nextLanguage);
   }

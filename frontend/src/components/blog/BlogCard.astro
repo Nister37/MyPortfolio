@@ -8,25 +8,31 @@ interface Props {
 }
 const { post, lang = "en" } = Astro.props;
 const copy = blogCopy[lang];
-const postHref = lang === "pl" ? `${base}pl/blog/${post.slug}` : `${base}blog/${post.slug}`;
+const postHref =
+  lang === "pl" ? `${base}pl/blog/${post.slug}` : `${base}blog/${post.slug}`;
 const formattedDate = post.publishedAt
-  ? new Date(post.publishedAt).toLocaleDateString(lang === "pl" ? "pl-PL" : "en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
+  ? new Date(post.publishedAt).toLocaleDateString(
+      lang === "pl" ? "pl-PL" : "en-GB",
+      {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      },
+    )
   : null;
 ---
-<article class="card relative bg-base-200 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
+
+<article
+  class="card bg-base-200 hover:ring-primary/40 relative shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg hover:ring-1"
+>
   <!-- Stretched link covers the entire card. Card content sits at the same
        stacking context but inner interactive elements (none here) would need
        `relative z-10` to stay clickable above this overlay. -->
   <a
     href={postHref}
-    class="absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-    aria-label={post.title}
-  ></a>
-  <div class="card-body relative z-[1] gap-3 pointer-events-none">
+    class="focus-visible:ring-primary absolute inset-0 z-0 rounded-[inherit] focus:outline-none focus-visible:ring-2"
+    aria-label={post.title}></a>
+  <div class="card-body pointer-events-none relative z-[1] gap-3">
     <div class="flex flex-wrap items-center gap-2">
       {
         (post.tags ?? []).map((tag) => (
@@ -35,12 +41,20 @@ const formattedDate = post.publishedAt
       }
     </div>
     <h3 class="card-title text-lg leading-snug">{post.title}</h3>
-    <p class="text-sm text-base-content/65">{post.description}</p>
-    <div class="mt-1 flex items-center gap-3 text-xs text-base-content/45">
-      {formattedDate && <time datetime={post.publishedAt}>{formattedDate}</time>}
-      {post.readingTime && (
-        <span>{post.readingTime} {copy.minRead}</span>
-      )}
+    <p class="text-base-content/65 text-sm">{post.description}</p>
+    <div class="text-base-content/45 mt-1 flex items-center gap-3 text-xs">
+      {
+        formattedDate && (
+          <time datetime={post.publishedAt}>{formattedDate}</time>
+        )
+      }
+      {
+        post.readingTime && (
+          <span>
+            {post.readingTime} {copy.minRead}
+          </span>
+        )
+      }
     </div>
   </div>
 </article>

@@ -6,8 +6,12 @@ function applyTheme(theme: string) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem(STORAGE_KEY, theme);
   document.querySelectorAll<HTMLElement>(".theme-toggle").forEach((btn) => {
-    btn.querySelector<SVGElement>(".icon-sun")?.classList.toggle("hidden", theme !== DARK);
-    btn.querySelector<SVGElement>(".icon-moon")?.classList.toggle("hidden", theme === DARK);
+    btn
+      .querySelector<SVGElement>(".icon-sun")
+      ?.classList.toggle("hidden", theme !== DARK);
+    btn
+      .querySelector<SVGElement>(".icon-moon")
+      ?.classList.toggle("hidden", theme === DARK);
   });
 }
 

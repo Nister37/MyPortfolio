@@ -34,10 +34,16 @@
       return;
     }
 
-    const elementAtPointer = document.elementFromPoint(targetX, targetY) as HTMLElement | null;
+    const elementAtPointer = document.elementFromPoint(
+      targetX,
+      targetY,
+    ) as HTMLElement | null;
     const usesNativeCursor = Boolean(elementAtPointer?.closest(NATIVE_CURSOR));
     cursor.classList.toggle("native", usesNativeCursor);
-    cursor.classList.toggle("hover", !usesNativeCursor && Boolean(elementAtPointer?.closest(INTERACTIVE)));
+    cursor.classList.toggle(
+      "hover",
+      !usesNativeCursor && Boolean(elementAtPointer?.closest(INTERACTIVE)),
+    );
   }
 
   function queueHoverSync() {
@@ -62,7 +68,9 @@
 
   onMount(() => {
     const touch = window.matchMedia("(pointer: coarse)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (touch || reduced) return;
 
     let firstMove = true;
@@ -173,8 +181,10 @@
   /* Hover/press feedback changes color + glow only — no shape, size, or
      position change, so the tip stays pixel-stable on interactive elements. */
   .cursor:global(.hover) svg {
-    filter:
-      drop-shadow(0 0 6px color-mix(in srgb, var(--color-primary, #6366f1) 70%, transparent))
+    filter: drop-shadow(
+        0 0 6px
+          color-mix(in srgb, var(--color-primary, #6366f1) 70%, transparent)
+      )
       drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
   }
   .cursor:global(.hover) :global(.cursor-path) {
@@ -191,5 +201,3 @@
     opacity: 0 !important;
   }
 </style>
-
-

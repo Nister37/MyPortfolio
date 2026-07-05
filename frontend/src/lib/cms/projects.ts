@@ -59,7 +59,9 @@ export async function getProjects(): Promise<Project[]> {
     // Use fallback when Strapi returns no projects — avoids showing an empty
     // page while the CMS is seeded or reset between environments.
     if (result.data.length === 0) {
-      console.warn("Strapi returned no projects — using fallback project data.");
+      console.warn(
+        "Strapi returned no projects — using fallback project data.",
+      );
       return fallbackProjects;
     }
 
@@ -93,7 +95,3 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   const all = await getProjects();
   return all.filter((project) => project.featured);
 }
-
-
-
-

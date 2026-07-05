@@ -3,8 +3,13 @@
 }
 
 .project-card[open] {
-  border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
-  box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--color-primary, #6366f1) 45%,
+    transparent
+  );
+  box-shadow: 0 14px 32px -22px
+    color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
 }
 
 .project-card__hide-label {

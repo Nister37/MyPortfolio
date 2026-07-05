@@ -30,6 +30,10 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Lint frontend
+        run: bun run lint
+      - name: Check frontend formatting
+        run: bun run format:check
       - name: TypeScript / Astro type-check
         run: bun run check
       - name: Security audit (fail on high-severity)

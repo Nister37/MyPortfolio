@@ -22,12 +22,22 @@ const typeBadgeClass: Record<TimelineEntryType, string> = {
 };
 
 // Two lifelines: education + professional experience on the left, projects on the right.
-const educationEntries = entries.filter((entry) => entry.type === "Education" || entry.type === "Work");
+const educationEntries = entries.filter(
+  (entry) => entry.type === "Education" || entry.type === "Work",
+);
 const experienceEntries = entries.filter((entry) => entry.type === "Project");
 
 const columns = [
-  { heading: copy.educationHeading, entries: educationEntries, revealSide: "left" },
-  { heading: copy.projectsHeading, entries: experienceEntries, revealSide: "right" },
+  {
+    heading: copy.educationHeading,
+    entries: educationEntries,
+    revealSide: "left",
+  },
+  {
+    heading: copy.projectsHeading,
+    entries: experienceEntries,
+    revealSide: "right",
+  },
 ];
 
 function typeLabel(type: TimelineEntryType) {
@@ -40,7 +50,7 @@ function typeLabel(type: TimelineEntryType) {
 <Section id="experience">
   <div data-reveal>
     <h2 class="text-3xl font-bold tracking-tight">{copy.heading}</h2>
-    <p class="mt-2 text-base-content/60">{copy.subheading}</p>
+    <p class="text-base-content/60 mt-2">{copy.subheading}</p>
   </div>
 
   <!-- Stacked on mobile (with the per-column subheading above each list);
@@ -49,29 +59,40 @@ function typeLabel(type: TimelineEntryType) {
     {
       columns.map((column) => (
         <div>
-          <h3 class="mb-5 text-sm font-semibold uppercase tracking-wider text-base-content/60">
+          <h3 class="text-base-content/60 mb-5 text-sm font-semibold tracking-wider uppercase">
             {column.heading}
           </h3>
-          <ol class="timeline-list space-y-4 border-l-2 border-base-300 pl-8">
+          <ol class="timeline-list border-base-300 space-y-4 border-l-2 pl-8">
             {column.entries.map((entry) => {
               const href = entry.blogSlug
                 ? `${blogBase}${entry.blogSlug}`
                 : entry.githubUrl;
               const isExternal = !entry.blogSlug && !!entry.githubUrl;
               return (
-                <li class="timeline-item relative" data-reveal data-reveal-side={column.revealSide}>
+                <li
+                  class="timeline-item relative"
+                  data-reveal
+                  data-reveal-side={column.revealSide}
+                >
                   <span
-                    class="timeline-dot absolute -left-10 top-5 block h-3.5 w-3.5 rounded-full border-2 border-primary bg-base-100 transition-all"
+                    class="timeline-dot border-primary bg-base-100 absolute top-5 -left-10 block h-3.5 w-3.5 rounded-full border-2 transition-all"
                     aria-hidden="true"
                   />
-                  <details class="timeline-card group rounded-lg border border-base-300 bg-base-200/40 transition-all">
-                    <summary class="cursor-pointer list-none rounded-lg p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                  <details class="timeline-card group border-base-300 bg-base-200/40 rounded-lg border transition-all">
+                    <summary class="focus-visible:ring-primary cursor-pointer list-none rounded-lg p-5 focus:outline-none focus-visible:ring-2">
                       <div class="mb-1 flex flex-wrap items-center gap-2">
-                        <span class="text-xs text-base-content/50">{entry.period}</span>
-                        <span class:list={["badge badge-sm", typeBadgeClass[entry.type]]}>
+                        <span class="text-base-content/50 text-xs">
+                          {entry.period}
+                        </span>
+                        <span
+                          class:list={[
+                            "badge badge-sm",
+                            typeBadgeClass[entry.type],
+                          ]}
+                        >
                           {typeLabel(entry.type)}
                         </span>
-                        <span class="ml-auto inline-flex items-center gap-1 text-xs text-primary/80">
+                        <span class="text-primary/80 ml-auto inline-flex items-center gap-1 text-xs">
                           {copy.labels.moreDetails}
                           <svg
                             class="timeline-card__chevron h-3.5 w-3.5 transition-transform"
@@ -81,17 +102,25 @@ function typeLabel(type: TimelineEntryType) {
                             stroke-width="2"
                             aria-hidden="true"
                           >
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="m6 9 6 6 6-6"
+                            />
                           </svg>
                         </span>
                       </div>
                       <h4 class="font-semibold">{entry.title}</h4>
-                      <p class="text-sm text-base-content/60">{entry.organization}</p>
+                      <p class="text-base-content/60 text-sm">
+                        {entry.organization}
+                      </p>
                     </summary>
                     {(entry.description || href) && (
-                      <div class="border-t border-base-300 px-5 pb-5 pt-4">
+                      <div class="border-base-300 border-t px-5 pt-4 pb-5">
                         {entry.description && (
-                          <p class="text-sm text-base-content/70">{entry.description}</p>
+                          <p class="text-base-content/70 text-sm">
+                            {entry.description}
+                          </p>
                         )}
                         {href && (
                           <a
@@ -117,7 +146,3 @@ function typeLabel(type: TimelineEntryType) {
     }
   </div>
 </Section>
-
-
-
-

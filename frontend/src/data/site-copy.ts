@@ -34,7 +34,8 @@ export const headerCopy = {
       about: "About",
     },
     cvButton: "Download CV",
-    cvDialogTitle: "Which language version of my CV would you like to download? 👀",
+    cvDialogTitle:
+      "Which language version of my CV would you like to download? 👀",
     cvEnglish: "English version",
     cvPolish: "Polish version",
     close: "Close",
@@ -60,7 +61,10 @@ export const headerCopy = {
 } as const satisfies Record<
   Lang,
   {
-    nav: Record<"home" | "projects" | "certificates" | "blog" | "about", string>;
+    nav: Record<
+      "home" | "projects" | "certificates" | "blog" | "about",
+      string
+    >;
     cvButton: string;
     cvDialogTitle: string;
     cvEnglish: string;
@@ -84,7 +88,8 @@ export const homeCopy = {
   en: {
     hero: {
       available: "Available for opportunities",
-      subtitle: "Junior Software Engineer focused on backend, automation, and practical DevOps.",
+      subtitle:
+        "Junior Software Engineer focused on backend, automation, and practical DevOps.",
       body: "I build Spring Boot systems, deployment pipelines, AI-assisted data extraction tools, and infrastructure scripts. Currently learning Astro, Svelte, Strapi, and modern frontend workflows by building this portfolio.",
       openTo:
         "Open to: IT internship, junior backend, automation, DevOps-oriented roles · Antwerp / remote / EU",
@@ -93,7 +98,8 @@ export const homeCopy = {
     },
     skills: {
       heading: "Skills",
-      subheading: "Select a domain to see technologies and hands-on experience.",
+      subheading:
+        "Select a domain to see technologies and hands-on experience.",
       legendHeading: "Experience legend",
       categoryLabels: {
         Backend: "Backend",
@@ -102,7 +108,13 @@ export const homeCopy = {
         Frontend: "Frontend",
         Database: "Database",
       },
-      levelLabels: ["0-5 months", "6+ months", "1+ year", "2+ years", "3+ years"],
+      levelLabels: [
+        "0-5 months",
+        "6+ months",
+        "1+ year",
+        "2+ years",
+        "3+ years",
+      ],
       meterTemplate: "of 5 experience bars",
       technologies: "technologies",
     },
@@ -122,7 +134,8 @@ export const homeCopy = {
     },
     blogPreview: {
       heading: "Recent Posts",
-      subheading: "Technical writing on things I built, debugged, or learned the hard way.",
+      subheading:
+        "Technical writing on things I built, debugged, or learned the hard way.",
     },
     contact: {
       heading: "Get in touch",
@@ -132,7 +145,8 @@ export const homeCopy = {
     },
     featuredProjects: {
       heading: "Featured Projects",
-      subheading: "A selection of real systems I built or contributed to significantly.",
+      subheading:
+        "A selection of real systems I built or contributed to significantly.",
       allProjects: "All projects ->",
     },
   },
@@ -149,7 +163,8 @@ export const homeCopy = {
     },
     skills: {
       heading: "Umiejętności techniczne",
-      subheading: "Wybierz obszar, aby zobaczyć technologie i czas doświadczenia.",
+      subheading:
+        "Wybierz obszar, aby zobaczyć technologie i czas doświadczenia.",
       legendHeading: "Legenda doświadczenia",
       categoryLabels: {
         Backend: "Backend",
@@ -158,13 +173,20 @@ export const homeCopy = {
         Frontend: "Frontend",
         Database: "Bazy danych",
       },
-      levelLabels: ["0-5 miesięcy", "6+ miesięcy", "1+ rok", "2+ lata", "3+ lata"],
+      levelLabels: [
+        "0-5 miesięcy",
+        "6+ miesięcy",
+        "1+ rok",
+        "2+ lata",
+        "3+ lata",
+      ],
       meterTemplate: "z 5 pasków doświadczenia",
       technologies: "technologii",
     },
     experience: {
       heading: "Doświadczenie i edukacja",
-      subheading: "Najnowsze na górze. Wybierz wpis, aby zobaczyć więcej szczegółów.",
+      subheading:
+        "Najnowsze na górze. Wybierz wpis, aby zobaczyć więcej szczegółów.",
       educationHeading: "Edukacja i doświadczenie zawodowe",
       projectsHeading: "Projekty",
       labels: {
@@ -189,7 +211,8 @@ export const homeCopy = {
     },
     featuredProjects: {
       heading: "Wyróżnione projekty",
-      subheading: "Wybrane projekty, które zbudowałem lub znacząco współtworzyłem.",
+      subheading:
+        "Wybrane projekty, które zbudowałem lub znacząco współtworzyłem.",
       allProjects: "Wszystkie projekty ->",
     },
   },
@@ -234,7 +257,8 @@ export const pageCopy = {
     },
     certificates: {
       title: "Certificates | Paweł Ryfiak",
-      description: "Certificates and course completion PDFs with a searchable, filterable overview.",
+      description:
+        "Certificates and course completion PDFs with a searchable, filterable overview.",
       heading: "Certificates",
       intro:
         "Certificates, course completions, and supporting PDFs collected in one place. Filter by type or category, sort the list, and open each PDF in a focused preview.",
@@ -349,7 +373,8 @@ export const blogCopy = {
   en: {
     allPosts: "← All posts",
     minRead: "min read",
-    fallbackContent: "Full article content will appear here once sourced from Strapi.",
+    fallbackContent:
+      "Full article content will appear here once sourced from Strapi.",
   },
   pl: {
     allPosts: "← Wszystkie wpisy",

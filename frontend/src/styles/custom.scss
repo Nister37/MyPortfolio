@@ -54,7 +54,8 @@ body::-webkit-scrollbar {
   }
 
   html.is-scrolling [class*="hover:shadow-lg"]:hover {
-    --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+    --tw-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
   }
 
   html.is-scrolling [class*="hover:ring-1"]:hover {

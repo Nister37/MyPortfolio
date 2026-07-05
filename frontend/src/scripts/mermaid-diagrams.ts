@@ -4,7 +4,8 @@ const selector = ".prose-portfolio pre.mermaid";
 const sourceByDiagram = new WeakMap<HTMLElement, string>();
 
 function currentTheme(): "default" | "dark" {
-  return document.documentElement.getAttribute("data-theme") === "portfolio-light"
+  return document.documentElement.getAttribute("data-theme") ===
+    "portfolio-light"
     ? "default"
     : "dark";
 }
@@ -34,7 +35,9 @@ let pendingRender = Promise.resolve();
 function queueRender() {
   pendingRender = pendingRender
     .then(renderDiagrams)
-    .catch((error) => console.error("Unable to render Mermaid diagram.", error));
+    .catch((error) =>
+      console.error("Unable to render Mermaid diagram.", error),
+    );
 }
 
 queueRender();

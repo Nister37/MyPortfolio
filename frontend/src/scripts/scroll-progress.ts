@@ -1,5 +1,8 @@
-const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
-const scrollTopButton = document.querySelector<HTMLButtonElement>("[data-scroll-top]");
+const progressBar = document.querySelector<HTMLElement>(
+  "[data-scroll-progress]",
+);
+const scrollTopButton =
+  document.querySelector<HTMLButtonElement>("[data-scroll-top]");
 
 if (progressBar) {
   const bar = progressBar;
@@ -50,7 +53,9 @@ if (progressBar) {
   resizeObserver.observe(document.body);
 
   scrollTopButton?.addEventListener("click", () => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
   });
   window.addEventListener("scroll", handleScroll, { passive: true });

@@ -6,7 +6,10 @@ type FetchOptions = {
   query?: string;
 };
 
-export async function fetchFromStrapi<T>({ path, query = "" }: FetchOptions): Promise<T> {
+export async function fetchFromStrapi<T>({
+  path,
+  query = "",
+}: FetchOptions): Promise<T> {
   const url = `${STRAPI_URL}/api/${path}${query}`;
 
   const response = await fetch(url, {

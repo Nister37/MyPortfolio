@@ -68,7 +68,9 @@ function toCertificate(item: StrapiCertificateItem): Certificate | undefined {
   const fileUrl = resolveStrapiMediaUrl(pdf?.url);
 
   if (!fileUrl) {
-    console.warn(`Certificate "${item.title}" has no PDF media attached; skipping.`);
+    console.warn(
+      `Certificate "${item.title}" has no PDF media attached; skipping.`,
+    );
     return undefined;
   }
 
@@ -102,7 +104,10 @@ export async function getCertificates(): Promise<Certificate[]> {
       return certificate ? [certificate] : [];
     });
   } catch (error) {
-    console.warn("Strapi unavailable - using fallback certificate data.", error);
+    console.warn(
+      "Strapi unavailable - using fallback certificate data.",
+      error,
+    );
     return fallbackCertificates;
   }
 }

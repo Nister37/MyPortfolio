@@ -14,7 +14,8 @@ interface Props {
 
 const { project, lang = "en" } = Astro.props;
 const copy = projectDetailCopy[lang];
-const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
+const allProjectsHref =
+  lang === "pl" ? `${base}pl/projects` : `${base}projects`;
 const groupProject = isGroupProject(project);
 
 const proseSections = [
@@ -34,32 +35,48 @@ const proseSections = [
 >
   <main id="main-content">
     <Section>
-      <a class="link link-primary text-sm" href={allProjectsHref}>{copy.allProjects}</a>
+      <a class="link link-primary text-sm" href={allProjectsHref}
+        >{copy.allProjects}</a
+      >
 
       <div class="mt-6 flex flex-wrap gap-2">
-        {project.categories.map((cat) => (
-          <span class="badge badge-outline">{cat}</span>
-        ))}
-        {groupProject && <span class="badge badge-sm badge-primary">{copy.groupProject}</span>}
+        {
+          project.categories.map((cat) => (
+            <span class="badge badge-outline">{cat}</span>
+          ))
+        }
+        {
+          groupProject && (
+            <span class="badge badge-sm badge-primary">
+              {copy.groupProject}
+            </span>
+          )
+        }
       </div>
 
       <h1 class="mt-4 text-4xl font-bold tracking-tight">{project.title}</h1>
-      <p class="mt-4 max-w-3xl text-lg text-base-content/70">{project.summary}</p>
+      <p class="text-base-content/70 mt-4 max-w-3xl text-lg">
+        {project.summary}
+      </p>
 
       <div class="mt-5 flex flex-wrap gap-2">
-        {project.stack.map((item) => (
-          <span class="badge badge-outline">{item}</span>
-        ))}
+        {
+          project.stack.map((item) => (
+            <span class="badge badge-outline">{item}</span>
+          ))
+        }
       </div>
 
       {
         project.highlights.length > 0 && (
-          <div class="mt-10 rounded-xl border border-base-300 bg-base-200 p-6">
+          <div class="border-base-300 bg-base-200 mt-10 rounded-xl border p-6">
             <h2 class="text-lg font-semibold">{copy.technicalHighlights}</h2>
             <ul class="mt-4 space-y-2">
               {project.highlights.map((point) => (
-                <li class="flex items-start gap-3 text-base-content/75">
-                  <span class="mt-0.5 text-primary" aria-hidden="true">▸</span>
+                <li class="text-base-content/75 flex items-start gap-3">
+                  <span class="text-primary mt-0.5" aria-hidden="true">
+                    ▸
+                  </span>
                   {point}
                 </li>
               ))}
@@ -74,7 +91,9 @@ const proseSections = [
             {proseSections.map(({ heading, content }) => (
               <div>
                 <h2 class="text-xl font-semibold">{heading}</h2>
-                <p class="mt-3 leading-relaxed text-base-content/75">{content}</p>
+                <p class="text-base-content/75 mt-3 leading-relaxed">
+                  {content}
+                </p>
               </div>
             ))}
           </div>

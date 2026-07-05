@@ -44,7 +44,9 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="space-y-8">
-  <div class="grid gap-4 rounded-lg border border-base-300 bg-base-200 p-4 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end">
+  <div
+    class="grid gap-4 rounded-lg border border-base-300 bg-base-200 p-4 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end"
+  >
     <div>
       <label class="label pb-1" for="certificate-kind-filter">
         <span class="label-text">{$labels.type}</span>
@@ -54,9 +56,11 @@
         class="select select-bordered w-full"
         bind:value={$selectedKind}
       >
-        {#each $kindOptions as kind}
+        {#each $kindOptions as kind (kind)}
           <option value={kind}>
-            {kind === "all" ? $labels.all : getCertificateKindLabel(kind, $labels)}
+            {kind === "all"
+              ? $labels.all
+              : getCertificateKindLabel(kind, $labels)}
           </option>
         {/each}
       </select>
@@ -71,7 +75,7 @@
         class="select select-bordered w-full"
         bind:value={$selectedCategory}
       >
-        {#each $categoryOptions as category}
+        {#each $categoryOptions as category (category)}
           <option value={category}>
             {category === "all" ? $labels.all : category}
           </option>
@@ -88,14 +92,17 @@
         class="select select-bordered w-full"
         bind:value={$sortBy}
       >
-        {#each $sortOptions as option}
+        {#each $sortOptions as option (option.value)}
           <option value={option.value}>{option.label}</option>
         {/each}
       </select>
     </div>
 
     <p class="pb-3 text-sm text-base-content/60 md:text-right">
-      {$labels.visibleCount} {$visibleCertificates.length} {$labels.of} {certificates.length}
+      {$labels.visibleCount}
+      {$visibleCertificates.length}
+      {$labels.of}
+      {certificates.length}
     </p>
   </div>
 
@@ -107,21 +114,39 @@
             class="certificate-card card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40"
             style={`--certificate-index: ${Math.min(index, 8)};`}
           >
-            <summary class="cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <summary
+              class="cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
               <div class="card-body gap-4">
                 <div class="flex flex-wrap gap-2">
-                  <span class="badge badge-primary badge-sm">{getCertificateKindLabel(certificate.kind, $labels)}</span>
-                  <span class="badge badge-outline badge-sm">{certificate.category}</span>
+                  <span class="badge badge-primary badge-sm"
+                    >{getCertificateKindLabel(certificate.kind, $labels)}</span
+                  >
+                  <span class="badge badge-outline badge-sm"
+                    >{certificate.category}</span
+                  >
                 </div>
 
-                <h2 class="card-title text-lg leading-snug">{certificate.title}</h2>
+                <h2 class="card-title text-lg leading-snug">
+                  {certificate.title}
+                </h2>
                 <p class="text-sm font-medium text-base-content/70">
-                  {certificate.issuer} · {formatCertificateDate(certificate.issuedAt, lang, $labels)}
+                  {certificate.issuer} · {formatCertificateDate(
+                    certificate.issuedAt,
+                    lang,
+                    $labels,
+                  )}
                 </p>
 
-                <span class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary">
-                  <span class="certificate-card__show-label">{$labels.showDetails}</span>
-                  <span class="certificate-card__hide-label">{$labels.hideDetails}</span>
+                <span
+                  class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary"
+                >
+                  <span class="certificate-card__show-label"
+                    >{$labels.showDetails}</span
+                  >
+                  <span class="certificate-card__hide-label"
+                    >{$labels.hideDetails}</span
+                  >
                   <svg
                     class="certificate-card__chevron h-3.5 w-3.5 transition-transform"
                     viewBox="0 0 24 24"
@@ -130,7 +155,11 @@
                     stroke-width="2"
                     aria-hidden="true"
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m6 9 6 6 6-6"
+                    ></path>
                   </svg>
                 </span>
               </div>
@@ -145,7 +174,7 @@
 
               {#if certificate.skills.length > 0}
                 <div class="flex flex-wrap gap-2 pt-1">
-                  {#each certificate.skills as skill}
+                  {#each certificate.skills as skill (skill)}
                     <span class="badge badge-outline badge-sm">{skill}</span>
                   {/each}
                 </div>
@@ -177,7 +206,9 @@
         {/each}
       </div>
     {:else}
-      <p class="certificate-empty py-12 text-center text-base-content/50">{$labels.empty}</p>
+      <p class="certificate-empty py-12 text-center text-base-content/50">
+        {$labels.empty}
+      </p>
     {/if}
   {/key}
 </div>
@@ -201,11 +232,18 @@
           <p class="text-xs font-medium uppercase tracking-wide text-primary">
             {getCertificateKindLabel($selectedCertificate.kind, $labels)}
           </p>
-          <h2 id="certificate-preview-title" class="truncate text-base font-semibold md:text-lg">
+          <h2
+            id="certificate-preview-title"
+            class="truncate text-base font-semibold md:text-lg"
+          >
             {$selectedCertificate.title}
           </h2>
           <p class="text-sm text-base-content/60">
-            {$selectedCertificate.issuer} · {formatCertificateDate($selectedCertificate.issuedAt, lang, $labels)}
+            {$selectedCertificate.issuer} · {formatCertificateDate(
+              $selectedCertificate.issuedAt,
+              lang,
+              $labels,
+            )}
           </p>
         </div>
 

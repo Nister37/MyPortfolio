@@ -117,5 +117,3 @@ you to justify.</p>
     `.trim(),
   },
 ];
-
-

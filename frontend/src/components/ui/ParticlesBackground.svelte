@@ -12,7 +12,6 @@
 
   let container: Container | undefined;
   let themeObserver: MutationObserver | undefined;
-  let initialised = false;
 
   // Theme-aware colors. Light mode needs deeper saturation, stronger opacity,
   // and a darker link color — pastel particles on a near-white background
@@ -59,7 +58,10 @@
           onClick: { enable: false },
         },
         modes: {
-          grab: { distance: 160, links: { opacity: theme === "light" ? 0.8 : 0.6 } },
+          grab: {
+            distance: 160,
+            links: { opacity: theme === "light" ? 0.8 : 0.6 },
+          },
         },
       },
     };
@@ -80,13 +82,15 @@
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     await loadSlim(tsParticles);
-    initialised = true;
     await reloadParticles();
 
     // Re-init on theme toggle so colors stay readable.
     themeObserver = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.type === "attributes" && mutation.attributeName === "data-theme") {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "data-theme"
+        ) {
           reloadParticles();
         }
       }
@@ -115,5 +119,3 @@
     height: 100% !important;
   }
 </style>
-
-

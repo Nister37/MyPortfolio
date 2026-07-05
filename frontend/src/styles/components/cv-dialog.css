@@ -71,7 +71,11 @@
 
 .cv-dialog__close:hover {
   opacity: 1;
-  background: color-mix(in srgb, var(--color-base-content, #000) 8%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-base-content, #000) 8%,
+    transparent
+  );
 }
 
 .cv-dialog__title {

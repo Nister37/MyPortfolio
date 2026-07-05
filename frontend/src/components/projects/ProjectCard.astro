@@ -16,20 +16,34 @@ const caseStudyHref = getRelativeLocaleUrl(lang, `/projects/${project.slug}`);
 const groupProject = isGroupProject(project);
 ---
 
-<details class="project-card group card border border-base-300 bg-base-200 shadow-sm transition duration-200 hover:shadow-lg hover:ring-1 hover:ring-primary/40">
-  <summary class="cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+<details
+  class="project-card group card border-base-300 bg-base-200 hover:ring-primary/40 border shadow-sm transition duration-200 hover:shadow-lg hover:ring-1"
+>
+  <summary
+    class="focus-visible:ring-primary cursor-pointer list-none rounded-[inherit] focus:outline-none focus-visible:ring-2"
+  >
     <div class="card-body gap-4">
       <div class="flex flex-wrap gap-2">
-        {project.categories.map((cat) => (
-          <span class="badge badge-outline badge-sm">{cat}</span>
-        ))}
-        {groupProject && <span class="badge badge-sm badge-primary">{copy.groupProject}</span>}
+        {
+          project.categories.map((cat) => (
+            <span class="badge badge-outline badge-sm">{cat}</span>
+          ))
+        }
+        {
+          groupProject && (
+            <span class="badge badge-sm badge-primary">
+              {copy.groupProject}
+            </span>
+          )
+        }
       </div>
 
       <h3 class="card-title text-lg leading-snug">{project.title}</h3>
-      <p class="text-sm text-base-content/70">{project.summary}</p>
+      <p class="text-base-content/70 text-sm">{project.summary}</p>
 
-      <span class="inline-flex items-center gap-1 self-start text-xs font-medium text-primary">
+      <span
+        class="text-primary inline-flex items-center gap-1 self-start text-xs font-medium"
+      >
         <span class="project-card__show-label">{copy.showDetails}</span>
         <span class="project-card__hide-label">{copy.hideDetails}</span>
         <svg
@@ -40,19 +54,22 @@ const groupProject = isGroupProject(project);
           stroke-width="2"
           aria-hidden="true"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"
+          ></path>
         </svg>
       </span>
     </div>
   </summary>
 
-  <div class="card-body gap-4 border-t border-base-300 pt-4">
+  <div class="card-body border-base-300 gap-4 border-t pt-4">
     {
       project.highlights.length > 0 && (
-        <ul class="space-y-1 text-sm text-base-content/60">
+        <ul class="text-base-content/60 space-y-1 text-sm">
           {project.highlights.map((point) => (
             <li class="flex items-start gap-2">
-              <span class="mt-1 text-primary" aria-hidden="true">▸</span>
+              <span class="text-primary mt-1" aria-hidden="true">
+                ▸
+              </span>
               {point}
             </li>
           ))}
@@ -61,33 +78,40 @@ const groupProject = isGroupProject(project);
     }
 
     <div class="flex flex-wrap gap-2 pt-1">
-      {project.stack.map((item) => (
-        <span class="badge badge-outline badge-sm">{item}</span>
-      ))}
+      {
+        project.stack.map((item) => (
+          <span class="badge badge-outline badge-sm">{item}</span>
+        ))
+      }
     </div>
 
     <div class="card-actions mt-2 flex-wrap gap-2">
-      <a href={caseStudyHref} class="btn btn-primary btn-sm">{copy.caseStudy}</a>
-      {project.githubUrl && (
-        <a
-          href={project.githubUrl}
-          class="btn btn-ghost btn-sm"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>
-      )}
-      {project.liveUrl && (
-        <a
-          href={project.liveUrl}
-          class="btn btn-ghost btn-sm"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {copy.liveDemo}
-        </a>
-      )}
+      <a href={caseStudyHref} class="btn btn-primary btn-sm">{copy.caseStudy}</a
+      >
+      {
+        project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        )
+      }
+      {
+        project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            class="btn btn-ghost btn-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {copy.liveDemo}
+          </a>
+        )
+      }
     </div>
   </div>
 </details>

@@ -33,9 +33,17 @@ type InlineNode = TextNode | LinkNode;
 // ---------------------------------------------------------------------------
 
 type ParagraphBlock = { type: "paragraph"; children: InlineNode[] };
-type HeadingBlock = { type: "heading"; level: 1 | 2 | 3 | 4 | 5 | 6; children: InlineNode[] };
+type HeadingBlock = {
+  type: "heading";
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  children: InlineNode[];
+};
 type ListItemBlock = { type: "list-item"; children: InlineNode[] };
-type ListBlock = { type: "list"; format: "ordered" | "unordered"; children: ListItemBlock[] };
+type ListBlock = {
+  type: "list";
+  format: "ordered" | "unordered";
+  children: ListItemBlock[];
+};
 type QuoteBlock = { type: "quote"; children: InlineNode[] };
 type CodeBlock = { type: "code"; language?: string; children: InlineNode[] };
 type ImageBlock = {
@@ -90,7 +98,9 @@ function renderInline(nodes: InlineNode[]): string {
 
 function renderPlainText(nodes: InlineNode[]): string {
   return nodes
-    .map((node) => (node.type === "link" ? renderPlainText(node.children) : node.text))
+    .map((node) =>
+      node.type === "link" ? renderPlainText(node.children) : node.text,
+    )
     .join("");
 }
 
@@ -99,7 +109,9 @@ function getMermaidSource(block: CodeBlock): string | null {
   if (block.language?.toLowerCase() === "mermaid") return source;
 
   const [directive, ...diagramLines] = source.split(/\r?\n/);
-  return directive.trim().toLowerCase() === "mermaid" ? diagramLines.join("\n") : null;
+  return directive.trim().toLowerCase() === "mermaid"
+    ? diagramLines.join("\n")
+    : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,7 +143,9 @@ function renderBlock(block: StrapiBlock): string {
         return `<pre class="mermaid">${escapeHtml(mermaidSource)}</pre>`;
       }
 
-      const lang = block.language ? ` class="language-${escapeHtml(block.language)}"` : "";
+      const lang = block.language
+        ? ` class="language-${escapeHtml(block.language)}"`
+        : "";
       const code = renderInline(block.children);
       return `<pre><code${lang}>${code}</code></pre>`;
     }
@@ -139,7 +153,8 @@ function renderBlock(block: StrapiBlock): string {
     case "image": {
       const { url, alternativeText, width, height } = block.image;
       const alt = escapeHtml(alternativeText ?? "");
-      const dims = width && height ? ` width="${width}" height="${height}"` : "";
+      const dims =
+        width && height ? ` width="${width}" height="${height}"` : "";
       return `<img src="${escapeHtml(url)}" alt="${alt}"${dims} loading="lazy" />`;
     }
 
@@ -162,4 +177,3 @@ export function strapiBlocksToHtml(blocks: unknown): string {
   if (!Array.isArray(blocks) || blocks.length === 0) return "";
   return (blocks as StrapiBlock[]).map(renderBlock).join("\n");
 }
-

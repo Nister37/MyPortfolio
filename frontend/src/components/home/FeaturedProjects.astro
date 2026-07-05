@@ -12,19 +12,24 @@ const { lang = "en" } = Astro.props;
 const copy = homeCopy[lang].featuredProjects;
 
 const featuredProjects = (await getProjects()).filter((p) => p.featured);
-const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`;
+const allProjectsHref =
+  lang === "pl" ? `${base}pl/projects` : `${base}projects`;
 ---
+
 <Section id="projects">
   <div class="mb-10 flex items-end justify-between" data-reveal>
     <div>
       <h2 class="text-3xl font-bold tracking-tight">
         {copy.heading}
       </h2>
-      <p class="mt-2 text-base-content/60">
+      <p class="text-base-content/60 mt-2">
         {copy.subheading}
       </p>
     </div>
-    <a href={allProjectsHref} class="btn btn-outline btn-sm hidden md:inline-flex">
+    <a
+      href={allProjectsHref}
+      class="btn btn-outline btn-sm hidden md:inline-flex"
+    >
       {copy.allProjects}
     </a>
   </div>
@@ -37,6 +42,3 @@ const allProjectsHref = lang === "pl" ? `${base}pl/projects` : `${base}projects`
     </a>
   </div>
 </Section>
-
-
-

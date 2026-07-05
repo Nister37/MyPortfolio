@@ -71,7 +71,8 @@ export function getTimelineEntries(lang: Lang): TimelineEntry[] {
           : "Spring Boot IoT smart room monitoring platform for real-time temperature, humidity, CO₂, noise, TVOC and occupancy tracking. Analytics dashboards, threshold alerts, multi-room support, role-based access, PostgreSQL, Thymeleaf, Bootstrap and Chart.js.",
     },
     {
-      title: lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
+      title:
+        lang === "pl" ? "Informatyka Stosowana" : "Applied Computer Science",
       organization:
         lang === "pl"
           ? "Karel de Grote Hogeschool, Antwerpia"

@@ -13,19 +13,26 @@ const { lang = "en" } = Astro.props;
 const copy = pageCopy[lang].about;
 ---
 
-<BaseLayout title={copy.title} description={copy.description} lang={lang} path="/about">
+<BaseLayout
+  title={copy.title}
+  description={copy.description}
+  lang={lang}
+  path="/about"
+>
   <main id="main-content">
     <Section>
       <div class="max-w-3xl" data-reveal>
         <h1 class="text-4xl font-bold tracking-tight">{copy.heading}</h1>
 
-        <p class="mt-6 text-lg leading-relaxed text-base-content/80">
+        <p class="text-base-content/80 mt-6 text-lg leading-relaxed">
           {copy.intro}
         </p>
 
-        {copy.paragraphs.map((paragraph) => (
-          <p class="mt-4 leading-relaxed text-base-content/70">{paragraph}</p>
-        ))}
+        {
+          copy.paragraphs.map((paragraph) => (
+            <p class="text-base-content/70 mt-4 leading-relaxed">{paragraph}</p>
+          ))
+        }
       </div>
     </Section>
 

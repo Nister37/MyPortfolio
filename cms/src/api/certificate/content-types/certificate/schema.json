@@ -28,10 +28,7 @@
     "kind": {
       "type": "enumeration",
       "default": "certificate",
-      "enum": [
-        "certificate",
-        "course"
-      ],
+      "enum": ["certificate", "course"],
       "required": true
     },
     "category": {
@@ -51,9 +48,7 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "files"
-      ]
+      "allowedTypes": ["files"]
     },
     "credentialUrl": {
       "type": "string"
@@ -61,10 +56,7 @@
     "language": {
       "type": "enumeration",
       "default": "en",
-      "enum": [
-        "en",
-        "pl"
-      ],
+      "enum": ["en", "pl"],
       "required": true
     },
     "order": {

@@ -1,2 +1,2 @@
-import { factories } from '@strapi/strapi';
-export default factories.createCoreController('api::experience.experience');
+import { factories } from "@strapi/strapi";
+export default factories.createCoreController("api::experience.experience");

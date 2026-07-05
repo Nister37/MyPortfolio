@@ -65,7 +65,9 @@ export async function getPosts(): Promise<BlogPost[]> {
   }
 }
 
-export async function getPostsByLanguage(lang: "en" | "pl"): Promise<BlogPost[]> {
+export async function getPostsByLanguage(
+  lang: "en" | "pl",
+): Promise<BlogPost[]> {
   const posts = await getPosts();
   return posts.filter((post) => (post.language ?? "en") === lang);
 }
@@ -98,4 +100,3 @@ export function getBlogPostLocalePaths(
 
   return localePaths;
 }
-

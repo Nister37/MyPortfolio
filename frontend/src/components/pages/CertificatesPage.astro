@@ -16,18 +16,27 @@ const certificates = await getCertificatesByLanguage(lang);
 const copy = pageCopy[lang].certificates;
 ---
 
-<BaseLayout title={copy.title} description={copy.description} lang={lang} path="/certificates">
+<BaseLayout
+  title={copy.title}
+  description={copy.description}
+  lang={lang}
+  path="/certificates"
+>
   <main id="main-content">
     <Section>
       <div data-reveal>
         <h1 class="text-4xl font-bold tracking-tight">{copy.heading}</h1>
-        <p class="mt-3 max-w-2xl text-base-content/65">
+        <p class="text-base-content/65 mt-3 max-w-2xl">
           {copy.intro}
         </p>
       </div>
 
       <div class="mt-10">
-        <CertificateLibrary client:load certificates={certificates} lang={lang} />
+        <CertificateLibrary
+          client:load
+          certificates={certificates}
+          lang={lang}
+        />
       </div>
     </Section>
   </main>

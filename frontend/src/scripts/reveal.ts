@@ -3,7 +3,9 @@
  * Falls back gracefully when prefers-reduced-motion is set.
  */
 
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
 
 if (!prefersReducedMotion) {
   const observer = new IntersectionObserver(
@@ -19,6 +21,7 @@ if (!prefersReducedMotion) {
     { threshold: 0.12 },
   );
 
-  document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+  document
+    .querySelectorAll("[data-reveal]")
+    .forEach((el) => observer.observe(el));
 }
-

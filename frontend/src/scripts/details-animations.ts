@@ -1,6 +1,8 @@
 const CLOSE_ANIMATION_MS = 130;
 const OPEN_ANIMATION_MS = 170;
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+);
 
 document.addEventListener("click", (event) => {
   if (!(event.target instanceof Element)) return;
@@ -22,10 +24,13 @@ document.addEventListener("click", (event) => {
   details.classList.remove("details-opening");
   details.classList.add("details-closing");
 
-  window.setTimeout(() => {
-    details.open = false;
-    details.classList.remove("details-closing");
-  }, prefersReducedMotion.matches ? 0 : CLOSE_ANIMATION_MS);
+  window.setTimeout(
+    () => {
+      details.open = false;
+      details.classList.remove("details-closing");
+    },
+    prefersReducedMotion.matches ? 0 : CLOSE_ANIMATION_MS,
+  );
 });
 
 document.addEventListener(
@@ -37,9 +42,12 @@ document.addEventListener(
     details.classList.remove("details-closing");
     details.classList.add("details-opening");
 
-    window.setTimeout(() => {
-      details.classList.remove("details-opening");
-    }, prefersReducedMotion.matches ? 0 : OPEN_ANIMATION_MS);
+    window.setTimeout(
+      () => {
+        details.classList.remove("details-opening");
+      },
+      prefersReducedMotion.matches ? 0 : OPEN_ANIMATION_MS,
+    );
   },
   true,
 );

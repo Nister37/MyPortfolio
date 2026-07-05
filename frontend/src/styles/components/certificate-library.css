@@ -9,8 +9,13 @@
 }
 
 .certificate-card[open] {
-  border-color: color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
-  box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--color-primary, #6366f1) 45%,
+    transparent
+  );
+  box-shadow: 0 14px 32px -22px
+    color-mix(in srgb, var(--color-primary, #6366f1) 72%, transparent);
 }
 
 .certificate-card__hide-label {
@@ -116,7 +121,11 @@
     linear-gradient(-45deg, rgb(255 255 255 / 0.04) 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, rgb(255 255 255 / 0.04) 75%),
     linear-gradient(-45deg, transparent 75%, rgb(255 255 255 / 0.04) 75%);
-  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
   background-size: 16px 16px;
   padding: 1rem;
   cursor: zoom-in;

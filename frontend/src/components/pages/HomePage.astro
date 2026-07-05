@@ -16,7 +16,12 @@ const { lang = "en" } = Astro.props;
 const copy = pageCopy[lang].home;
 ---
 
-<BaseLayout title={copy.title} description={copy.description} lang={lang} path="/">
+<BaseLayout
+  title={copy.title}
+  description={copy.description}
+  lang={lang}
+  path="/"
+>
   <main id="main-content">
     <Hero lang={lang} />
     <SkillsOverview lang={lang} />

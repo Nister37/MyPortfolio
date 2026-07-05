@@ -18,7 +18,10 @@ function meterLabel(level: SkillLevel) {
 }
 
 function categoryName(category: string) {
-  return copy.categoryLabels[category as keyof typeof copy.categoryLabels] ?? category;
+  return (
+    copy.categoryLabels[category as keyof typeof copy.categoryLabels] ??
+    category
+  );
 }
 ---
 
@@ -27,13 +30,15 @@ function categoryName(category: string) {
     <h2 class="text-3xl font-bold tracking-tight">
       {copy.heading}
     </h2>
-    <p class="mt-2 text-base-content/60">
+    <p class="text-base-content/60 mt-2">
       {copy.subheading}
     </p>
   </div>
 
-  <div class="mt-6 rounded-xl border border-base-300 bg-base-200/50 p-5">
-    <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/70">
+  <div class="border-base-300 bg-base-200/50 mt-6 rounded-xl border p-5">
+    <h3
+      class="text-base-content/70 text-sm font-semibold tracking-wider uppercase"
+    >
       {copy.legendHeading}
     </h3>
     <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -50,7 +55,9 @@ function categoryName(category: string) {
                 />
               ))}
             </span>
-            <span class="text-xs text-base-content/65">{copy.levelLabels[level - 1]}</span>
+            <span class="text-base-content/65 text-xs">
+              {copy.levelLabels[level - 1]}
+            </span>
           </div>
         ))
       }
@@ -60,34 +67,40 @@ function categoryName(category: string) {
   <div class="mt-10 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
     {
       skillCategories.map(({ category, skills }) => (
-        <details class="skill-card group rounded-xl border border-base-300 bg-base-200 transition-all">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <details class="skill-card group border-base-300 bg-base-200 rounded-xl border transition-all">
+          <summary class="focus-visible:ring-primary flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl p-5 focus:outline-none focus-visible:ring-2">
             <div>
-              <h3 class="text-sm font-semibold uppercase tracking-wider text-primary">
+              <h3 class="text-primary text-sm font-semibold tracking-wider uppercase">
                 {categoryName(category)}
               </h3>
-              <p class="mt-1 text-xs text-base-content/50">
+              <p class="text-base-content/50 mt-1 text-xs">
                 {skills.length} {copy.technologies}
               </p>
             </div>
             <svg
-              class="skill-card__chevron h-4 w-4 shrink-0 text-primary transition-transform"
+              class="skill-card__chevron text-primary h-4 w-4 shrink-0 transition-transform"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
               aria-hidden="true"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m6 9 6 6 6-6"
+              />
             </svg>
           </summary>
-          <ul class="space-y-3 border-t border-base-300 px-5 py-4">
+          <ul class="border-base-300 space-y-3 border-t px-5 py-4">
             {skills.map(({ name, months }) => {
               const level = getSkillLevel(months);
 
               return (
                 <li class="flex items-center justify-between gap-3">
-                  <span class="min-w-0 text-sm font-medium text-base-content">{name}</span>
+                  <span class="text-base-content min-w-0 text-sm font-medium">
+                    {name}
+                  </span>
                   <span
                     class="skill-meter"
                     data-level={level}
