@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Paweł Ryfiak — Software Engineer</title>
+  <desc id="desc">Portfolio social card for Java, Spring Boot, cloud, and automation projects.</desc>
+  <rect width="1200" height="630" fill="#0d1424"/>
+  <path d="M0 495h1200v135H0z" fill="#111c31"/>
+  <g opacity=".18" stroke="#62a0ff">
+    <path d="M760 94h350M760 144h270M760 194h310M760 244h220M760 294h290"/>
+    <path d="M820 62v300M880 62v300M940 62v300M1000 62v300M1060 62v300"/>
+  </g>
+  <g fill="none" stroke="#63a4ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M102 158l-48 48 48 48M174 158l48 48-48 48"/>
+    <path d="M151 134l-26 144"/>
+  </g>
+  <text x="62" y="380" fill="#eef3ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="72" font-weight="700">Paweł Ryfiak</text>
+  <text x="64" y="447" fill="#69a8ff" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="600">Software Engineer | Java &amp; Spring Boot | Cloud &amp; Automation</text>
+  <text x="64" y="558" fill="#a9b8d2" font-family="Arial, Helvetica, sans-serif" font-size="26">pawelryfiak.is-a.dev</text>
+</svg>

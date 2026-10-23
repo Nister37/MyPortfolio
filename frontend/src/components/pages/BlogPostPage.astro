@@ -3,6 +3,7 @@ import DOMPurify from "isomorphic-dompurify";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MermaidDiagrams from "../blog/MermaidDiagrams.astro";
 import Section from "../layout/Section.astro";
+import IconHeading from "../ui/IconHeading.astro";
 import { blogCopy, siteMetadata } from "../../data/site-copy";
 import type { Lang } from "../../data/site-copy";
 import type { BlogPost } from "../../lib/cms/posts";
@@ -52,9 +53,12 @@ const allPostsHref = lang === "pl" ? `${base}pl/blog` : `${base}blog`;
         }
       </div>
 
-      <h1 class="mt-4 text-4xl leading-tight font-bold tracking-tight">
+      <IconHeading
+        icon="file-text"
+        class="mt-4 text-4xl leading-tight font-bold tracking-tight"
+      >
         {post.title}
-      </h1>
+      </IconHeading>
 
       <div class="text-base-content/50 mt-3 flex items-center gap-3 text-sm">
         {

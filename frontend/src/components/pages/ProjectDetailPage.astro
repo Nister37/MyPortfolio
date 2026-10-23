@@ -1,6 +1,8 @@
 ---
+import DOMPurify from "isomorphic-dompurify";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../layout/Section.astro";
+import IconHeading from "../ui/IconHeading.astro";
 import { projectDetailCopy, siteMetadata } from "../../data/site-copy";
 import type { Lang } from "../../data/site-copy";
 import { isGroupProject } from "../../lib/project-flags";
@@ -24,7 +26,12 @@ const proseSections = [
   { heading: copy.architecture, content: project.architecture },
   { heading: copy.hardestProblem, content: project.hardestProblem },
   { heading: copy.lessonsLearned, content: project.lessonsLearned },
-].filter((section) => section.content);
+]
+  .filter((section) => section.content)
+  .map((section) => ({
+    ...section,
+    content: DOMPurify.sanitize(section.content as string),
+  }));
 ---
 
 <BaseLayout
@@ -54,7 +61,9 @@ const proseSections = [
         }
       </div>
 
-      <h1 class="mt-4 text-4xl font-bold tracking-tight">{project.title}</h1>
+      <IconHeading icon="code-2" class="mt-4 text-4xl font-bold tracking-tight">
+        {project.title}
+      </IconHeading>
       <p class="text-base-content/70 mt-4 max-w-3xl text-lg">
         {project.summary}
       </p>
@@ -91,9 +100,10 @@ const proseSections = [
             {proseSections.map(({ heading, content }) => (
               <div>
                 <h2 class="text-xl font-semibold">{heading}</h2>
-                <p class="text-base-content/75 mt-3 leading-relaxed">
-                  {content}
-                </p>
+                <div
+                  class="prose-portfolio text-base-content/75 mt-3 leading-relaxed"
+                  set:html={content}
+                />
               </div>
             ))}
           </div>
@@ -108,6 +118,8 @@ const proseSections = [
               class="btn btn-outline"
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="github-click"
+              data-umami-event-project={project.slug}
             >
               {copy.viewOnGitHub}
             </a>
@@ -120,6 +132,8 @@ const proseSections = [
               class="btn btn-primary"
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="project-live-demo"
+              data-umami-event-project={project.slug}
             >
               {copy.liveDemo}
             </a>

@@ -19,7 +19,7 @@ const plUrl = getRelativeLocaleUrl("pl", localePaths?.pl ?? path);
   <a
     href={enUrl}
     class:list={[
-      "rounded px-2 py-2 transition-colors md:py-0.5",
+      "mobile-touch-target inline-flex items-center justify-center rounded px-2 py-2 transition-colors md:py-0.5",
       currentLang === "en"
         ? "bg-base-300 text-base-content"
         : "text-base-content/50 hover:text-base-content",
@@ -32,7 +32,7 @@ const plUrl = getRelativeLocaleUrl("pl", localePaths?.pl ?? path);
   <a
     href={plUrl}
     class:list={[
-      "rounded px-2 py-2 transition-colors md:py-0.5",
+      "mobile-touch-target inline-flex items-center justify-center rounded px-2 py-2 transition-colors md:py-0.5",
       currentLang === "pl"
         ? "bg-base-300 text-base-content"
         : "text-base-content/50 hover:text-base-content",

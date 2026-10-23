@@ -1,5 +1,6 @@
 import { fetchFromStrapi } from "./strapi";
 import { fallbackProjects } from "../../data/fallback-projects";
+import { strapiBlocksToHtml } from "./strapi-blocks-to-html";
 
 export type Project = {
   title: string;
@@ -33,11 +34,11 @@ type StrapiProjectItem = {
   highlights?: string[];
   tags?: string[];
   readingTime?: number;
-  problem?: string;
-  myRole?: string;
-  architecture?: string;
-  hardestProblem?: string;
-  lessonsLearned?: string;
+  problem?: unknown;
+  myRole?: unknown;
+  architecture?: unknown;
+  hardestProblem?: unknown;
+  lessonsLearned?: unknown;
   githubUrl?: string;
   liveUrl?: string;
   coverImageUrl?: string;
@@ -53,7 +54,7 @@ export async function getProjects(): Promise<Project[]> {
   try {
     const result = await fetchFromStrapi<StrapiListResponse>({
       path: "projects",
-      query: "?sort=order:asc",
+      query: "?sort=order:asc&status=published",
     });
 
     // Use fallback when Strapi returns no projects — avoids showing an empty
@@ -74,11 +75,11 @@ export async function getProjects(): Promise<Project[]> {
       highlights: item.highlights ?? [],
       tags: item.tags,
       readingTime: item.readingTime,
-      problem: item.problem,
-      myRole: item.myRole,
-      architecture: item.architecture,
-      hardestProblem: item.hardestProblem,
-      lessonsLearned: item.lessonsLearned,
+      problem: strapiBlocksToHtml(item.problem),
+      myRole: strapiBlocksToHtml(item.myRole),
+      architecture: strapiBlocksToHtml(item.architecture),
+      hardestProblem: strapiBlocksToHtml(item.hardestProblem),
+      lessonsLearned: strapiBlocksToHtml(item.lessonsLearned),
       githubUrl: item.githubUrl,
       liveUrl: item.liveUrl,
       coverImageUrl: item.coverImageUrl,

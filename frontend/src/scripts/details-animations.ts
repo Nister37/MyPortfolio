@@ -12,6 +12,7 @@ document.addEventListener("click", (event) => {
 
   const details = summary.parentElement;
   if (!(details instanceof HTMLDetailsElement)) return;
+  if (details.classList.contains("skill-row")) return;
 
   if (details.classList.contains("details-closing")) {
     event.preventDefault();
@@ -38,6 +39,7 @@ document.addEventListener(
   (event) => {
     const details = event.target;
     if (!(details instanceof HTMLDetailsElement) || !details.open) return;
+    if (details.classList.contains("skill-row")) return;
 
     details.classList.remove("details-closing");
     details.classList.add("details-opening");

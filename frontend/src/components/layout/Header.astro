@@ -166,7 +166,7 @@ function isActive(href: string) {
   <div class="cv-dialog__panel" role="document">
     <button
       type="button"
-      class="cv-dialog__close"
+      class="cv-dialog__close mobile-touch-target"
       data-cv-close
       aria-label={copy.close}
     >
@@ -196,6 +196,8 @@ function isActive(href: string) {
         target="_blank"
         rel="noopener noreferrer"
         download
+        data-umami-event="cv-download"
+        data-umami-event-language="en"
       >
         🇬🇧 {copy.cvEnglish}
       </a>
@@ -205,6 +207,8 @@ function isActive(href: string) {
         target="_blank"
         rel="noopener noreferrer"
         download
+        data-umami-event="cv-download"
+        data-umami-event-language="pl"
       >
         🇵🇱 {copy.cvPolish}
       </a>

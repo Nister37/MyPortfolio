@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CertificateLibrary from "../certificates/CertificateLibrary.svelte";
 import Section from "../layout/Section.astro";
+import IconHeading from "../ui/IconHeading.astro";
 import { pageCopy } from "../../data/site-copy";
 import type { Lang } from "../../data/site-copy";
 import { getCertificatesByLanguage } from "../../lib/cms/certificates";
@@ -25,7 +26,9 @@ const copy = pageCopy[lang].certificates;
   <main id="main-content">
     <Section>
       <div data-reveal>
-        <h1 class="text-4xl font-bold tracking-tight">{copy.heading}</h1>
+        <IconHeading icon="award" class="text-4xl font-bold tracking-tight">
+          {copy.heading}
+        </IconHeading>
         <p class="text-base-content/65 mt-3 max-w-2xl">
           {copy.intro}
         </p>

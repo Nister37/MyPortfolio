@@ -5,6 +5,7 @@ import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import CustomCursor from "../components/ui/CustomCursor.svelte";
 import ScrollProgress from "../components/ui/ScrollProgress.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { layoutCopy, siteMetadata } from "../data/site-copy";
 import { base } from "../lib/url";
 
@@ -31,8 +32,21 @@ const canonicalUrl = new URL(
   Astro.url.pathname,
   Astro.site ?? siteMetadata.url,
 );
-// Fall back to the site favicon so all pages have a shareable social image.
-const resolvedOgImage = ogImage ?? `${base}favicon.svg`;
+const socialImagePath = ogImage ?? `${base}social-card.svg`;
+const resolvedOgImage = new URL(
+  socialImagePath,
+  Astro.site ?? siteMetadata.url,
+);
+const enUrl = new URL(
+  getRelativeLocaleUrl("en", localePaths?.en ?? path),
+  Astro.site ?? siteMetadata.url,
+);
+const plUrl = new URL(
+  getRelativeLocaleUrl("pl", localePaths?.pl ?? path),
+  Astro.site ?? siteMetadata.url,
+);
+const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID?.trim();
+const analyticsEnabled = import.meta.env.PROD && Boolean(umamiWebsiteId);
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -60,6 +74,9 @@ const websiteSchema = {
     <meta name="author" content={siteMetadata.name} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="pl" href={plUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
     <!-- Open Graph -->
@@ -71,7 +88,7 @@ const websiteSchema = {
     <meta property="og:image" content={resolvedOgImage} />
 
     <!-- Twitter / X card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={resolvedOgImage} />
@@ -87,6 +104,17 @@ const websiteSchema = {
       type="application/ld+json"
       set:html={JSON.stringify(websiteSchema)}
     />
+    {
+      analyticsEnabled && (
+        <script
+          is:inline
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id={umamiWebsiteId}
+          data-domains="pawelryfiak.is-a.dev"
+        />
+      )
+    }
 
     <title>{title}</title>
     <!-- Redirect legacy GitHub Pages project URLs to the custom domain.
@@ -124,7 +152,9 @@ const websiteSchema = {
       })();
     </script>
   </head>
-  <body class="bg-base-100 text-base-content min-h-screen antialiased">
+  <body
+    class="bg-base-100 text-base-content flex min-h-dvh flex-col antialiased"
+  >
     <ScrollProgress lang={lang} />
     <!-- Skip nav for keyboard users -->
     <a
@@ -133,9 +163,13 @@ const websiteSchema = {
     >
       {copy.skipToContent}
     </a>
-    <Header lang={lang} path={path} localePaths={localePaths} />
-    <slot />
-    <Footer lang={lang} />
+    <div class="site-frame flex min-h-dvh flex-1 flex-col">
+      <Header lang={lang} path={path} localePaths={localePaths} />
+      <div class="flex flex-1 flex-col">
+        <slot />
+      </div>
+      <Footer lang={lang} />
+    </div>
     <CustomCursor client:load />
     <script>
       import "../scripts/details-animations";

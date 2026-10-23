@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Hero from "../home/Hero.astro";
+import FeaturedProjects from "../home/FeaturedProjects.astro";
 import SkillsOverview from "../home/SkillsOverview.astro";
 import ExperienceTimeline from "../home/ExperienceTimeline.astro";
 import BlogPreview from "../home/BlogPreview.astro";
@@ -24,6 +25,7 @@ const copy = pageCopy[lang].home;
 >
   <main id="main-content">
     <Hero lang={lang} />
+    <FeaturedProjects lang={lang} />
     <SkillsOverview lang={lang} />
     <ExperienceTimeline lang={lang} />
     <BlogPreview lang={lang} />

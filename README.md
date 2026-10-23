@@ -1,7 +1,6 @@
 ﻿# MyPortfolio
-Bilingual (EN / PL) personal portfolio. Static Astro frontend deployed to GitHub Pages, headless Strapi CMS hosted on Railway.
-**Live site:** [nister37.github.io/MyPortfolio](https://nister37.github.io/MyPortfolio)  
-**CMS admin:** [myportfolio-production-38ce.up.railway.app/admin](https://myportfolio-production-38ce.up.railway.app/admin)
+Bilingual (EN / PL) personal portfolio. Static Astro frontend deployed with a custom domain, headless Strapi CMS hosted on Railway.
+**Live site:** [pawelryfiak.is-a.dev](https://pawelryfiak.is-a.dev)
 ---
 ## Table of contents
 - [Architecture](#architecture)
@@ -12,6 +11,7 @@ Bilingual (EN / PL) personal portfolio. Static Astro frontend deployed to GitHub
 - [Build and preview](#build-and-preview)
 - [Deployment](#deployment)
 - [Content management](#content-management)
+- [Privacy-conscious analytics](#privacy-conscious-analytics)
 - [CI/CD pipeline](#cicd-pipeline)
 - [Security notes](#security-notes)
 ---
@@ -19,7 +19,7 @@ Bilingual (EN / PL) personal portfolio. Static Astro frontend deployed to GitHub
 ### System overview
 ```mermaid
 graph TD
-    Visitor([Browser]) -->|HTTPS| Pages["GitHub Pages\nnister37.github.io/MyPortfolio"]
+    Visitor([Browser]) -->|HTTPS| Pages["GitHub Pages\npawelryfiak.is-a.dev"]
     subgraph "Build time GitHub Actions"
         Actions["withastro/action\nbun run build"]
     end
@@ -51,7 +51,7 @@ sequenceDiagram
     Note over CI,CMS: Falls back to src/data/ if Strapi unreachable
     CI->>CI: astro build to dist/
     CI->>Pages: upload artifact and deploy
-    Pages-->>Dev: https://nister37.github.io/MyPortfolio
+    Pages-->>Dev: https://pawelryfiak.is-a.dev
 ```
 ### Content update flow
 ```mermaid
@@ -121,7 +121,7 @@ MyPortfolio/
 │   ├── src/api/                 # Content types: blog-post, project, skill,
 │   │                            # experience, site-setting
 │   ├── config/
-│   │   ├── middlewares.ts       # CORS locked to GitHub Pages + Railway origins
+│   │   ├── middlewares.ts       # CORS locked to frontend + CMS origins (env-configured)
 │   │   ├── database.ts          # SQLite locally, PostgreSQL via DATABASE_URL
 │   │   └── server.ts
 │   ├── railway.toml             # Railway build/deploy/healthcheck config
@@ -178,11 +178,14 @@ cp frontend/.env.example frontend/.env
 |----------|----------|---------|-------------|
 | `STRAPI_URL` | No | `http://localhost:1337` | Base URL of your Strapi instance |
 | `STRAPI_API_TOKEN` | No | (none) | Read-only API token from Strapi admin |
+| `PUBLIC_UMAMI_WEBSITE_ID` | No | (none) | Public Umami Cloud website ID; production analytics stays disabled when omitted |
 ```env
 STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=
+PUBLIC_UMAMI_WEBSITE_ID=
 ```
-Both variables are **build-time only**. They are never exposed to the browser.
+The Strapi variables are build-time only and never exposed to the browser.
+`PUBLIC_UMAMI_WEBSITE_ID` is intentionally browser-visible and is not a secret.
 ### CMS — `cms/.env`
 | Variable | Required | Description |
 |----------|----------|-------------|
@@ -215,13 +218,13 @@ Every push to `master` triggers automatic deployment via GitHub Actions.
 2. `Settings -> Secrets -> Actions` — add two repository secrets:
 | Secret | Value |
 |--------|-------|
-| `STRAPI_URL` | `https://myportfolio-production-38ce.up.railway.app` |
+| `STRAPI_URL` | Your Railway CMS URL (e.g. `https://<your-app>.up.railway.app`) |
 | `STRAPI_API_TOKEN` | Read-only token from Strapi admin (scoped to blog-post and project) |
 ### CMS to Railway
 Railway auto-deploys from the `cms/` directory on every push to `master`.
 **One-time Railway setup:**
 1. Connect the repository to a Railway project
-2. Set all CMS environment variables in the service dashboard
+2. Set all CMS environment variables in the service dashboard, including `CORS_ORIGIN_FRONTEND` and `CORS_ORIGIN_CMS`
 3. Add a PostgreSQL plugin — Railway injects `DATABASE_URL` automatically
 Configuration lives in `cms/railway.toml`:
 ```toml
@@ -254,7 +257,7 @@ sequenceDiagram
     Pages-->>Author: Updated site live in ~2 min
 ```
 ### Manual rebuild
-1. Open the [Strapi admin panel](https://myportfolio-production-38ce.up.railway.app/admin)
+1. Open the Strapi admin panel at your Railway URL (`/admin`)
 2. Create or edit content in **Blog Posts**, **Projects**, **Skills**, or **Experience**
 3. Click **Publish**
 4. Go to **GitHub -> Actions -> Deploy Portfolio Frontend -> Run workflow**
@@ -266,6 +269,35 @@ cd cms && npm run develop
 cd frontend && bun run dev
 ```
 Edit content at `http://localhost:1337/admin`, publish, then refresh the Astro dev server.
+---
+## Privacy-conscious analytics
+The shared Astro layout can load Umami Cloud in production. Analytics is optional and
+the standard Umami tracker does not set cookies:
+1. Create the website in Umami Cloud with the domain `pawelryfiak.is-a.dev`.
+2. Copy its public website ID.
+3. In GitHub, open **Settings → Secrets and variables → Actions → Variables**.
+4. Add `PUBLIC_UMAMI_WEBSITE_ID` with that ID and rebuild the frontend.
+
+The script is not rendered during local development or when the variable is empty. Its
+`data-domains` restriction accepts events only on `pawelryfiak.is-a.dev`.
+
+Umami records normal page views for EN and PL routes. The portfolio also emits these
+named activation events:
+
+| Event | Trigger | Extra property |
+|-------|---------|----------------|
+| `cv-download` | Actual English or Polish PDF link activation | `language` |
+| `contact-email` | Contact email link | — |
+| `github-click` | GitHub profile or project link | `project` when applicable |
+| `linkedin-click` | LinkedIn profile link | — |
+| `project-case-study` | Project detail navigation | `project` |
+| `project-live-demo` | External live demo link | `project` |
+
+No names, email addresses, form contents, search terms, or other visitor-provided
+values are added to custom event payloads. The footer provides a visible analytics
+notice. Before enabling Umami Cloud, document the controller, purpose, legal basis,
+data categories, retention, processor and international-transfer settings in the
+site's privacy information, and review the Umami data-processing agreement.
 ---
 ## CI/CD pipeline
 ```mermaid
@@ -280,7 +312,7 @@ flowchart TD
     subgraph job_deploy["Job: deploy"]
         E["actions/deploy-pages SHA d6db90 v4"]
     end
-    E --> F["Live at nister37.github.io/MyPortfolio"]
+    E --> F["Live at pawelryfiak.is-a.dev"]
 ```
 All actions are pinned to **commit SHAs** to prevent supply-chain attacks from mutable version tags.
 The `concurrency` block prevents a running deploy from being cancelled by a racing push:
@@ -294,7 +326,7 @@ concurrency:
 | Concern | Mitigation |
 |---------|-----------|
 | XSS via CMS HTML | `isomorphic-dompurify` sanitizes all `set:html` content at build time |
-| CORS | Strapi CORS locked to `nister37.github.io` and the Railway URL; methods restricted to GET, HEAD, OPTIONS |
+| CORS | Strapi CORS locked to production frontend and CMS origins via `CORS_ORIGIN_FRONTEND` / `CORS_ORIGIN_CMS` env vars; methods restricted to GET, HEAD, OPTIONS |
 | API token in browser | `STRAPI_API_TOKEN` is build-time only, never in `PUBLIC_*` variables |
 | Supply-chain CI | All GitHub Actions pinned to commit SHAs, not floating version tags |
 | Secrets in source | No keys committed; Railway and GitHub Actions inject them at runtime |

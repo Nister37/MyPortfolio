@@ -2,9 +2,11 @@ const DARK = "portfolio-dark";
 const LIGHT = "portfolio-light";
 const STORAGE_KEY = "portfolio-theme";
 
-function applyTheme(theme: string) {
+function applyTheme(theme: string, persist = false) {
   document.documentElement.setAttribute("data-theme", theme);
-  localStorage.setItem(STORAGE_KEY, theme);
+  if (persist) {
+    localStorage.setItem(STORAGE_KEY, theme);
+  }
   document.querySelectorAll<HTMLElement>(".theme-toggle").forEach((btn) => {
     btn
       .querySelector<SVGElement>(".icon-sun")
@@ -21,6 +23,6 @@ applyTheme(saved === LIGHT ? LIGHT : DARK);
 document.querySelectorAll<HTMLButtonElement>(".theme-toggle").forEach((btn) => {
   btn.addEventListener("click", () => {
     const current = document.documentElement.getAttribute("data-theme");
-    applyTheme(current === DARK ? LIGHT : DARK);
+    applyTheme(current === DARK ? LIGHT : DARK, true);
   });
 });

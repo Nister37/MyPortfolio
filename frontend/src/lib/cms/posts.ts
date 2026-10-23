@@ -42,7 +42,7 @@ export async function getPosts(): Promise<BlogPost[]> {
   try {
     const result = await fetchFromStrapi<StrapiListResponse>({
       path: "blog-posts",
-      query: "?fields=*&sort=publishedAtCustom:desc",
+      query: "?fields=*&sort=publishedAtCustom:desc&status=published",
     });
 
     return result.data.map((item) => ({

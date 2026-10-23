@@ -7,7 +7,6 @@ import type {
 
 export type CertificateSortKey = "newest" | "oldest" | "title" | "issuer";
 
-const PREVIEW_ZOOM = 1.35;
 const PREVIEW_EXIT_MS = 180;
 
 const CERTIFICATE_LABELS = {
@@ -28,10 +27,9 @@ const CERTIFICATE_LABELS = {
     noDate: "Bez daty",
     openPdf: "Otwórz PDF",
     openInNewTab: "Otwórz w nowej karcie",
+    close: "Zamknij",
     credential: "Poświadczenie",
-    zoomOut: "Pomniejsz",
-    zoomIn: "Powiększ",
-    closeHint: "kliknij tło, aby zamknąć podgląd",
+    closeHint: "Naciśnij Esc lub kliknij tło, aby zamknąć podgląd.",
     empty: "Certyfikaty i kursy pojawią się wkrótce.",
     visibleCount: "Widoczne",
     of: "z",
@@ -53,10 +51,9 @@ const CERTIFICATE_LABELS = {
     noDate: "No date",
     openPdf: "Open PDF",
     openInNewTab: "Open in new tab",
+    close: "Close",
     credential: "Credential",
-    zoomOut: "Zoom out",
-    zoomIn: "Zoom in",
-    closeHint: "press on background to close overview",
+    closeHint: "Press Esc or click outside to close the preview.",
     empty: "Certificates and courses are coming soon.",
     visibleCount: "Showing",
     of: "of",
@@ -113,8 +110,8 @@ export function getCertificateKindLabel(
 }
 
 export function getCertificateViewerSrc(url: string) {
-  const separator = url.includes("#") ? "&" : "#";
-  return `${url}${separator}toolbar=0&navpanes=0&scrollbar=0&view=Fit`;
+  if (url.includes("#")) return url;
+  return `${url}#toolbar=1&navpanes=0&view=FitH`;
 }
 
 export function createCertificateLibrary() {
@@ -125,8 +122,6 @@ export function createCertificateLibrary() {
   const sortBy = writable<CertificateSortKey>("newest");
   const selectedCertificate = writable<Certificate | null>(null);
   const isClosingPreview = writable(false);
-  const zoom = writable(1);
-  const zoomOrigin = writable("50% 50%");
 
   const labels = derived(
     language,
@@ -199,8 +194,6 @@ export function createCertificateLibrary() {
 
     selectedCertificate.set(certificate);
     isClosingPreview.set(false);
-    zoom.set(1);
-    zoomOrigin.set("50% 50%");
     lockBodyScroll();
   }
 
@@ -223,30 +216,6 @@ export function createCertificateLibrary() {
     );
   }
 
-  function toggleZoom(event?: MouseEvent) {
-    if (get(zoom) > 1) {
-      zoom.set(1);
-      zoomOrigin.set("50% 50%");
-      return;
-    }
-
-    if (event?.currentTarget instanceof HTMLElement) {
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const x = ((event.clientX - bounds.left) / bounds.width) * 100;
-      const y = ((event.clientY - bounds.top) / bounds.height) * 100;
-      zoomOrigin.set(`${x}% ${y}%`);
-    }
-
-    zoom.set(PREVIEW_ZOOM);
-  }
-
-  function handleZoomKeydown(event: KeyboardEvent) {
-    if (event.key !== "Enter" && event.key !== " ") return;
-
-    event.preventDefault();
-    toggleZoom();
-  }
-
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === "Escape" && get(selectedCertificate)) {
       closePreview();
@@ -264,8 +233,6 @@ export function createCertificateLibrary() {
     sortBy,
     selectedCertificate,
     isClosingPreview,
-    zoom,
-    zoomOrigin,
     labels,
     kindOptions,
     categoryOptions,
@@ -274,8 +241,6 @@ export function createCertificateLibrary() {
     setInput,
     openPreview,
     closePreview,
-    toggleZoom,
-    handleZoomKeydown,
     handleKeydown,
     destroy,
   };

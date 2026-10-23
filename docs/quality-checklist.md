@@ -45,7 +45,7 @@ npm run develop
 - [ ] Public URL loads without 404
 - [ ] CSS and fonts load on the deployed URL
 - [ ] Navigation links work on the deployed URL
-- [ ] Direct page refresh on `/projects/gazetkomania` works (Astro static output handles this)
+- [ ] Direct page refresh on `/projects/[slug]` works (Astro static output handles this)
 
 ## Content
 

@@ -44,7 +44,7 @@
   z-index: 9000;
   display: grid;
   place-items: center;
-  padding: 4.5rem 1rem 1rem;
+  padding: 0;
   background: rgb(0 0 0 / 0.72);
   backdrop-filter: blur(3px);
   animation: certificate-overlay-in 180ms ease-out both;
@@ -55,37 +55,14 @@
   animation: certificate-overlay-out 180ms ease-in both;
 }
 
-.certificate-overlay__hint {
-  position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  max-width: calc(100vw - 2rem);
-  border: 1px solid rgb(255 255 255 / 0.18);
-  border-radius: 9999px;
-  background: rgb(0 0 0 / 0.62);
-  color: white;
-  box-shadow: 0 16px 38px rgb(0 0 0 / 0.28);
-  padding: 0.65rem 1rem;
-  text-align: center;
-  font-size: 0.875rem;
-  line-height: 1.25;
-  animation: certificate-hint-in 220ms ease-out both;
-}
-
-.certificate-overlay--closing .certificate-overlay__hint {
-  animation: certificate-hint-out 140ms ease-in both;
-}
-
 .certificate-preview {
   display: flex;
   flex-direction: column;
-  width: min(1180px, 100%);
-  height: min(86vh, 920px);
+  width: 100%;
+  height: 100dvh;
   overflow: hidden;
   border: 1px solid var(--color-base-300, rgb(255 255 255 / 0.18));
-  border-radius: 0.5rem;
+  border-radius: 0;
   background: var(--color-base-100, #111827);
   color: var(--color-base-content, white);
   box-shadow: 0 28px 70px rgb(0 0 0 / 0.38);
@@ -109,6 +86,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .certificate-preview__viewport {
@@ -116,35 +94,25 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background:
-    linear-gradient(45deg, rgb(255 255 255 / 0.04) 25%, transparent 25%),
-    linear-gradient(-45deg, rgb(255 255 255 / 0.04) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgb(255 255 255 / 0.04) 75%),
-    linear-gradient(-45deg, transparent 75%, rgb(255 255 255 / 0.04) 75%);
-  background-position:
-    0 0,
-    0 8px,
-    8px -8px,
-    -8px 0;
-  background-size: 16px 16px;
-  padding: 1rem;
-  cursor: zoom-in;
-}
-
-.certificate-preview__viewport--zoomed {
-  cursor: zoom-out;
+  background: var(--color-base-300, #263247);
 }
 
 .certificate-preview__frame {
   display: block;
   width: 100%;
   height: 100%;
-  /* Cross-origin iframes stop pointer tracking in the parent document. */
-  pointer-events: none;
   border: 0;
-  border-radius: 0.35rem;
   background: white;
-  transition: transform 180ms ease-out;
+}
+
+.certificate-preview__footer {
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  border-top: 1px solid var(--color-base-300, rgb(255 255 255 / 0.16));
+  padding: 0.5rem 0.85rem;
+  color: color-mix(in srgb, var(--color-base-content, white) 55%, transparent);
+  font-size: 0.75rem;
 }
 
 @keyframes certificate-overlay-in {
@@ -189,28 +157,6 @@
   }
 }
 
-@keyframes certificate-hint-in {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -0.5rem);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-@keyframes certificate-hint-out {
-  from {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -0.35rem);
-  }
-}
-
 @keyframes certificate-preview-in {
   from {
     opacity: 0;
@@ -235,22 +181,27 @@
 
 @media (prefers-reduced-motion: reduce) {
   .certificate-overlay,
-  .certificate-overlay__hint,
   .certificate-preview,
   .certificate-overlay--closing,
-  .certificate-overlay--closing .certificate-overlay__hint,
   .certificate-overlay--closing .certificate-preview,
   .certificate-card,
   .certificate-empty {
     animation: none;
   }
-
-  .certificate-preview__frame {
-    transition: none;
-  }
 }
 
 @media (min-width: 768px) {
+  .certificate-overlay {
+    padding: 1rem;
+  }
+
+  .certificate-preview {
+    width: min(1180px, 100%);
+    height: min(calc(100vh - 2rem), 920px);
+    height: min(calc(100dvh - 2rem), 920px);
+    border-radius: 0.5rem;
+  }
+
   .certificate-preview__header {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -259,5 +210,9 @@
 
   .certificate-preview__actions {
     justify-content: flex-end;
+  }
+
+  .certificate-preview__footer {
+    padding-inline: 1rem;
   }
 }

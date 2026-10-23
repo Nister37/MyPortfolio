@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount, tick } from "svelte";
   import FileText from "lucide-svelte/icons/file-text";
+  import X from "lucide-svelte/icons/x";
   import {
     createCertificateLibrary,
     formatCertificateDate,
@@ -22,8 +23,6 @@
     sortBy,
     selectedCertificate,
     isClosingPreview,
-    zoom,
-    zoomOrigin,
     labels,
     kindOptions,
     categoryOptions,
@@ -31,14 +30,65 @@
     visibleCertificates,
     openPreview,
     closePreview,
-    toggleZoom,
-    handleZoomKeydown,
     handleKeydown,
   } = library;
 
   $: library.setInput(certificates, lang);
 
-  onDestroy(library.destroy);
+  let dialogElement: HTMLElement;
+  let closeButton: HTMLButtonElement;
+  let previewOpener: HTMLElement | null = null;
+
+  function handleOpenPreview(certificate: Certificate, event: MouseEvent) {
+    previewOpener =
+      event.currentTarget instanceof HTMLElement ? event.currentTarget : null;
+    openPreview(certificate);
+  }
+
+  function handleDialogKeydown(event: KeyboardEvent) {
+    if (event.key !== "Tab" || !dialogElement) return;
+
+    const focusable = Array.from(
+      dialogElement.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), iframe[tabindex="0"]',
+      ),
+    );
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  let unsubscribePreview: (() => void) | undefined;
+
+  onMount(() => {
+    unsubscribePreview = selectedCertificate.subscribe((certificate) => {
+      if (certificate) {
+        void tick().then(() => closeButton?.focus());
+        return;
+      }
+
+      if (previewOpener) {
+        void tick().then(() => {
+          previewOpener?.focus();
+          previewOpener = null;
+        });
+      }
+    });
+  });
+
+  onDestroy(() => {
+    unsubscribePreview?.();
+    library.destroy();
+    previewOpener?.focus();
+  });
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -183,16 +233,16 @@
               <div class="card-actions mt-2 flex-wrap gap-2">
                 <button
                   type="button"
-                  class="btn btn-primary btn-square btn-sm"
+                  class="btn btn-primary btn-square btn-sm mobile-touch-target"
                   title={$labels.openPdf}
                   aria-label={`${$labels.openPdf}: ${certificate.title}`}
-                  on:click={() => openPreview(certificate)}
+                  on:click={(event) => handleOpenPreview(certificate, event)}
                 >
                   <FileText size={17} aria-hidden="true" />
                 </button>
                 {#if certificate.credentialUrl}
                   <a
-                    class="btn btn-ghost btn-sm"
+                    class="btn btn-ghost btn-sm mobile-touch-target"
                     href={certificate.credentialUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -222,11 +272,12 @@
     aria-labelledby="certificate-preview-title"
     on:click|self={closePreview}
   >
-    <div class="certificate-overlay__hint" aria-live="polite">
-      {$labels.closeHint}
-    </div>
-
-    <section class="certificate-preview" role="document">
+    <section
+      bind:this={dialogElement}
+      class="certificate-preview"
+      role="document"
+      on:keydown={handleDialogKeydown}
+    >
       <header class="certificate-preview__header">
         <div class="min-w-0">
           <p class="text-xs font-medium uppercase tracking-wide text-primary">
@@ -249,33 +300,37 @@
 
         <div class="certificate-preview__actions">
           <a
-            class="btn btn-ghost btn-sm"
+            class="btn btn-ghost btn-sm mobile-touch-target"
             href={$selectedCertificate.fileUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
             {$labels.openInNewTab}
           </a>
+          <button
+            bind:this={closeButton}
+            type="button"
+            class="btn btn-primary btn-sm mobile-touch-target"
+            data-certificate-close
+            on:click={closePreview}
+          >
+            <X size={17} aria-hidden="true" />
+            {$labels.close}
+          </button>
         </div>
       </header>
 
-      <div
-        class="certificate-preview__viewport"
-        class:certificate-preview__viewport--zoomed={$zoom > 1}
-        role="button"
-        tabindex="0"
-        aria-label={$zoom > 1 ? $labels.zoomOut : $labels.zoomIn}
-        on:click={toggleZoom}
-        on:keydown={handleZoomKeydown}
-      >
+      <div class="certificate-preview__viewport">
         <iframe
           title={$selectedCertificate.title}
           src={getCertificateViewerSrc($selectedCertificate.fileUrl)}
           class="certificate-preview__frame"
-          tabindex="-1"
-          style={`transform: scale(${$zoom}); transform-origin: ${$zoomOrigin};`}
+          tabindex="0"
         ></iframe>
       </div>
+      <footer class="certificate-preview__footer">
+        <p>{$labels.closeHint}</p>
+      </footer>
     </section>
   </div>
 {/if}

@@ -1,6 +1,6 @@
 ---
 import Section from "../layout/Section.astro";
-import { getSkillLevel, skillCategories } from "../../data/skills";
+import { skillCategories } from "../../data/skills";
 import type { SkillLevel } from "../../data/skills";
 import { homeCopy } from "../../data/site-copy";
 import "../../styles/components/skills-overview.css";
@@ -8,13 +8,13 @@ import "../../styles/components/skills-overview.css";
 interface Props {
   lang?: "en" | "pl";
 }
+
 const { lang = "en" } = Astro.props;
 const copy = homeCopy[lang].skills;
-
-const levels = [1, 2, 3, 4, 5] as const;
+const levels: SkillLevel[] = [1, 2, 3, 4, 5];
 
 function meterLabel(level: SkillLevel) {
-  return `${level} ${copy.meterTemplate}: ${copy.levelLabels[level - 1]}`;
+  return `${copy.levelLabels[level - 1]}: ${level} ${copy.meterTemplate}`;
 }
 
 function categoryName(category: string) {
@@ -25,139 +25,207 @@ function categoryName(category: string) {
 }
 ---
 
-<Section id="skills">
-  <div data-reveal>
-    <h2 class="text-3xl font-bold tracking-tight">
-      {copy.heading}
-    </h2>
-    <p class="text-base-content/60 mt-2">
-      {copy.subheading}
-    </p>
+<Section id="skills" background="base-100">
+  <div>
+    <h2 class="text-3xl font-bold tracking-tight">{copy.heading}</h2>
+    <p class="text-base-content/60 mt-2 max-w-2xl">{copy.subheading}</p>
   </div>
 
-  <div class="border-base-300 bg-base-200/50 mt-6 rounded-xl border p-5">
+  <div class="mt-8">
     <h3
-      class="text-base-content/70 text-sm font-semibold tracking-wider uppercase"
+      class="text-base-content/55 text-xs font-semibold tracking-[0.2em] uppercase"
     >
-      {copy.legendHeading}
+      {copy.additionalHeading}
     </h3>
-    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+
+    <div class="skill-level-legend mt-4" aria-label={copy.additionalHeading}>
       {
         levels.map((level) => (
-          <div class="flex items-center gap-3">
-            <span class="skill-meter" data-level={level} aria-hidden="true">
+          <div class="skill-level-legend__item">
+            <span
+              class="skill-meter"
+              data-level={level}
+              role="img"
+              aria-label={meterLabel(level)}
+            >
               {levels.map((bar) => (
                 <span
                   class:list={[
                     "skill-meter__bar",
                     bar <= level && "skill-meter__bar--active",
                   ]}
+                  aria-hidden="true"
                 />
               ))}
             </span>
-            <span class="text-base-content/65 text-xs">
-              {copy.levelLabels[level - 1]}
-            </span>
+            <span>{copy.levelLabels[level - 1]}</span>
           </div>
+        ))
+      }
+    </div>
+
+    <div class="skills-list mt-4">
+      {
+        skillCategories.map(({ category, skills }, index) => (
+          <details class="skill-row border-base-300" open={index === 0}>
+            <summary class="focus-visible:ring-primary flex cursor-pointer list-none items-center gap-4 py-4 focus:outline-none focus-visible:ring-2">
+              <svg
+                class="skill-row__chevron text-primary h-4 w-4 shrink-0 transition-transform"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m9 18 6-6-6-6"
+                />
+              </svg>
+              <span class="font-semibold">{categoryName(category)}</span>
+              <span class="text-base-content/45 ml-auto text-xs">
+                {skills.length} {copy.technologies}
+              </span>
+            </summary>
+
+            <div class="skill-row__content">
+              <ul class="grid gap-2 pb-5 pl-8 sm:grid-cols-2 lg:grid-cols-3">
+                {skills.map(({ name, level }) => (
+                  <li class="skill-entry bg-base-200/60 min-w-0 rounded-md px-3 py-2.5">
+                    <span class="truncate text-sm font-medium">{name}</span>
+                    <span
+                      class="skill-meter"
+                      data-level={level}
+                      role="img"
+                      aria-label={`${name}, ${meterLabel(level)}`}
+                      title={meterLabel(level)}
+                    >
+                      {levels.map((bar) => (
+                        <span
+                          class:list={[
+                            "skill-meter__bar",
+                            bar <= level && "skill-meter__bar--active",
+                          ]}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
         ))
       }
     </div>
   </div>
 
-  <div class="skills-grid mt-10" data-skills-grid>
-    {
-      skillCategories.map(({ category, skills }) => (
-        <details class="skill-card group border-base-300 bg-base-200 rounded-xl border transition-all">
-          <summary class="focus-visible:ring-primary flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl p-5 focus:outline-none focus-visible:ring-2">
-            <div>
-              <h3 class="text-primary text-sm font-semibold tracking-wider uppercase">
-                {categoryName(category)}
-              </h3>
-              <p class="text-base-content/50 mt-1 text-xs">
-                {skills.length} {copy.technologies}
-              </p>
-            </div>
-            <svg
-              class="skill-card__chevron text-primary h-4 w-4 shrink-0 transition-transform"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m6 9 6 6 6-6"
-              />
-            </svg>
-          </summary>
-          <ul class="border-base-300 space-y-3 border-t px-5 py-4">
-            {skills.map(({ name, months }) => {
-              const level = getSkillLevel(months);
-
-              return (
-                <li class="flex items-center justify-between gap-3">
-                  <span class="text-base-content min-w-0 text-sm font-medium">
-                    {name}
-                  </span>
-                  <span
-                    class="skill-meter"
-                    data-level={level}
-                    role="img"
-                    aria-label={meterLabel(level)}
-                    title={meterLabel(level)}
-                  >
-                    {levels.map((bar) => (
-                      <span
-                        class:list={[
-                          "skill-meter__bar",
-                          bar <= level && "skill-meter__bar--active",
-                        ]}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </details>
-      ))
-    }
-  </div>
-
   <script>
-    const skillsGrids =
-      document.querySelectorAll<HTMLElement>("[data-skills-grid]");
+    const skillRows = Array.from(
+      document.querySelectorAll<HTMLDetailsElement>(".skill-row"),
+    );
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const animatingRows = new WeakSet<HTMLDetailsElement>();
 
-    skillsGrids.forEach((grid) => {
-      const cards = Array.from(
-        grid.querySelectorAll<HTMLDetailsElement>("details.skill-card"),
-      );
+    async function closeSkillRow(row: HTMLDetailsElement) {
+      if (!row.open || animatingRows.has(row)) return;
 
-      const updateExpandedState = () => {
-        grid.classList.toggle(
-          "skills-grid--expanded",
-          cards.some((card) => card.open),
+      const summary = row.querySelector<HTMLElement>("summary");
+      const content = row.querySelector<HTMLElement>(".skill-row__content");
+      if (!summary || !content || reducedMotion) {
+        row.open = false;
+        return;
+      }
+
+      animatingRows.add(row);
+      await content.animate(
+        [
+          { opacity: 1, transform: "translateY(0)" },
+          { opacity: 0, transform: "translateY(-0.3rem)" },
+        ],
+        { duration: 100, easing: "ease-in", fill: "forwards" },
+      ).finished;
+
+      const startHeight = row.offsetHeight;
+      const endHeight = summary.offsetHeight;
+      row.style.overflow = "clip";
+
+      await row.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        {
+          duration: 180,
+          easing: "cubic-bezier(0.4, 0, 1, 1)",
+        },
+      ).finished;
+
+      row.open = false;
+      row.style.overflow = "";
+      content.getAnimations().forEach((animation) => animation.cancel());
+      animatingRows.delete(row);
+    }
+
+    async function openSkillRow(row: HTMLDetailsElement) {
+      if (row.open || animatingRows.has(row)) return;
+
+      const summary = row.querySelector<HTMLElement>("summary");
+      const content = row.querySelector<HTMLElement>(".skill-row__content");
+      if (!summary || !content || reducedMotion) {
+        row.open = true;
+        return;
+      }
+
+      animatingRows.add(row);
+      row.open = true;
+      content.style.opacity = "0";
+
+      const startHeight = summary.offsetHeight;
+      const endHeight = row.offsetHeight;
+      row.style.overflow = "clip";
+
+      await row.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        {
+          duration: 220,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        },
+      ).finished;
+
+      row.style.overflow = "";
+      content.style.opacity = "";
+      await content.animate(
+        [
+          { opacity: 0, transform: "translateY(-0.35rem)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ],
+        {
+          duration: 130,
+          easing: "ease-out",
+        },
+      ).finished;
+      animatingRows.delete(row);
+    }
+
+    skillRows.forEach((row) => {
+      row.querySelector("summary")?.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (animatingRows.has(row)) return;
+
+        if (row.open) {
+          await closeSkillRow(row);
+          return;
+        }
+
+        await Promise.all(
+          skillRows
+            .filter((other) => other !== row && other.open)
+            .map(closeSkillRow),
         );
-      };
-
-      cards.forEach((card) => {
-        card.addEventListener("toggle", () => {
-          if (card.open) {
-            cards.forEach((otherCard) => {
-              if (otherCard !== card) {
-                otherCard.open = false;
-              }
-            });
-          }
-
-          updateExpandedState();
-        });
+        await openSkillRow(row);
       });
-
-      updateExpandedState();
     });
   </script>
 </Section>

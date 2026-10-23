@@ -1,3 +1,15 @@
+.contact-section {
+  margin-top: auto;
+  padding: 3rem;
+}
+
+#main-content {
+  display: flex;
+  min-height: 100%;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
 .contact-icons a {
   color: var(--color-base-content, currentColor);
   opacity: 0.65;

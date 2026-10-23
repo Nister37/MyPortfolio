@@ -1,7 +1,7 @@
 ---
 import ParticlesBackground from "../ui/ParticlesBackground.svelte";
+import IconHeading from "../ui/IconHeading.astro";
 import { homeCopy, siteMetadata } from "../../data/site-copy";
-import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
 }
@@ -9,43 +9,575 @@ const { lang = "en" } = Astro.props;
 const c = homeCopy[lang].hero;
 ---
 
-<section class="relative overflow-hidden py-20 md:py-32">
+<section class="hero-shell bg-base-100 relative overflow-hidden py-20 md:py-28">
   <ParticlesBackground client:load />
   <div class="relative z-10 mx-auto max-w-[1120px] px-4">
-    <div class="max-w-3xl" data-reveal>
-      <p
-        class="text-primary mb-4 text-sm font-medium tracking-widest uppercase"
-      >
-        {c.available}
-      </p>
-
-      <h1 class="text-4xl leading-tight font-bold tracking-tight md:text-6xl">
-        {siteMetadata.name}
-      </h1>
-
-      <p class="text-base-content/80 mt-4 text-xl font-medium md:text-2xl">
-        {c.subtitle}
-      </p>
-
-      <p class="text-base-content/65 mt-6 max-w-2xl text-base leading-relaxed">
-        {c.body}
-      </p>
-
-      <p class="text-base-content/50 mt-3 text-sm">
-        {c.openTo}
-      </p>
-
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a
-          href={lang === "pl" ? `${base}pl/projects` : `${base}projects`}
-          class="btn btn-primary"
+    <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_23rem]">
+      <div class="max-w-3xl">
+        <IconHeading
+          icon="terminal"
+          class="text-4xl leading-tight font-bold tracking-tight md:text-6xl"
         >
-          {c.viewProjects}
-        </a>
-        <button type="button" class="btn btn-outline" data-cv-trigger>
-          {c.downloadCv}
-        </button>
+          {siteMetadata.name}
+        </IconHeading>
+
+        <p
+          class="hero-headline text-primary mt-5 text-xl font-semibold md:text-2xl"
+          data-role-headline
+          data-headlines={JSON.stringify([c.headline, ...c.headlineVariants])}
+        >
+          {c.headline}
+        </p>
+
+        <p class="text-base-content/85 mt-6 max-w-2xl text-lg leading-relaxed">
+          {c.summary}
+        </p>
+
+        <p
+          class="text-base-content/65 mt-4 max-w-2xl text-base leading-relaxed"
+        >
+          {c.body}
+        </p>
+
+        <p
+          class="hero-availability text-secondary mt-5 inline-flex rounded-full px-3 py-1.5 text-sm font-medium"
+        >
+          {c.availability}
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#contact" class="btn btn-primary">{c.contactMe}</a>
+        </div>
+      </div>
+
+      <div
+        class="hero-terminal border-base-300 bg-base-200/65 text-base-content/55 hidden overflow-hidden rounded-xl border font-mono text-sm shadow-2xl shadow-black/10 lg:block"
+        data-typewriter-panel
+        data-lines={JSON.stringify(c.codeLines)}
+        data-error-lines={JSON.stringify(c.errorLines)}
+        role="button"
+        tabindex="0"
+        aria-label={c.terminalEasterEggLabel}
+        aria-pressed="false"
+        title={c.terminalEasterEggLabel}
+      >
+        <div class="border-base-300 flex items-center gap-2 border-b px-5 py-3">
+          <span class="h-2 w-2 rounded-full bg-red-400/70"></span>
+          <span class="h-2 w-2 rounded-full bg-amber-400/70"></span>
+          <span class="h-2 w-2 rounded-full bg-emerald-400/70"></span>
+          <span
+            class="text-base-content/35 ml-2 text-[0.65rem] tracking-wider"
+            data-terminal-file
+          >
+            portfolio.java
+          </span>
+        </div>
+        <div class="hero-terminal__body p-6 leading-7" aria-hidden="true">
+          <p>
+            <span class="text-primary" data-terminal-object>portfolio</span
+            >.<span class="text-secondary" data-terminal-method>execute</span>(
+          </p>
+          <p class="hero-terminal__line text-base-content/80 pl-5">
+            &quot;<span data-typewriter-output>{c.codeLines[0]}</span><span
+              class="hero-terminal__cursor text-primary">|</span
+            >&quot;
+          </p>
+          <p>);</p>
+          <p class="text-base-content/30 mt-5" data-terminal-comment>
+            // build · automate · deploy
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-typewriter-panel]")
+    .forEach((panel) => {
+      const output = panel.querySelector<HTMLElement>(
+        "[data-typewriter-output]",
+      );
+      const encodedLines = panel.dataset.lines;
+      const encodedErrorLines = panel.dataset.errorLines;
+      if (!output || !encodedLines || !encodedErrorLines) return;
+      const typewriterOutput = output;
+
+      const lines = JSON.parse(encodedLines) as string[];
+      const errorLines = JSON.parse(encodedErrorLines) as string[];
+      if (lines.length === 0 || errorLines.length === 0) return;
+
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const terminalFile = panel.querySelector<HTMLElement>(
+        "[data-terminal-file]",
+      );
+      const terminalObject = panel.querySelector<HTMLElement>(
+        "[data-terminal-object]",
+      );
+      const terminalMethod = panel.querySelector<HTMLElement>(
+        "[data-terminal-method]",
+      );
+      const terminalComment = panel.querySelector<HTMLElement>(
+        "[data-terminal-comment]",
+      );
+
+      let lineIndex = 0;
+      let characterIndex = lines[0].length;
+      let deleting = true;
+      let typewriterTimer: number | undefined;
+      let errorInterval: number | undefined;
+      let resetTimer: number | undefined;
+      let lightCleanupTimer: number | undefined;
+      let shakeCleanupTimer: number | undefined;
+
+      function scheduleTypewriter(delay: number) {
+        typewriterTimer = window.setTimeout(typeNextCharacter, delay);
+      }
+
+      function typeNextCharacter() {
+        const line = lines[lineIndex];
+
+        if (!deleting) {
+          characterIndex += 1;
+          typewriterOutput.textContent = line.slice(0, characterIndex);
+
+          if (characterIndex >= line.length) {
+            deleting = true;
+            scheduleTypewriter(1800);
+            return;
+          }
+
+          scheduleTypewriter(48);
+          return;
+        }
+
+        characterIndex -= 1;
+        typewriterOutput.textContent = line.slice(0, characterIndex);
+
+        if (characterIndex <= 0) {
+          deleting = false;
+          lineIndex = (lineIndex + 1) % lines.length;
+          scheduleTypewriter(320);
+          return;
+        }
+
+        scheduleTypewriter(24);
+      }
+
+      function restoreTerminal() {
+        if (errorInterval !== undefined) window.clearInterval(errorInterval);
+        document.body.classList.add("terminal-easter-egg-ending");
+        lightCleanupTimer = window.setTimeout(() => {
+          document.body.classList.remove(
+            "terminal-easter-egg-active",
+            "terminal-easter-egg-ending",
+            "terminal-easter-egg-shaking",
+          );
+        }, 1200);
+        panel.classList.remove("hero-terminal--error");
+        panel.setAttribute("aria-pressed", "false");
+        if (terminalFile) terminalFile.textContent = "portfolio.java";
+        if (terminalObject) terminalObject.textContent = "portfolio";
+        if (terminalMethod) terminalMethod.textContent = "execute";
+        if (terminalComment) {
+          terminalComment.textContent = "// build · automate · deploy";
+        }
+
+        lineIndex = (lineIndex + 1) % lines.length;
+        characterIndex = 0;
+        deleting = false;
+        typewriterOutput.textContent = "";
+        if (reducedMotion) typewriterOutput.textContent = lines[lineIndex];
+        else scheduleTypewriter(320);
+      }
+
+      function triggerEasterEgg() {
+        if (panel.classList.contains("hero-terminal--error")) return;
+        if (typewriterTimer !== undefined) window.clearTimeout(typewriterTimer);
+        if (lightCleanupTimer !== undefined) {
+          window.clearTimeout(lightCleanupTimer);
+        }
+        if (shakeCleanupTimer !== undefined) {
+          window.clearTimeout(shakeCleanupTimer);
+        }
+
+        document.body.classList.remove(
+          "terminal-easter-egg-active",
+          "terminal-easter-egg-ending",
+          "terminal-easter-egg-shaking",
+        );
+        void document.body.offsetWidth;
+        document.body.classList.add(
+          "terminal-easter-egg-active",
+          "terminal-easter-egg-shaking",
+        );
+        shakeCleanupTimer = window.setTimeout(() => {
+          document.body.classList.remove("terminal-easter-egg-shaking");
+        }, 700);
+        panel.classList.add("hero-terminal--error");
+        panel.setAttribute("aria-pressed", "true");
+        if (terminalFile) terminalFile.textContent = "runtime.log";
+        if (terminalObject) terminalObject.textContent = "runtime";
+        if (terminalMethod) terminalMethod.textContent = "failure";
+        if (terminalComment) {
+          terminalComment.textContent = "// panic · rollback · recover";
+        }
+
+        let errorIndex = 0;
+        typewriterOutput.textContent = errorLines[errorIndex];
+        if (!reducedMotion) {
+          errorInterval = window.setInterval(() => {
+            errorIndex = (errorIndex + 1) % errorLines.length;
+            typewriterOutput.textContent = errorLines[errorIndex];
+          }, 900);
+        }
+
+        resetTimer = window.setTimeout(restoreTerminal, 5000);
+      }
+
+      panel.addEventListener("click", triggerEasterEgg);
+      panel.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        triggerEasterEgg();
+      });
+
+      if (!reducedMotion) scheduleTypewriter(1800);
+
+      window.addEventListener(
+        "pagehide",
+        () => {
+          if (typewriterTimer !== undefined)
+            window.clearTimeout(typewriterTimer);
+          if (errorInterval !== undefined) window.clearInterval(errorInterval);
+          if (resetTimer !== undefined) window.clearTimeout(resetTimer);
+          if (lightCleanupTimer !== undefined)
+            window.clearTimeout(lightCleanupTimer);
+          if (shakeCleanupTimer !== undefined)
+            window.clearTimeout(shakeCleanupTimer);
+          document.body.classList.remove(
+            "terminal-easter-egg-active",
+            "terminal-easter-egg-ending",
+            "terminal-easter-egg-shaking",
+          );
+        },
+        { once: true },
+      );
+    });
+
+  document
+    .querySelectorAll<HTMLElement>("[data-role-headline]")
+    .forEach((headline) => {
+      const encodedHeadlines = headline.dataset.headlines;
+      if (
+        !encodedHeadlines ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
+
+      const headlines = JSON.parse(encodedHeadlines) as string[];
+      if (headlines.length < 2) return;
+
+      let headlineIndex = 0;
+      const switchHeadline = async () => {
+        await headline.animate(
+          [
+            { opacity: 1, transform: "translateX(0)" },
+            { opacity: 0, transform: "translateX(2rem)" },
+          ],
+          {
+            duration: 170,
+            easing: "cubic-bezier(0.55, 0, 1, 0.45)",
+            fill: "forwards",
+          },
+        ).finished;
+
+        headlineIndex = (headlineIndex + 1) % headlines.length;
+        headline.textContent = headlines[headlineIndex];
+
+        await headline.animate(
+          [
+            { opacity: 0, transform: "translateX(-2rem)" },
+            { opacity: 1, transform: "translateX(0.12rem)", offset: 0.82 },
+            { opacity: 1, transform: "translateX(0)" },
+          ],
+          {
+            duration: 290,
+            easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+            fill: "forwards",
+          },
+        ).finished;
+
+        window.setTimeout(switchHeadline, 2800);
+      };
+
+      window.setTimeout(switchHeadline, 2800);
+    });
+</script>
+
+<style>
+  .hero-shell {
+    animation: hero-shell-in 700ms ease-out both;
+  }
+
+  .hero-shell::after {
+    position: absolute;
+    z-index: 5;
+    top: -5rem;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 14rem;
+    background:
+      radial-gradient(
+        ellipse 72% 100% at top,
+        color-mix(in srgb, var(--color-error) 82%, transparent) 0%,
+        color-mix(in srgb, var(--color-error) 38%, transparent) 42%,
+        transparent 78%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-error) 30%, transparent) 0%,
+        color-mix(in srgb, var(--color-error) 13%, transparent) 42%,
+        transparent 82%
+      );
+    filter: blur(0.8rem);
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-1.5rem) scaleY(0.82);
+    will-change: opacity, transform;
+    transition:
+      opacity 180ms ease,
+      transform 220ms ease;
+  }
+
+  :global(body.terminal-easter-egg-active) {
+    overflow-x: clip;
+  }
+
+  :global(body.terminal-easter-egg-shaking .site-frame) {
+    position: relative;
+    animation: site-error-shake 680ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  :global(body.terminal-easter-egg-active) .hero-shell::after {
+    opacity: 0.92;
+    transform: translateY(0) scaleY(1);
+    animation: terminal-error-light 900ms ease-in-out infinite alternate;
+  }
+
+  :global(body.terminal-easter-egg-active.terminal-easter-egg-ending)
+    .hero-shell::after {
+    animation: terminal-error-light-out 1200ms cubic-bezier(0.4, 0, 0.2, 1)
+      forwards;
+  }
+
+  .hero-headline {
+    min-height: 3.5rem;
+    will-change: transform, opacity;
+  }
+
+  .hero-availability {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-availability::before {
+    position: absolute;
+    z-index: -1;
+    inset: -0.4rem -2rem;
+    background: radial-gradient(
+      ellipse 82% 58% at center,
+      color-mix(in srgb, var(--color-secondary) 34%, transparent) 0%,
+      color-mix(in srgb, var(--color-secondary) 15%, transparent) 48%,
+      transparent 82%
+    );
+    filter: blur(0.5rem);
+    content: "";
+    animation: availability-pulse 2.8s ease-in-out infinite;
+  }
+
+  .hero-terminal__body {
+    min-height: 13.75rem;
+  }
+
+  .hero-terminal {
+    cursor: pointer;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .hero-terminal:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-terminal:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .hero-terminal--error {
+    border-color: color-mix(in srgb, var(--color-error) 72%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--color-error) 13%,
+      var(--color-base-200)
+    );
+    box-shadow:
+      0 24px 55px -28px color-mix(in srgb, var(--color-error) 88%, transparent),
+      0 0 2rem -0.65rem color-mix(in srgb, var(--color-error) 72%, transparent);
+  }
+
+  .hero-terminal--error [data-terminal-file],
+  .hero-terminal--error [data-terminal-object],
+  .hero-terminal--error [data-terminal-method],
+  .hero-terminal--error [data-terminal-comment],
+  .hero-terminal--error .hero-terminal__cursor {
+    color: var(--color-error);
+  }
+
+  .hero-terminal__line {
+    min-height: 4.25rem;
+  }
+
+  .hero-terminal__cursor {
+    display: inline-block;
+    margin-left: 0.08em;
+    animation: terminal-cursor 850ms steps(1, end) infinite;
+  }
+
+  @keyframes terminal-cursor {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes site-error-shake {
+    0%,
+    100% {
+      top: 0;
+      left: 0;
+    }
+
+    10% {
+      top: 0.16rem;
+      left: -0.55rem;
+    }
+
+    22% {
+      top: -0.2rem;
+      left: 0.48rem;
+    }
+
+    36% {
+      top: 0.12rem;
+      left: -0.42rem;
+    }
+
+    52% {
+      top: -0.1rem;
+      left: 0.34rem;
+    }
+
+    70% {
+      top: 0.06rem;
+      left: -0.22rem;
+    }
+
+    86% {
+      top: -0.04rem;
+      left: 0.12rem;
+    }
+  }
+
+  @keyframes terminal-error-light {
+    from {
+      opacity: 0.62;
+      transform: translateY(0) scaleY(0.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scaleY(1);
+    }
+  }
+
+  @keyframes terminal-error-light-out {
+    0% {
+      opacity: 0.92;
+      transform: translateY(0) scaleY(1);
+    }
+
+    45% {
+      opacity: 0.58;
+      transform: translateY(-0.2rem) scaleY(0.97);
+    }
+
+    78% {
+      opacity: 0.2;
+      transform: translateY(-0.65rem) scaleY(0.91);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-1rem) scaleY(0.86);
+    }
+  }
+
+  @keyframes hero-shell-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes availability-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(0.92);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-headline {
+      min-height: 2.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-shell,
+    .hero-availability::before,
+    .hero-terminal__cursor,
+    .hero-terminal--error,
+    :global(body.terminal-easter-egg-shaking .site-frame),
+    :global(body.terminal-easter-egg-active) .hero-shell::after {
+      animation: none;
+    }
+
+    :global(body.terminal-easter-egg-active.terminal-easter-egg-ending)
+      .hero-shell::after {
+      opacity: 0;
+    }
+
+    .hero-terminal {
+      transition: none;
+    }
+  }
+</style>

@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+html {
+  scroll-behavior: smooth;
+}
+
 /*
   Theme variables defined with explicit attribute selectors so that setting
   data-theme on <html> at runtime reliably switches the colour palette.
@@ -67,4 +71,17 @@
   --rounded-box: 1rem;
   --rounded-btn: 0.5rem;
   --rounded-badge: 1.9rem;
+}
+
+@media (max-width: 767px) {
+  .mobile-touch-target {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

@@ -2,6 +2,37 @@ import type { Project } from "../lib/cms/projects";
 
 export const fallbackProjects: Project[] = [
   {
+    title: "PackPlay",
+    slug: "packplay",
+    summary:
+      "Backend for coordinating personal and shared equipment before group activities, including reusable checklists, responsibility transfers, readiness summaries, notifications, and real-time updates.",
+    categories: ["Backend", "Automation"],
+    stack: [
+      "TypeScript",
+      "NestJS",
+      "MySQL",
+      "Redis",
+      "Docker",
+      "Jenkins",
+      "Terraform",
+      "Ansible",
+    ],
+    highlights: [
+      "REST API for groups, activity equipment, packing sessions, and readiness summaries",
+      "JWT authentication, invitation links, in-app notifications, and Socket.IO rooms",
+      "Docker Compose services with documented Jenkins, Terraform, and Ansible infrastructure",
+    ],
+    problem:
+      "Group activities need a clear way to track who is bringing shared equipment, how many items are still missing, and whether the group is ready before departure.",
+    architecture:
+      "The public repository contains a NestJS 11 API in an Nx monorepo, Prisma with MySQL for persistent data, Redis for cache and ephemeral state, Socket.IO activity and group rooms, and Docker Compose for local services. Infrastructure work is documented separately with Jenkins, Terraform, Ansible, Google Cloud, and Caddy.",
+    lessonsLearned:
+      "The repository documents its current gaps explicitly: email uses a development implementation, integration and end-to-end targets are still missing, and the production API deployment workflow is not complete. Those limits keep the case study honest about what is implemented today.",
+    githubUrl: "https://github.com/Nister37/PackPlay",
+    featured: true,
+    order: 1,
+  },
+  {
     title: "Integration 4 CI/CD on Google Cloud",
     slug: "integration4-cicd-google-cloud",
     summary:

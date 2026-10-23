@@ -4,11 +4,11 @@ export const siteMetadata = {
   name: "Paweł Ryfiak",
   url: "https://pawelryfiak.is-a.dev",
   portfolioName: "Paweł Ryfiak — Portfolio",
-  jobTitle: "Junior Software Engineer",
+  jobTitle: "Software Engineer",
   defaultDescription:
-    "Paweł Ryfiak — Junior Software Engineer focused on backend, automation, and practical DevOps.",
+    "Paweł Ryfiak — Software Engineer building Java, Spring Boot, cloud, and automation projects.",
   personDescription:
-    "Junior Software Engineer focused on backend systems, automation, and practical DevOps.",
+    "Software Engineer focused on Java, Spring Boot, cloud deployments, and automation.",
   sameAs: [
     "https://github.com/Nister37",
     "https://www.linkedin.com/in/pawelryfiak2004/",
@@ -78,29 +78,55 @@ export const headerCopy = {
 export const footerCopy = {
   en: {
     builtWith: "Built with Astro, Svelte, Tailwind CSS, and Strapi.",
+    privacy:
+      "Cookie-free analytics measure page views and selected link activations. No advertising profiles or form contents are collected.",
   },
   pl: {
     builtWith: "Zbudowane przy użyciu Astro, Svelte, Tailwind CSS i Strapi.",
+    privacy:
+      "Analityka bez plików cookie mierzy odsłony i wybrane kliknięcia. Nie tworzy profili reklamowych ani nie zbiera treści formularzy.",
   },
-} as const satisfies Record<Lang, { builtWith: string }>;
+} as const satisfies Record<Lang, { builtWith: string; privacy: string }>;
 
 export const homeCopy = {
   en: {
     hero: {
-      available: "Available for opportunities",
-      subtitle:
-        "Junior Software Engineer focused on backend, automation, and practical DevOps.",
-      body: "I build Spring Boot systems, deployment pipelines, AI-assisted data extraction tools, and infrastructure scripts. Currently learning Astro, Svelte, Strapi, and modern frontend workflows by building this portfolio.",
-      openTo:
-        "Open to: IT internship, junior backend, automation, DevOps-oriented roles · Antwerp / remote / EU",
-      viewProjects: "View projects",
-      downloadCv: "Download CV",
+      headline: "Software Engineer | Java & Spring Boot | Cloud & Automation",
+      headlineVariants: [
+        "Full-Stack Developer | Backend-First Delivery",
+        "Backend Developer | APIs, Data & Integrations",
+        "Cloud & Automation Engineer | CI/CD & Containers",
+      ],
+      summary:
+        "I build backend applications, automate deployments, and turn complex technical problems into working software.",
+      body: "I'm an Applied Computer Science student in Antwerp with hands-on experience developing Spring Boot systems, building automation tools, and deploying containerized applications to Google Cloud. My work includes IoT monitoring, real-time services, CI/CD pipelines, and AI-assisted data extraction.",
+      availability: "Open to internship and junior opportunities",
+      contactMe: "Contact Me",
+      codeLines: [
+        "Build reliable backend systems.",
+        "Automate repeatable delivery.",
+        "Deploy containerized services.",
+        "Turn complex problems into working software.",
+        "Design clear service boundaries.",
+        "Make failure states observable.",
+        "Ship small, reviewable changes.",
+        "Test behaviour that matters.",
+        "Document decisions for the next engineer.",
+      ],
+      terminalEasterEggLabel: "Trigger terminal easter egg",
+      errorLines: [
+        "Java: NullPointerException at Portfolio.java:42",
+        "Python: TypeError: 'NoneType' is not iterable",
+        "JavaScript: ReferenceError: deploy is not defined",
+        "C#: InvalidOperationException: Sequence contains no elements",
+        "SQL: duplicate key value violates unique constraint",
+      ],
     },
     skills: {
-      heading: "Skills",
+      heading: "Core Skills",
       subheading:
-        "Select a domain to see technologies and hands-on experience.",
-      legendHeading: "Experience legend",
+        "Technologies I use most, followed by detailed areas of experience and exposure.",
+      additionalHeading: "Skills by area",
       categoryLabels: {
         Backend: "Backend",
         DevOps: "DevOps",
@@ -110,13 +136,13 @@ export const homeCopy = {
         Business: "Business",
       },
       levelLabels: [
-        "0-5 months",
-        "6+ months",
-        "1+ year",
-        "2+ years",
-        "3+ years",
+        "Exploring",
+        "Learning basics",
+        "Intermediate usage",
+        "Solid knowledge",
+        "Proficient fluency",
       ],
-      meterTemplate: "of 5 experience bars",
+      meterTemplate: "of 5 experience grades",
       technologies: "technologies",
     },
     experience: {
@@ -140,33 +166,54 @@ export const homeCopy = {
     },
     contact: {
       heading: "Get in touch",
-      body: "I am open to IT internships, junior backend positions, automation roles, and DevOps-oriented opportunities. Based in Antwerp — available for remote and EU roles.",
       navLabel: "Contact links",
       emailLabel: "Send email",
     },
     featuredProjects: {
-      heading: "Featured Projects",
+      heading: "Recent Projects",
       subheading:
-        "A selection of real systems I built or contributed to significantly.",
-      allProjects: "All projects ->",
+        "The three latest systems I built or contributed to significantly.",
     },
   },
   pl: {
     hero: {
-      available: "OTWARTY NA STAŻE I ROLE JUNIORSKIE",
-      subtitle:
-        "Student Applied Computer Science — backend Java/Spring, automatyzacja i podstawy deploymentu.",
-      body: "Tworzę aplikacje backendowe w Spring Boot, pracuję z bazami danych, REST API, Dockerem i Linuksem oraz buduję narzędzia automatyzujące powtarzalne procesy. Aktualnie uczę się Astro, Svelte, Strapi i nowoczesnego frontendu, budując to portfolio.",
-      openTo:
-        "Szukam: stażu programistycznego, roli junior backend lub zadań związanych z automatyzacją · Antwerpia / okolice Głogowa / zdalnie / UE",
-      viewProjects: "Zobacz projekty",
-      downloadCv: "Pobierz CV",
+      headline:
+        "Software Engineer | Java i Spring Boot | Chmura i automatyzacja",
+      headlineVariants: [
+        "Full-Stack Developer | Backend przede wszystkim",
+        "Backend Developer | API, dane i integracje",
+        "Cloud & Automation Engineer | CI/CD i kontenery",
+      ],
+      summary:
+        "Buduję aplikacje backendowe, automatyzuję wdrożenia i zamieniam złożone problemy techniczne w działające oprogramowanie.",
+      body: "Studiuję informatykę stosowaną w Antwerpii i mam praktyczne doświadczenie w tworzeniu systemów Spring Boot, narzędzi automatyzujących oraz wdrażaniu skonteneryzowanych aplikacji w Google Cloud. Pracowałem nad monitoringiem IoT, usługami czasu rzeczywistego, pipeline'ami CI/CD i ekstrakcją danych wspieraną przez AI.",
+      availability: "Otwarty na staże i role juniorskie",
+      contactMe: "Skontaktuj się",
+      codeLines: [
+        "Buduj niezawodne systemy backendowe.",
+        "Automatyzuj powtarzalne wdrożenia.",
+        "Wdrażaj skonteneryzowane usługi.",
+        "Zamieniaj złożone problemy w działające oprogramowanie.",
+        "Projektuj czytelne granice usług.",
+        "Dbaj o obserwowalność błędów.",
+        "Wdrażaj małe zmiany łatwe do przeglądu.",
+        "Testuj zachowania, które mają znaczenie.",
+        "Dokumentuj decyzje dla kolejnego programisty.",
+      ],
+      terminalEasterEggLabel: "Uruchom easter egg terminala",
+      errorLines: [
+        "Java: NullPointerException at Portfolio.java:42",
+        "Python: TypeError: 'NoneType' is not iterable",
+        "JavaScript: ReferenceError: deploy is not defined",
+        "C#: InvalidOperationException: Sequence contains no elements",
+        "SQL: duplicate key value violates unique constraint",
+      ],
     },
     skills: {
-      heading: "Umiejętności techniczne",
+      heading: "Kluczowe umiejętności",
       subheading:
-        "Wybierz obszar, aby zobaczyć technologie i czas doświadczenia.",
-      legendHeading: "Legenda doświadczenia",
+        "Technologie, z których korzystam najczęściej, oraz szczegółowe obszary doświadczenia i podstawowej znajomości.",
+      additionalHeading: "Umiejętności według obszaru",
       categoryLabels: {
         Backend: "Backend",
         DevOps: "DevOps",
@@ -176,13 +223,13 @@ export const homeCopy = {
         Business: "Biznes",
       },
       levelLabels: [
-        "0-5 miesięcy",
-        "6+ miesięcy",
-        "1+ rok",
-        "2+ lata",
-        "3+ lata",
+        "Poznaję",
+        "Uczę się podstaw",
+        "Poziom średniozaawansowany",
+        "Solidna znajomość",
+        "Biegła znajomość",
       ],
-      meterTemplate: "z 5 pasków doświadczenia",
+      meterTemplate: "z 5 poziomów doświadczenia",
       technologies: "technologii",
     },
     experience: {
@@ -207,15 +254,13 @@ export const homeCopy = {
     },
     contact: {
       heading: "Skontaktuj się",
-      body: "Jestem otwarty na staże programistyczne, role junior backend, projekty automatyzacyjne oraz zadania związane z podstawami deploymentu. Obecnie mieszkam w Antwerpii, ale jestem dostępny także zdalnie oraz w Polsce.",
       navLabel: "Linki kontaktowe",
       emailLabel: "Wyślij e-mail",
     },
     featuredProjects: {
-      heading: "Wyróżnione projekty",
+      heading: "Najnowsze projekty",
       subheading:
-        "Wybrane projekty, które zbudowałem lub znacząco współtworzyłem.",
-      allProjects: "Wszystkie projekty ->",
+        "Trzy najnowsze systemy, które zbudowałem lub znacząco współtworzyłem.",
     },
   },
 } as const satisfies Record<Lang, unknown>;
@@ -232,12 +277,14 @@ export const pageCopy = {
       description:
         "Applied Computer Science student at Karel de Grote in Antwerp. Spring Boot, Docker, GitLab CI, and AI-assisted automation. Seeking IT internship or junior backend role.",
       heading: "About",
+      photoAlt:
+        "Portrait of Paweł Ryfiak outdoors overlooking a mountain landscape",
       intro:
         "I am a software engineering student at Karel de Grote Hogeschool in Antwerp, focused on backend systems, deployment automation, and practical infrastructure work.",
       paragraphs: [
-        "My strongest area is Java and Spring Boot — building REST APIs, validation layers, JPA integrations, and running them inside Docker. I have shipped CI/CD pipelines on Google Cloud using GitLab CI, Nginx, and Compose-based blue-green deployments. Most recently I have been building AI-assisted data extraction tooling with Gemini and Spring Boot.",
-        "I am expanding into modern frontend work — learning Astro, Svelte, Tailwind CSS, and Strapi — by building this portfolio from scratch. Not to become a frontend developer, but to understand the full deployment picture.",
-        "I am looking for an IT internship or junior backend/automation role where I can contribute to a real codebase, learn from experienced engineers, and keep improving my DevOps and system design skills. Based in Antwerp, open to remote and EU roles.",
+        "I enjoy the parts of engineering where a vague operational problem has to become a dependable system: defining the domain, choosing a clear API boundary, handling failure cases, and making deployment repeatable.",
+        "My project work has covered Spring Boot backends, PostgreSQL data models, Docker-based environments, CI/CD pipelines, IoT monitoring, and real-time communication. I also use Python for automation and data-oriented tasks.",
+        "I work well in project teams and value direct technical communication, small reviewable changes, and documentation that helps the next person understand why a decision was made.",
       ],
     },
     projects: {
@@ -284,12 +331,13 @@ export const pageCopy = {
       description:
         "Student informatyki stosowanej na Karel de Grote w Antwerpii. Spring Boot, Docker, GitLab CI i automatyzacja AI. Szukam stażu programistycznego lub roli junior backend.",
       heading: "O mnie",
+      photoAlt: "Portret Pawła Ryfiaka na tle górskiego krajobrazu",
       intro:
         "Jestem studentem informatyki stosowanej na Karel de Grote Hogeschool w Antwerpii. Skupiam się na backendzie w Javie i Spring Boot, automatyzacji powtarzalnych procesów oraz podstawach deploymentu aplikacji.",
       paragraphs: [
-        "Najpewniej czuję się w Javie i Spring Boot — projektuję REST API, warstwy walidacji, integracje z bazą danych przez JPA i uruchamiam aplikacje w Dockerze. Pracowałem też nad procesem CI/CD na Google Cloud z użyciem GitLab CI, Nginx i strategii blue-green deployment z Docker Compose.",
-        "Równolegle uczę się nowoczesnego frontendu — Astro, Svelte, Tailwind CSS i Strapi — budując to portfolio od podstaw. Nie zamierzam zostać frontend developerem, ale chcę rozumieć cały proces wdrożenia aplikacji.",
-        "Szukam stażu programistycznego lub roli junior backend / automatyzacja, w której będę mógł wnosić wkład do realnego kodu, uczyć się od bardziej doświadczonych inżynierów oraz rozwijać umiejętności w zakresie projektowania systemów i podstaw deploymentu. Obecnie mieszkam w Antwerpii, jestem dostępny zdalnie oraz w Polsce i UE.",
+        "Najbardziej interesują mnie zadania, w których niejasny problem operacyjny trzeba zamienić w niezawodny system: opisać domenę, wyznaczyć czytelną granicę API, obsłużyć błędy i przygotować powtarzalne wdrożenie.",
+        "W projektach pracowałem z backendami Spring Boot, modelami danych PostgreSQL, środowiskami Docker, pipeline'ami CI/CD, monitoringiem IoT i komunikacją czasu rzeczywistego. Pythona wykorzystuję do automatyzacji i zadań związanych z danymi.",
+        "Dobrze odnajduję się w pracy projektowej. Cenię bezpośrednią komunikację techniczną, małe zmiany łatwe do przeglądu oraz dokumentację wyjaśniającą powody podjętych decyzji.",
       ],
     },
     projects: {

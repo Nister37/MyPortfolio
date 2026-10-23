@@ -2,12 +2,19 @@
 interface Props {
   id?: string;
   class?: string;
+  background?: "base-100" | "base-200" | "transparent";
 }
 
-const { id, class: className } = Astro.props;
+const { id, class: className, background = "transparent" } = Astro.props;
+
+const backgroundClass = {
+  "base-100": "bg-base-100",
+  "base-200": "bg-base-200",
+  transparent: "",
+}[background];
 ---
 
-<section {id} class:list={["py-16 md:py-24", className]}>
+<section {id} class:list={["py-16 md:py-24", backgroundClass, className]}>
   <div class="mx-auto max-w-[1120px] px-4" data-reveal>
     <slot />
   </div>

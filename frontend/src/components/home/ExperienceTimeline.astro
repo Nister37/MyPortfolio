@@ -3,42 +3,23 @@ import Section from "../layout/Section.astro";
 import { homeCopy } from "../../data/site-copy";
 import { getTimelineEntries } from "../../data/timeline";
 import type { TimelineEntryType } from "../../data/timeline";
-import { base } from "../../lib/url";
 import "../../styles/components/experience-timeline.css";
 
 interface Props {
   lang?: "en" | "pl";
 }
+
 const { lang = "en" } = Astro.props;
 const copy = homeCopy[lang].experience;
-
-const blogBase = lang === "pl" ? `${base}pl/blog/` : `${base}blog/`;
-const entries = getTimelineEntries(lang);
+const entries = getTimelineEntries(lang).filter(
+  (entry) => entry.type === "Education" || entry.type === "Work",
+);
 
 const typeBadgeClass: Record<TimelineEntryType, string> = {
   Education: "badge-accent",
   Project: "badge-primary",
   Work: "badge-secondary",
 };
-
-// Two lifelines: education + professional experience on the left, projects on the right.
-const educationEntries = entries.filter(
-  (entry) => entry.type === "Education" || entry.type === "Work",
-);
-const experienceEntries = entries.filter((entry) => entry.type === "Project");
-
-const columns = [
-  {
-    heading: copy.educationHeading,
-    entries: educationEntries,
-    revealSide: "left",
-  },
-  {
-    heading: copy.projectsHeading,
-    entries: experienceEntries,
-    revealSide: "right",
-  },
-];
 
 function typeLabel(type: TimelineEntryType) {
   if (type === "Education") return copy.labels.education;
@@ -47,102 +28,62 @@ function typeLabel(type: TimelineEntryType) {
 }
 ---
 
-<Section id="experience">
-  <div data-reveal>
+<Section id="experience" background="base-200">
+  <div>
     <h2 class="text-3xl font-bold tracking-tight">{copy.heading}</h2>
     <p class="text-base-content/60 mt-2">{copy.subheading}</p>
   </div>
 
-  <!-- Stacked on mobile (with the per-column subheading above each list);
-       side-by-side on desktop, each column its own continuous lifeline. -->
-  <div class="mt-10 grid gap-10 md:grid-cols-2 md:gap-8">
+  <ol
+    class="timeline-list border-base-300 mt-10 max-w-3xl space-y-4 border-l-2 pl-8"
+  >
     {
-      columns.map((column) => (
-        <div>
-          <h3 class="text-base-content/60 mb-5 text-sm font-semibold tracking-wider uppercase">
-            {column.heading}
-          </h3>
-          <ol class="timeline-list border-base-300 space-y-4 border-l-2 pl-8">
-            {column.entries.map((entry) => {
-              const href = entry.blogSlug
-                ? `${blogBase}${entry.blogSlug}`
-                : entry.githubUrl;
-              const isExternal = !entry.blogSlug && !!entry.githubUrl;
-              return (
-                <li
-                  class="timeline-item relative"
-                  data-reveal
-                  data-reveal-side={column.revealSide}
+      entries.map((entry) => (
+        <li class="timeline-item relative" data-reveal>
+          <span
+            class="timeline-dot border-primary bg-base-200 absolute top-5 -left-10 block h-3.5 w-3.5 rounded-full border-2 transition-all"
+            aria-hidden="true"
+          />
+          <details class="timeline-card group border-base-300 bg-base-100/55 rounded-lg border transition-all">
+            <summary class="focus-visible:ring-primary cursor-pointer list-none rounded-lg p-5 focus:outline-none focus-visible:ring-2">
+              <div class="mb-1 flex flex-wrap items-center gap-2">
+                <span class="text-base-content/50 text-xs">{entry.period}</span>
+                <span
+                  class:list={["badge badge-sm", typeBadgeClass[entry.type]]}
                 >
-                  <span
-                    class="timeline-dot border-primary bg-base-100 absolute top-5 -left-10 block h-3.5 w-3.5 rounded-full border-2 transition-all"
+                  {typeLabel(entry.type)}
+                </span>
+                <span class="text-primary/80 ml-auto inline-flex items-center gap-1 text-xs">
+                  {copy.labels.moreDetails}
+                  <svg
+                    class="timeline-card__chevron h-3.5 w-3.5 transition-transform"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
                     aria-hidden="true"
-                  />
-                  <details class="timeline-card group border-base-300 bg-base-200/40 rounded-lg border transition-all">
-                    <summary class="focus-visible:ring-primary cursor-pointer list-none rounded-lg p-5 focus:outline-none focus-visible:ring-2">
-                      <div class="mb-1 flex flex-wrap items-center gap-2">
-                        <span class="text-base-content/50 text-xs">
-                          {entry.period}
-                        </span>
-                        <span
-                          class:list={[
-                            "badge badge-sm",
-                            typeBadgeClass[entry.type],
-                          ]}
-                        >
-                          {typeLabel(entry.type)}
-                        </span>
-                        <span class="text-primary/80 ml-auto inline-flex items-center gap-1 text-xs">
-                          {copy.labels.moreDetails}
-                          <svg
-                            class="timeline-card__chevron h-3.5 w-3.5 transition-transform"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            aria-hidden="true"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="m6 9 6 6 6-6"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h4 class="font-semibold">{entry.title}</h4>
-                      <p class="text-base-content/60 text-sm">
-                        {entry.organization}
-                      </p>
-                    </summary>
-                    {(entry.description || href) && (
-                      <div class="border-base-300 border-t px-5 pt-4 pb-5">
-                        {entry.description && (
-                          <p class="text-base-content/70 text-sm">
-                            {entry.description}
-                          </p>
-                        )}
-                        {href && (
-                          <a
-                            href={href}
-                            target={isExternal ? "_blank" : undefined}
-                            rel={isExternal ? "noopener noreferrer" : undefined}
-                            class="btn btn-ghost btn-sm mt-3"
-                          >
-                            {entry.blogSlug
-                              ? copy.labels.readArticle
-                              : copy.labels.github}
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </details>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m6 9 6 6 6-6"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <h3 class="font-semibold">{entry.title}</h3>
+              <p class="text-base-content/60 text-sm">{entry.organization}</p>
+            </summary>
+            {entry.description && (
+              <div class="border-base-300 border-t px-5 pt-4 pb-5">
+                <p class="text-base-content/70 text-sm leading-relaxed">
+                  {entry.description}
+                </p>
+              </div>
+            )}
+          </details>
+        </li>
       ))
     }
-  </div>
+  </ol>
 </Section>

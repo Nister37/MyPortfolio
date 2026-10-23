@@ -1,5 +1,10 @@
 import type { Core } from "@strapi/strapi";
 
+// CORS origins are read from the environment so no production URLs are hardcoded
+// in source. Set CORS_ORIGIN_FRONTEND and CORS_ORIGIN_CMS in production.
+const frontendOrigin = process.env.CORS_ORIGIN_FRONTEND ?? "http://localhost:4321";
+const cmsOrigin = process.env.CORS_ORIGIN_CMS ?? "http://localhost:1337";
+
 const config: Core.Config.Middlewares = [
   "strapi::logger",
   "strapi::errors",
@@ -23,11 +28,7 @@ const config: Core.Config.Middlewares = [
     config: {
       // Locked to the actual frontend and CMS origins.
       // DO NOT use '*' — that allows unauthenticated mutations from any origin.
-      origin: [
-        "https://pawelryfiak.is-a.dev",
-        "https://nister37.github.io",
-        "https://myportfolio-production-38ce.up.railway.app",
-      ],
+      origin: [frontendOrigin, cmsOrigin],
       methods: ["GET", "HEAD", "OPTIONS"],
       headers: ["Content-Type", "Authorization", "Origin", "Accept"],
       keepHeaderOnError: true,

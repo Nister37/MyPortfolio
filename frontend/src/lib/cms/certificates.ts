@@ -96,7 +96,8 @@ export async function getCertificates(): Promise<Certificate[]> {
   try {
     const result = await fetchFromStrapi<StrapiListResponse>({
       path: "certificates",
-      query: "?populate=pdf&sort[0]=order:asc&sort[1]=issuedAt:desc",
+      query:
+        "?populate=pdf&sort[0]=order:asc&sort[1]=issuedAt:desc&status=published",
     });
 
     return result.data.flatMap((item) => {

@@ -1,6 +1,6 @@
 ---
-import { getProjects } from "../../lib/cms/projects";
-import ProjectCard from "../projects/ProjectCard.astro";
+import { getFeaturedProjects } from "../../lib/cms/projects";
+import ProjectStrip from "../projects/ProjectStrip.svelte";
 import Section from "../layout/Section.astro";
 import { homeCopy } from "../../data/site-copy";
 import { base } from "../../lib/url";
@@ -8,37 +8,25 @@ import { base } from "../../lib/url";
 interface Props {
   lang?: "en" | "pl";
 }
+
 const { lang = "en" } = Astro.props;
 const copy = homeCopy[lang].featuredProjects;
-
-const featuredProjects = (await getProjects()).filter((p) => p.featured);
-const allProjectsHref =
-  lang === "pl" ? `${base}pl/projects` : `${base}projects`;
+const recentProjects = (await getFeaturedProjects()).slice(0, 3);
+const projectBase = lang === "pl" ? base + "pl/projects/" : base + "projects/";
 ---
 
-<Section id="projects">
-  <div class="mb-10 flex items-end justify-between" data-reveal>
+<Section id="projects" background="base-200">
+  <div class="mb-6">
     <div>
-      <h2 class="text-3xl font-bold tracking-tight">
-        {copy.heading}
-      </h2>
-      <p class="text-base-content/60 mt-2">
-        {copy.subheading}
-      </p>
+      <h2 class="text-3xl font-bold tracking-tight">{copy.heading}</h2>
+      <p class="text-base-content/60 mt-2 max-w-2xl">{copy.subheading}</p>
     </div>
-    <a
-      href={allProjectsHref}
-      class="btn btn-outline btn-sm hidden md:inline-flex"
-    >
-      {copy.allProjects}
-    </a>
   </div>
-  <div class="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {featuredProjects.map((project) => <ProjectCard project={project} />)}
-  </div>
-  <div class="mt-8 md:hidden">
-    <a href={allProjectsHref} class="btn btn-outline w-full">
-      {copy.allProjects}
-    </a>
-  </div>
+
+  <ProjectStrip
+    client:load
+    projects={recentProjects}
+    projectBase={projectBase}
+    lang={lang}
+  />
 </Section>

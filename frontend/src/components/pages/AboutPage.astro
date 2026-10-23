@@ -2,8 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../layout/Section.astro";
 import ContactCta from "../home/ContactCta.astro";
+import IconHeading from "../ui/IconHeading.astro";
 import { pageCopy } from "../../data/site-copy";
 import type { Lang } from "../../data/site-copy";
+import { base } from "../../lib/url";
 
 interface Props {
   lang?: Lang;
@@ -21,18 +23,47 @@ const copy = pageCopy[lang].about;
 >
   <main id="main-content">
     <Section>
-      <div class="max-w-3xl" data-reveal>
-        <h1 class="text-4xl font-bold tracking-tight">{copy.heading}</h1>
+      <div
+        class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16"
+      >
+        <div class="max-w-3xl" data-reveal>
+          <IconHeading
+            icon="user-round"
+            class="text-4xl font-bold tracking-tight"
+          >
+            {copy.heading}
+          </IconHeading>
 
-        <p class="text-base-content/80 mt-6 text-lg leading-relaxed">
-          {copy.intro}
-        </p>
+          <p class="text-base-content/80 mt-6 text-lg leading-relaxed">
+            {copy.intro}
+          </p>
 
-        {
-          copy.paragraphs.map((paragraph) => (
-            <p class="text-base-content/70 mt-4 leading-relaxed">{paragraph}</p>
-          ))
-        }
+          {
+            copy.paragraphs.map((paragraph) => (
+              <p class="text-base-content/70 mt-4 leading-relaxed">
+                {paragraph}
+              </p>
+            ))
+          }
+        </div>
+
+        <figure
+          class="border-base-300 bg-base-200 relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border shadow-2xl shadow-black/15 lg:sticky lg:top-24"
+          data-reveal
+        >
+          <img
+            src={`${base}images/pawel-ryfiak-about.webp`}
+            alt={copy.photoAlt}
+            width="1200"
+            height="1200"
+            class="aspect-square h-auto w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+          <span
+            class="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-white/10 ring-inset"
+            aria-hidden="true"></span>
+        </figure>
       </div>
     </Section>
 

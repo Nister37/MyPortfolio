@@ -2,7 +2,7 @@ export type SkillLevel = 1 | 2 | 3 | 4 | 5;
 
 export type Skill = {
   name: string;
-  months: number;
+  level: SkillLevel;
 };
 
 export type SkillCategory = {
@@ -10,98 +10,86 @@ export type SkillCategory = {
   skills: Skill[];
 };
 
-export function getSkillLevel(months: number): SkillLevel {
-  if (months < 6) return 1;
-  if (months < 12) return 2;
-  if (months < 24) return 3;
-  if (months < 36) return 4;
-  return 5;
-}
+// Keep quantitative time claims out of the public UI. Levels reflect relative
+// confidence and demonstrated project use, from familiarity (1) to strongest
+// working skills (5).
 
-// Static skill data — updated manually, not sourced from Strapi for the MVP.
-// Durations are stored in months and rendered against the UI legend.
 export const skillCategories: SkillCategory[] = [
   {
     category: "Backend",
     skills: [
-      { name: "Java", months: 24 },
-      { name: "C++", months: 24 },
-      { name: "C#", months: 24 },
-      { name: "JDBC", months: 18 },
-      { name: "Maven", months: 12 },
-      { name: "Spring Boot", months: 9 },
-      { name: "REST API", months: 9 },
-      { name: "JPA", months: 9 },
-      { name: "Gradle", months: 9 },
-      { name: "Strapi", months: 1 },
-      { name: "NestJS", months: 1 },
-      { name: "Django", months: 1 },
-      { name: "Postman", months: 1 },
-      { name: "OpenAPI", months: 1 },
+      { name: "Java", level: 5 },
+      { name: "Spring Boot", level: 5 },
+      { name: "REST API", level: 5 },
+      { name: "JPA", level: 4 },
+      { name: "JDBC", level: 3 },
+      { name: "Maven", level: 4 },
+      { name: "Gradle", level: 4 },
+      { name: "OpenAPI", level: 3 },
+      { name: "C#", level: 2 },
+      { name: "C++", level: 2 },
+      { name: "NestJS", level: 2 },
+      { name: "Django", level: 1 },
+      { name: "Strapi", level: 2 },
     ],
   },
   {
     category: "DevOps",
     skills: [
-      { name: "Linux", months: 36 },
-      { name: "Google Cloud", months: 6 },
-      { name: "Docker", months: 5 },
-      { name: "GitLab/GitHub CI", months: 3 },
-      { name: "Proxmox", months: 3 },
-      { name: "Kubernetes", months: 1 },
-      { name: "Caddy", months: 1 },
-      { name: "Railway", months: 1 },
-      { name: "Jenkins", months: 1 },
+      { name: "Linux", level: 5 },
+      { name: "Docker", level: 5 },
+      { name: "GitLab/GitHub CI", level: 5 },
+      { name: "Google Cloud", level: 4 },
+      { name: "Proxmox", level: 4 },
+      { name: "Caddy", level: 3 },
+      { name: "Railway", level: 4 },
+      { name: "Kubernetes", level: 2 },
+      { name: "Jenkins", level: 3 },
     ],
   },
   {
     category: "AI & Automation",
     skills: [
-      { name: "Python", months: 48 },
-      { name: "Prompt engineering", months: 36 },
-      { name: "Gemini API", months: 24 },
+      { name: "Python", level: 5 },
+      { name: "Automation scripting", level: 4 },
+      { name: "Gemini API", level: 4 },
+      { name: "Prompt engineering", level: 4 },
     ],
   },
   {
     category: "Frontend",
     skills: [
-      { name: "HTML", months: 48 },
-      { name: "CSS", months: 48 },
-      { name: "JavaScript", months: 36 },
-      { name: "Bootstrap", months: 12 },
-      { name: "jQuery", months: 12 },
-      { name: "TypeScript", months: 6 },
-      { name: "Vue", months: 6 },
-      { name: "React", months: 6 },
-      { name: "Astro", months: 1 },
-      { name: "Svelte", months: 1 },
-      { name: "Angular", months: 1 },
-      { name: "NX", months: 1 },
-      { name: "Cypress", months: 1 },
-      { name: "npm", months: 1 },
-      { name: "ESLint", months: 1 },
-      { name: "dprint", months: 1 },
-      { name: "Prettier", months: 1 },
+      { name: "HTML", level: 4 },
+      { name: "CSS", level: 4 },
+      { name: "JavaScript", level: 4 },
+      { name: "TypeScript", level: 4 },
+      { name: "Bootstrap", level: 3 },
+      { name: "Astro", level: 3 },
+      { name: "Svelte", level: 3 },
+      { name: "React", level: 2 },
+      { name: "Vue", level: 2 },
+      { name: "Angular", level: 1 },
+      { name: "Cypress", level: 2 },
     ],
   },
   {
     category: "Database",
     skills: [
-      { name: "SQL", months: 48 },
-      { name: "PostgreSQL", months: 24 },
-      { name: "MySQL", months: 24 },
-      { name: "H2", months: 9 },
-      { name: "MongoDB", months: 1 },
+      { name: "SQL", level: 5 },
+      { name: "PostgreSQL", level: 5 },
+      { name: "MySQL", level: 4 },
+      { name: "H2", level: 3 },
+      { name: "MongoDB", level: 2 },
     ],
   },
   {
     category: "Business",
     skills: [
-      { name: "BPMN", months: 1 },
-      { name: "TRIZ", months: 1 },
-      { name: "SIPOC", months: 1 },
-      { name: "5 Whys", months: 1 },
-      { name: "RACI", months: 1 },
+      { name: "BPMN", level: 3 },
+      { name: "SIPOC", level: 2 },
+      { name: "5 Whys", level: 3 },
+      { name: "RACI", level: 2 },
+      { name: "TRIZ", level: 1 },
     ],
   },
 ];

@@ -54,6 +54,8 @@ jobs:
           # Build-time only — never exposed to the browser.
           STRAPI_URL: ${{ secrets.STRAPI_URL }}
           STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
+          # Optional public Umami site identifier. The site builds without it.
+          PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.PUBLIC_UMAMI_WEBSITE_ID }}
         with:
           path: frontend
           package-manager: bun@latest
@@ -85,9 +87,9 @@ jobs:
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
         with:
           urls: |
-            https://nister37.github.io/MyPortfolio/
-            https://nister37.github.io/MyPortfolio/projects/
-            https://nister37.github.io/MyPortfolio/blog/
+            https://pawelryfiak.is-a.dev/
+            https://pawelryfiak.is-a.dev/projects/
+            https://pawelryfiak.is-a.dev/blog/
           # Thresholds: build fails if any score drops below these.
           budgetPath: .github/lighthouse-budget.json
           uploadArtifacts: true
