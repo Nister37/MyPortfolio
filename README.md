@@ -79,7 +79,7 @@ flowchart TD
 ## Tech stack
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| Frontend framework | [Astro 6](https://astro.build) | Static site generation, island architecture |
+| Frontend framework | [Astro 7](https://astro.build) | Static site generation, island architecture |
 | Interactive islands | [Svelte 5](https://svelte.dev) | Project filter, particles background, custom cursor, theme toggle |
 | Styling | [Tailwind CSS v4](https://tailwindcss.com) + [daisyUI 5](https://daisyui.com) + Sass | Utility-first layout, component classes, design tokens |
 | Icons | [@iconify-json/devicon](https://icon-sets.iconify.design/devicon/) + [lucide-svelte](https://lucide.dev) | Tech stack icons, UI icons |
@@ -178,14 +178,11 @@ cp frontend/.env.example frontend/.env
 |----------|----------|---------|-------------|
 | `STRAPI_URL` | No | `http://localhost:1337` | Base URL of your Strapi instance |
 | `STRAPI_API_TOKEN` | No | (none) | Read-only API token from Strapi admin |
-| `PUBLIC_UMAMI_WEBSITE_ID` | No | (none) | Public Umami Cloud website ID; production analytics stays disabled when omitted |
 ```env
 STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=
-PUBLIC_UMAMI_WEBSITE_ID=
 ```
 The Strapi variables are build-time only and never exposed to the browser.
-`PUBLIC_UMAMI_WEBSITE_ID` is intentionally browser-visible and is not a secret.
 ### CMS — `cms/.env`
 | Variable | Required | Description |
 |----------|----------|-------------|
@@ -271,15 +268,9 @@ cd frontend && bun run dev
 Edit content at `http://localhost:1337/admin`, publish, then refresh the Astro dev server.
 ---
 ## Privacy-conscious analytics
-The shared Astro layout can load Umami Cloud in production. Analytics is optional and
-the standard Umami tracker does not set cookies:
-1. Create the website in Umami Cloud with the domain `pawelryfiak.is-a.dev`.
-2. Copy its public website ID.
-3. In GitHub, open **Settings → Secrets and variables → Actions → Variables**.
-4. Add `PUBLIC_UMAMI_WEBSITE_ID` with that ID and rebuild the frontend.
-
-The script is not rendered during local development or when the variable is empty. Its
-`data-domains` restriction accepts events only on `pawelryfiak.is-a.dev`.
+The shared Astro layout loads the self-hosted Umami tracker from Railway. The standard
+Umami tracker does not set cookies. Its public website ID is embedded in the tracking
+script tag and does not grant access to the analytics dashboard.
 
 Umami records normal page views for EN and PL routes. The portfolio also emits these
 named activation events:
@@ -295,9 +286,9 @@ named activation events:
 
 No names, email addresses, form contents, search terms, or other visitor-provided
 values are added to custom event payloads. The footer provides a visible analytics
-notice. Before enabling Umami Cloud, document the controller, purpose, legal basis,
-data categories, retention, processor and international-transfer settings in the
-site's privacy information, and review the Umami data-processing agreement.
+notice. Document the controller, purpose, legal basis, data categories, retention,
+processor and international-transfer settings in the site's privacy information, and
+review the hosting and data-processing configuration.
 ---
 ## CI/CD pipeline
 ```mermaid

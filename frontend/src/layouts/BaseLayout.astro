@@ -45,8 +45,6 @@ const plUrl = new URL(
   getRelativeLocaleUrl("pl", localePaths?.pl ?? path),
   Astro.site ?? siteMetadata.url,
 );
-const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID?.trim();
-const analyticsEnabled = import.meta.env.PROD && Boolean(umamiWebsiteId);
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -104,17 +102,11 @@ const websiteSchema = {
       type="application/ld+json"
       set:html={JSON.stringify(websiteSchema)}
     />
-    {
-      analyticsEnabled && (
-        <script
-          is:inline
-          defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id={umamiWebsiteId}
-          data-domains="pawelryfiak.is-a.dev"
-        />
-      )
-    }
+    <script
+      is:inline
+      defer
+      src="https://umami-production-59f2.up.railway.app/script.js"
+      data-website-id="65c6e9d8-5a34-48ea-b139-682c4fc8c6ca"></script>
 
     <title>{title}</title>
     <!-- Redirect legacy GitHub Pages project URLs to the custom domain.
