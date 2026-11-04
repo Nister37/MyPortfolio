@@ -62,7 +62,7 @@ function isActive(href: string) {
     isHomePage && "is-home",
   ]}
 >
-  <div class="mx-auto flex w-full flex-col items-center">
+  <div class="relative mx-auto flex w-full flex-col items-center">
     <!-- Main Island Pill -->
     <div
       class="island-pill pointer-events-auto flex w-[calc(100%-1.5rem)] max-w-md items-center justify-between gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 md:w-auto md:max-w-fit md:justify-center"
@@ -292,7 +292,7 @@ function isActive(href: string) {
     <!-- Mobile Floating Island Menu (Unrolls beneath the pill with matching width) -->
     <div
       id="island-mobile-menu"
-      class="island-mobile-dropdown pointer-events-auto mt-2 hidden w-[calc(100%-1.5rem)] max-w-md flex-col gap-1 md:hidden"
+      class="island-mobile-dropdown pointer-events-auto absolute top-[calc(100%+0.5rem)] right-0 left-0 mx-auto hidden w-[calc(100%-1.5rem)] max-w-md flex-col gap-1 md:hidden"
       aria-label="Mobile navigation"
     >
       {
@@ -501,6 +501,14 @@ function isActive(href: string) {
 
   /* Mobile Dropdown Menu */
   .island-mobile-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 50;
+    pointer-events: auto;
     border-radius: 1.25rem;
     background-color: var(--island-glass-bg);
     border: 1px solid var(--island-glass-border);
