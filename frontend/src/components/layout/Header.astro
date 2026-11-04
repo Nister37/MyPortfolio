@@ -4,151 +4,578 @@ import LanguageSwitcher from "../ui/LanguageSwitcher.astro";
 import { headerCopy } from "../../data/site-copy";
 import { base } from "../../lib/url";
 import "../../styles/components/cv-dialog.css";
+
 interface Props {
   lang?: "en" | "pl";
   path?: string;
   localePaths?: Partial<Record<"en" | "pl", string>>;
 }
+
 const { lang = "en", path = "/", localePaths } = Astro.props;
 const copy = headerCopy[lang];
+
+const isHomePage = path === "/" || path === "/pl" || path === "/pl/";
+
 const navLinks = [
-  { href: lang === "pl" ? `${base}pl` : base, label: copy.nav.home },
+  {
+    href: lang === "pl" ? `${base}pl` : base,
+    label: copy.nav.home,
+    icon: "home",
+  },
   {
     href: lang === "pl" ? `${base}pl/projects` : `${base}projects`,
     label: copy.nav.projects,
+    icon: "projects",
   },
   {
     href: lang === "pl" ? `${base}pl/certificates` : `${base}certificates`,
     label: copy.nav.certificates,
+    icon: "certificates",
   },
   {
     href: lang === "pl" ? `${base}pl/blog` : `${base}blog`,
     label: copy.nav.blog,
+    icon: "blog",
   },
   {
     href: lang === "pl" ? `${base}pl/about` : `${base}about`,
     label: copy.nav.about,
+    icon: "about",
   },
 ];
+
 const currentPath = Astro.url.pathname;
 const normalizedPath =
   currentPath.endsWith("/") && currentPath !== base
     ? currentPath.slice(0, -1)
     : currentPath;
+
 function isActive(href: string) {
   return normalizedPath === href || normalizedPath === href.replace(/\/$/, "");
 }
 ---
 
+<!-- Island Navbar (Floating Pill Navigation) -->
 <header
-  class="border-base-300 bg-base-100/90 sticky top-0 z-50 border-b backdrop-blur-sm"
+  class:list={[
+    "island-header pointer-events-none sticky top-2 z-40 w-full px-2 sm:top-4 sm:px-4",
+    isHomePage && "is-home",
+  ]}
 >
-  <div
-    class="mx-auto grid max-w-[1120px] grid-cols-[1fr_auto_1fr] items-center px-4 py-3 md:gap-4"
-  >
-    <!-- Left column kept empty on desktop to balance the centered nav. -->
-    <div class="hidden md:block" aria-hidden="true"></div>
+  <div class="mx-auto flex w-full flex-col items-center">
+    <!-- Main Island Pill -->
+    <div
+      class="island-pill pointer-events-auto flex w-[calc(100%-1.5rem)] max-w-md items-center justify-between gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 md:w-auto md:max-w-fit md:justify-center"
+    >
+      <!-- Mobile: CV Button (Left aligned with generous space) -->
+      <div class="flex shrink-0 items-center md:hidden">
+        <button
+          type="button"
+          class="island-cv-btn btn btn-primary btn-xs gap-1.5 rounded-full px-3 text-xs font-semibold shadow-sm transition-all duration-200 active:scale-[0.97]"
+          data-cv-trigger
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>CV</span>
+        </button>
+      </div>
 
-    <!-- Desktop navigation: centered between left spacer and right utilities. -->
-    <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+      <!-- Desktop Navigation Links -->
+      <nav
+        class="hidden shrink-0 items-center gap-0.5 md:flex lg:gap-1"
+        aria-label="Main navigation"
+      >
+        {
+          navLinks.map(({ href, label, icon }) => (
+            <a
+              href={href}
+              class:list={[
+                "island-link flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 lg:gap-1.5 lg:px-3 lg:py-1.5 lg:text-sm",
+                isActive(href) ? "is-active" : "",
+              ]}
+              aria-current={isActive(href) ? "page" : undefined}
+            >
+              {icon === "home" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              )}
+              {icon === "projects" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+              )}
+              {icon === "certificates" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="8" r="6" />
+                  <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                </svg>
+              )}
+              {icon === "blog" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                  <path d="M6 6h10" />
+                  <path d="M6 10h10" />
+                </svg>
+              )}
+              {icon === "about" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="7" r="4" />
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                </svg>
+              )}
+              <span>{label}</span>
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Desktop Divider -->
+      <div
+        class="bg-base-content/15 mx-0.5 hidden h-4 w-px shrink-0 md:block"
+        aria-hidden="true"
+      >
+      </div>
+
+      <!-- Right Side Utilities: Desktop CV, ThemeToggle, LanguageSwitcher, Mobile Toggle -->
+      <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <!-- Desktop CV Button -->
+        <button
+          type="button"
+          class="island-cv-btn btn btn-primary btn-xs sm:btn-sm hidden gap-1.5 rounded-full px-3 text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] md:inline-flex"
+          data-cv-trigger
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span class="hidden lg:inline">{copy.cvButton}</span>
+          <span class="lg:hidden">CV</span>
+        </button>
+
+        <ThemeToggle
+          class="btn btn-ghost btn-circle btn-xs sm:btn-sm text-base-content/75 hover:text-base-content h-7 min-h-0 w-7 rounded-full sm:h-8 sm:w-8"
+        />
+
+        <LanguageSwitcher
+          currentLang={lang}
+          path={path}
+          localePaths={localePaths}
+        />
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          type="button"
+          id="island-mobile-toggle"
+          class="btn btn-ghost btn-circle btn-xs sm:btn-sm text-base-content/85 ml-0.5 h-8 min-h-0 w-8 rounded-full md:hidden"
+          aria-label={copy.openNavigation}
+          aria-expanded="false"
+          aria-controls="island-mobile-menu"
+        >
+          <svg
+            id="island-toggle-open-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            id="island-toggle-close-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            class="hidden h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Floating Island Menu (Unrolls beneath the pill with matching width) -->
+    <div
+      id="island-mobile-menu"
+      class="island-mobile-dropdown pointer-events-auto mt-2 hidden w-[calc(100%-1.5rem)] max-w-md flex-col gap-1 md:hidden"
+      aria-label="Mobile navigation"
+    >
       {
-        navLinks.map(({ href, label }) => (
+        navLinks.map(({ href, label, icon }, index) => (
           <a
             href={href}
+            style={`--item-index: ${index};`}
             class:list={[
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              "island-mobile-item flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200",
               isActive(href)
-                ? "bg-base-200 text-primary"
-                : "text-base-content/70 hover:bg-base-200 hover:text-base-content",
+                ? "bg-primary/15 text-primary border-primary/20 border font-semibold shadow-[0_0_12px_rgba(59,130,246,0.2)]"
+                : "text-base-content/80 hover:bg-base-content/8 hover:text-base-content",
             ]}
             aria-current={isActive(href) ? "page" : undefined}
           >
-            {label}
+            {icon === "home" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            )}
+            {icon === "projects" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+            )}
+            {icon === "certificates" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="6" />
+                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+              </svg>
+            )}
+            {icon === "blog" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                <path d="M6 6h10" />
+                <path d="M6 10h10" />
+              </svg>
+            )}
+            {icon === "about" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="7" r="4" />
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              </svg>
+            )}
+            <span>{label}</span>
           </a>
         ))
       }
-    </nav>
-
-    <!-- Desktop utilities: CV, theme, language — kept on the right. -->
-    <div class="hidden items-center justify-end gap-2 md:flex">
-      <button type="button" class="btn btn-primary btn-sm" data-cv-trigger>
-        {copy.cvButton}
-      </button>
-      <ThemeToggle />
-      <LanguageSwitcher
-        currentLang={lang}
-        path={path}
-        localePaths={localePaths}
-      />
-    </div>
-
-    <!-- Mobile controls + hamburger span the full row on small screens. -->
-    <div class="col-span-3 flex items-center justify-end gap-2 md:hidden">
-      <!-- Larger class keeps the touch target ≥ 44 px on mobile. -->
-      <ThemeToggle class="btn btn-ghost" />
-      <LanguageSwitcher
-        currentLang={lang}
-        path={path}
-        localePaths={localePaths}
-      />
-      <div class="drawer drawer-end">
-        <input id="mobile-nav" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content">
-          <label
-            for="mobile-nav"
-            class="btn btn-ghost"
-            aria-label={copy.openNavigation}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </label>
-        </div>
-        <div class="drawer-side">
-          <label
-            for="mobile-nav"
-            aria-label={copy.closeNavigation}
-            class="drawer-overlay"></label>
-          <nav
-            class="bg-base-200 flex min-h-full w-64 flex-col gap-1 p-6 pt-16"
-            aria-label="Mobile navigation"
-          >
-            {
-              navLinks.map(({ href, label }) => (
-                <a
-                  href={href}
-                  class:list={[
-                    "rounded-md px-4 py-3 text-base font-medium transition-colors",
-                    isActive(href)
-                      ? "bg-base-300 text-primary"
-                      : "text-base-content/70 hover:bg-base-300 hover:text-base-content",
-                  ]}
-                  aria-current={isActive(href) ? "page" : undefined}
-                >
-                  {label}
-                </a>
-              ))
-            }
-            <button type="button" class="btn btn-primary mt-4" data-cv-trigger>
-              {copy.cvButton}
-            </button>
-          </nav>
-        </div>
-      </div>
     </div>
   </div>
 </header>
+
+<style>
+  .island-header {
+    pointer-events: none;
+    transition:
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.25s ease,
+      margin-bottom 0.3s ease;
+    will-change: transform;
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .island-header.is-home {
+    margin-bottom: -4.5rem;
+  }
+
+  /* Desktop smart slide out: only applies when viewport >= 768px */
+  @media (min-width: 768px) {
+    .island-header.is-hidden {
+      transform: translateY(calc(-100% - 2.5rem));
+      opacity: 0;
+      pointer-events: none !important;
+    }
+  }
+
+  /* Glass Theme Variables */
+  :root,
+  :root[data-theme="portfolio-dark"] {
+    --island-glass-bg: rgba(15, 23, 42, 0.85);
+    --island-glass-border: rgba(255, 255, 255, 0.12);
+    --island-glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45);
+    --island-glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  }
+
+  :root[data-theme="portfolio-light"] {
+    --island-glass-bg: rgba(255, 255, 255, 0.88);
+    --island-glass-border: rgba(0, 0, 0, 0.08);
+    --island-glass-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.1);
+    --island-glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .island-pill {
+    pointer-events: auto;
+    border-radius: 9999px;
+    background-color: var(--island-glass-bg);
+    border: 1px solid var(--island-glass-border);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: var(--island-glass-shadow), var(--island-glass-highlight);
+    transition:
+      box-shadow 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .island-header.is-scrolled .island-pill {
+    box-shadow:
+      0 18px 46px -10px rgba(0, 0, 0, 0.5),
+      var(--island-glass-highlight);
+  }
+
+  .island-link {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .island-link.is-active {
+    background-color: color-mix(
+      in srgb,
+      var(--color-primary, #3b82f6) 18%,
+      transparent
+    );
+    color: var(--color-primary, #3b82f6);
+    box-shadow: 0 0 16px -2px
+      color-mix(in srgb, var(--color-primary, #3b82f6) 38%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--color-primary, #3b82f6) 25%, transparent);
+    font-weight: 600;
+  }
+
+  .island-link:not(.is-active) {
+    color: color-mix(
+      in srgb,
+      var(--color-base-content, #e2e8f0) 70%,
+      transparent
+    );
+  }
+
+  .island-link:not(.is-active):hover {
+    color: var(--color-base-content, #e2e8f0);
+    background-color: color-mix(
+      in srgb,
+      var(--color-base-content, #e2e8f0) 8%,
+      transparent
+    );
+    transform: translateY(-1px);
+  }
+
+  /* Mobile Dropdown Menu */
+  .island-mobile-dropdown {
+    border-radius: 1.25rem;
+    background-color: var(--island-glass-bg);
+    border: 1px solid var(--island-glass-border);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: var(--island-glass-shadow), var(--island-glass-highlight);
+    padding: 0.5rem;
+    transform-origin: top center;
+  }
+
+  .island-mobile-dropdown.is-opening {
+    display: flex;
+    animation: island-dropdown-in 0.26s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .island-mobile-dropdown.is-closing {
+    display: flex;
+    animation: island-dropdown-out 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    pointer-events: none;
+  }
+
+  .island-mobile-dropdown.is-opening .island-mobile-item {
+    animation: island-item-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--item-index, 0) * 35ms);
+  }
+
+  @keyframes island-dropdown-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes island-dropdown-out {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+    }
+  }
+
+  @keyframes island-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .island-header {
+      transition: none;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+    .island-mobile-dropdown {
+      animation: none !important;
+    }
+    .island-mobile-dropdown.is-opening .island-mobile-item {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
 
 <!-- CV language picker: custom overlay (NOT native <dialog>) because <dialog>
      uses the browser top layer which always renders above the custom cursor
@@ -218,4 +645,121 @@ function isActive(href: string) {
 
 <script>
   import "../../scripts/cv-dialog";
+
+  const toggle = document.getElementById("island-mobile-toggle");
+  const menu = document.getElementById("island-mobile-menu");
+  const openIcon = document.getElementById("island-toggle-open-icon");
+  const closeIcon = document.getElementById("island-toggle-close-icon");
+  const header = document.querySelector(".island-header") as HTMLElement | null;
+
+  let isMenuOpen = false;
+  let isClosing = false;
+
+  function setOpen(isOpen: boolean) {
+    if (!menu || !toggle) return;
+    if (isClosing && isOpen) return;
+
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    isMenuOpen = isOpen;
+
+    if (isOpen) {
+      isClosing = false;
+      menu.classList.remove("hidden");
+      menu.classList.remove("is-closing");
+      menu.classList.add("flex");
+      menu.classList.add("is-opening");
+      openIcon?.classList.add("hidden");
+      closeIcon?.classList.remove("hidden");
+    } else {
+      if (menu.classList.contains("hidden")) return;
+      isClosing = true;
+      menu.classList.remove("is-opening");
+      menu.classList.add("is-closing");
+      openIcon?.classList.remove("hidden");
+      closeIcon?.classList.add("hidden");
+
+      const onClosed = () => {
+        menu.classList.remove("is-closing");
+        menu.classList.remove("flex");
+        menu.classList.add("hidden");
+        isClosing = false;
+      };
+
+      menu.addEventListener("animationend", onClosed, { once: true });
+      setTimeout(() => {
+        if (isClosing) onClosed();
+      }, 240);
+    }
+  }
+
+  if (toggle && menu) {
+    toggle.addEventListener("click", () => {
+      setOpen(!isMenuOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        isMenuOpen &&
+        !toggle.contains(e.target as Node) &&
+        !menu.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isMenuOpen) setOpen(false);
+    });
+
+    menu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setOpen(false));
+    });
+  }
+
+  // Smart slide in / slide out animation on scroll (active on desktop, reliable on mobile)
+  if (header) {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const SCROLL_THRESHOLD = 8;
+    const TOP_OFFSET = 45;
+
+    function onScroll() {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
+      const isMobile = window.innerWidth < 768;
+
+      if (currentScrollY <= TOP_OFFSET) {
+        header?.classList.remove("is-hidden");
+        header?.classList.remove("is-scrolled");
+      } else {
+        header?.classList.add("is-scrolled");
+
+        // On mobile, keep navbar accessible so menu is always usable anywhere on page!
+        if (!isMobile && !isMenuOpen) {
+          if (delta > SCROLL_THRESHOLD) {
+            header?.classList.add("is-hidden");
+          } else if (delta < -SCROLL_THRESHOLD) {
+            header?.classList.remove("is-hidden");
+          }
+        } else {
+          // On mobile or when menu is open, ensure navbar stays visible
+          header?.classList.remove("is-hidden");
+        }
+      }
+
+      lastScrollY = Math.max(0, currentScrollY);
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+  }
 </script>

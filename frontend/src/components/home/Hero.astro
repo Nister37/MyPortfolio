@@ -1,5 +1,5 @@
 ---
-import ParticlesBackground from "../ui/ParticlesBackground.svelte";
+import PaintFlowShaderBackground from "../ui/PaintFlowShaderBackground.svelte";
 import IconHeading from "../ui/IconHeading.astro";
 import { homeCopy, siteMetadata } from "../../data/site-copy";
 interface Props {
@@ -10,7 +10,7 @@ const c = homeCopy[lang].hero;
 ---
 
 <section class="hero-shell bg-base-100 relative overflow-hidden py-20 md:py-28">
-  <ParticlesBackground client:load />
+  <PaintFlowShaderBackground client:load />
   <div class="relative z-10 mx-auto max-w-[1120px] px-4">
     <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_23rem]">
       <div class="max-w-3xl">
@@ -40,13 +40,15 @@ const c = homeCopy[lang].hero;
         </p>
 
         <p
-          class="hero-availability text-secondary mt-5 inline-flex rounded-full px-3 py-1.5 text-sm font-medium"
+          class="hero-availability text-secondary mt-5 inline-flex text-sm font-medium"
         >
           {c.availability}
         </p>
 
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#contact" class="btn btn-primary">{c.contactMe}</a>
+          <a href="#contact" class="btn btn-primary mobile-touch-target"
+            >{c.contactMe}</a
+          >
         </div>
       </div>
 
@@ -380,26 +382,18 @@ const c = homeCopy[lang].hero;
   .hero-headline {
     min-height: 3.5rem;
     will-change: transform, opacity;
+    letter-spacing: -0.015em;
+    text-shadow: 0 1px 3px
+      color-mix(in srgb, var(--color-base-100) 80%, transparent);
   }
 
   .hero-availability {
-    position: relative;
-    isolation: isolate;
+    color: var(--color-secondary);
+    font-weight: 500;
   }
 
-  .hero-availability::before {
-    position: absolute;
-    z-index: -1;
-    inset: -0.4rem -2rem;
-    background: radial-gradient(
-      ellipse 82% 58% at center,
-      color-mix(in srgb, var(--color-secondary) 34%, transparent) 0%,
-      color-mix(in srgb, var(--color-secondary) 15%, transparent) 48%,
-      transparent 82%
-    );
-    filter: blur(0.5rem);
-    content: "";
-    animation: availability-pulse 2.8s ease-in-out infinite;
+  :global([data-theme="portfolio-light"]) .hero-availability {
+    color: #16a34a;
   }
 
   .hero-terminal__body {

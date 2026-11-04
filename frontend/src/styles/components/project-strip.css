@@ -151,6 +151,7 @@
 }
 
 .project-strip-card__fallback {
+  cursor: pointer;
   position: relative;
   display: flex;
   height: 100%;

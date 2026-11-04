@@ -17,10 +17,12 @@
   let x = 0;
   let y = 0;
   let hasPointer = false;
+  let isEmbedHovered = false;
 
   const INTERACTIVE =
-    "a, button, [role='button'], input, textarea, select, label, summary, details, .skill-card, .project-card, .timeline-card, .certificate-card";
-  const NATIVE_CURSOR = "select, option";
+    "a, button, [role='button'], input, textarea, select, label, summary, details, .skill-card, .project-card, .project-strip-card, .project-strip-card__fallback, .timeline-card, .certificate-card, .certificate-preview button, .certificate-preview a";
+  const NATIVE_CURSOR =
+    "select, option, iframe, embed, .certificate-preview__frame, .certificate-preview__viewport";
 
   // Lower factor = smoother trailing motion. Sub-stepping keeps it framerate-
   // independent enough on 60Hz and 120Hz displays without feeling laggy.
@@ -29,8 +31,9 @@
   function syncHoverState() {
     hoverSyncRaf = 0;
     if (!cursor) return;
-    if (!hasPointer) {
-      cursor.classList.remove("hover", "native");
+    if (!hasPointer || isEmbedHovered) {
+      cursor.classList.remove("hover");
+      if (isEmbedHovered) cursor.classList.add("native");
       return;
     }
 
@@ -67,13 +70,41 @@
   }
 
   onMount(() => {
-    const touch = window.matchMedia("(pointer: coarse)").matches;
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (touch || reduced) return;
+    const isTouchOnly =
+      window.matchMedia("(pointer: coarse)").matches &&
+      !window.matchMedia("(pointer: fine)").matches;
+    if (isTouchOnly) {
+      if (typeof window !== "undefined") {
+        window.__portfolioCursorReady = true;
+        window.dispatchEvent(new CustomEvent("portfolio-cursor-ready"));
+      }
+      return;
+    }
 
     let firstMove = true;
+
+    const isEmbedElement = (target: EventTarget | null): boolean => {
+      if (!(target instanceof Element)) return false;
+      return Boolean(
+        target.closest(
+          "iframe, embed, .certificate-preview__frame, .certificate-preview__viewport",
+        ),
+      );
+    };
+
+    const hideCursor = () => {
+      isEmbedHovered = true;
+      cursor?.classList.add("native");
+    };
+
+    const showCursor = () => {
+      isEmbedHovered = false;
+      cursor?.classList.remove("native");
+      if (hasPointer && cursor) {
+        cursor.style.opacity = "1";
+      }
+      queueHoverSync();
+    };
 
     const onMove = (e: PointerEvent) => {
       hasPointer = true;
@@ -83,9 +114,36 @@
         x = targetX;
         y = targetY;
         firstMove = false;
+        if (cursor) {
+          cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        }
+        document.documentElement.classList.add("has-custom-cursor");
       }
-      cursor.style.opacity = "1";
+
+      if (isEmbedElement(e.target)) {
+        hideCursor();
+      } else if (isEmbedHovered) {
+        showCursor();
+      } else {
+        cursor.style.opacity = "1";
+      }
       queueHoverSync();
+    };
+
+    const onPointerOver = (e: PointerEvent) => {
+      if (isEmbedElement(e.target)) {
+        hideCursor();
+      }
+    };
+
+    const onPointerOut = (e: PointerEvent) => {
+      if (
+        isEmbedHovered &&
+        e.relatedTarget instanceof Element &&
+        !isEmbedElement(e.relatedTarget)
+      ) {
+        showCursor();
+      }
     };
 
     const onViewportShift = () => {
@@ -100,11 +158,15 @@
       cursor.classList.remove("hover", "press", "native");
     };
     const onEnter = () => {
-      if (hasPointer) cursor.style.opacity = "1";
+      if (hasPointer && !isEmbedHovered) cursor.style.opacity = "1";
       queueHoverSync();
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerover", onPointerOver, { passive: true });
+    window.addEventListener("pointerout", onPointerOut, { passive: true });
+    window.addEventListener("portfolio-hide-cursor", hideCursor);
+    window.addEventListener("portfolio-show-cursor", showCursor);
     window.addEventListener("scroll", onViewportShift, { passive: true });
     window.addEventListener("resize", onViewportShift);
     window.addEventListener("pointerdown", onDown);
@@ -114,8 +176,18 @@
 
     rafId = requestAnimationFrame(tick);
 
+    if (typeof window !== "undefined") {
+      window.__portfolioCursorReady = true;
+      window.dispatchEvent(new CustomEvent("portfolio-cursor-ready"));
+    }
+
     cleanup = () => {
+      document.documentElement.classList.remove("has-custom-cursor");
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerover", onPointerOver);
+      window.removeEventListener("pointerout", onPointerOut);
+      window.removeEventListener("portfolio-hide-cursor", hideCursor);
+      window.removeEventListener("portfolio-show-cursor", showCursor);
       window.removeEventListener("scroll", onViewportShift);
       window.removeEventListener("resize", onViewportShift);
       window.removeEventListener("pointerdown", onDown);
@@ -157,7 +229,7 @@
     top: 0;
     left: 0;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 2147483647 !important;
     opacity: 0;
     will-change: transform, opacity;
     transition: opacity 0.2s ease;

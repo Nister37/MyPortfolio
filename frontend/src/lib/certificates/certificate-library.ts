@@ -29,7 +29,7 @@ const CERTIFICATE_LABELS = {
     openInNewTab: "Otwórz w nowej karcie",
     close: "Zamknij",
     credential: "Poświadczenie",
-    closeHint: "Naciśnij Esc lub kliknij tło, aby zamknąć podgląd.",
+    closeHint: "Ctrl + scroll, aby przybliżyć/oddalić",
     empty: "Certyfikaty i kursy pojawią się wkrótce.",
     visibleCount: "Widoczne",
     of: "z",
@@ -53,7 +53,7 @@ const CERTIFICATE_LABELS = {
     openInNewTab: "Open in new tab",
     close: "Close",
     credential: "Credential",
-    closeHint: "Press Esc or click outside to close the preview.",
+    closeHint: "Ctrl + scroll to zoom in/out",
     empty: "Certificates and courses are coming soon.",
     visibleCount: "Showing",
     of: "of",
@@ -111,7 +111,7 @@ export function getCertificateKindLabel(
 
 export function getCertificateViewerSrc(url: string) {
   if (url.includes("#")) return url;
-  return `${url}#toolbar=1&navpanes=0&view=FitH`;
+  return `${url}#toolbar=0&navpanes=0&view=Fit`;
 }
 
 export function createCertificateLibrary() {
@@ -199,6 +199,10 @@ export function createCertificateLibrary() {
 
   function closePreview() {
     if (!get(selectedCertificate) || get(isClosingPreview)) return;
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("portfolio-show-cursor"));
+    }
 
     isClosingPreview.set(true);
     const reducedMotion =

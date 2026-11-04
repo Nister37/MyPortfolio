@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import Code2 from "lucide-svelte/icons/code-2";
   import ExternalLink from "lucide-svelte/icons/external-link";
   import { getProjectStatus } from "../../lib/project-flags";
@@ -7,6 +8,23 @@
   export let project: Project;
   export let projectBase = "/projects/";
   export let lang: "en" | "pl" = "en";
+
+  let containerEl: HTMLElement;
+  let contentEl: HTMLElement;
+  let isOverflowing = false;
+
+  function checkOverflow() {
+    if (containerEl && contentEl) {
+      isOverflowing = contentEl.scrollWidth > containerEl.clientWidth;
+    }
+  }
+
+  onMount(() => {
+    checkOverflow();
+    const ro = new ResizeObserver(checkOverflow);
+    if (containerEl) ro.observe(containerEl);
+    return () => ro.disconnect();
+  });
 
   $: caseStudyLabel = lang === "pl" ? "Studium przypadku" : "Case study";
   $: liveDemoLabel = lang === "pl" ? "Wersja live" : "Live demo";
@@ -53,14 +71,38 @@
       {project.summary}
     </p>
 
-    <ul
-      class="mt-5 flex flex-wrap gap-2"
-      aria-label={lang === "pl" ? "Technologie" : "Technologies"}
+    <!-- Technologies: all in one line, automatically looped sliding to right when overflowing -->
+    <div
+      class="tech-marquee-wrapper mt-5"
+      bind:this={containerEl}
+      aria-label="Technologies"
+      role="region"
     >
-      {#each project.stack.slice(0, 4) as item (item)}
-        <li class="badge badge-outline badge-sm">{item}</li>
-      {/each}
-    </ul>
+      <div class="tech-marquee-track" class:is-sliding={isOverflowing}>
+        <ul
+          class="tech-marquee-list"
+          bind:this={contentEl}
+          aria-label="Technologies"
+        >
+          {#each project.stack as item (item)}
+            <li class="badge badge-outline badge-sm shrink-0 whitespace-nowrap">
+              {item}
+            </li>
+          {/each}
+        </ul>
+        {#if isOverflowing}
+          <ul class="tech-marquee-list" aria-hidden="true">
+            {#each project.stack as item (`dup-${item}`)}
+              <li
+                class="badge badge-outline badge-sm shrink-0 whitespace-nowrap"
+              >
+                {item}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+    </div>
 
     <div
       class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-base-300 pt-5"
@@ -115,3 +157,70 @@
     </div>
   </div>
 </article>
+
+<style>
+  .tech-marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 10px,
+      black calc(100% - 10px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 10px,
+      black calc(100% - 10px),
+      transparent 100%
+    );
+  }
+
+  .tech-marquee-track {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+  }
+
+  .tech-marquee-track.is-sliding {
+    animation: slide-to-right 16s linear infinite;
+  }
+
+  .tech-marquee-wrapper:hover .tech-marquee-track,
+  .tech-marquee-wrapper:focus-within .tech-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .tech-marquee-list {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+    margin: 0;
+    list-style: none;
+  }
+
+  @keyframes slide-to-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech-marquee-track.is-sliding {
+      animation: none;
+    }
+    .tech-marquee-wrapper {
+      overflow-x: auto;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+</style>

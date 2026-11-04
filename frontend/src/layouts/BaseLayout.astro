@@ -5,6 +5,7 @@ import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import CustomCursor from "../components/ui/CustomCursor.svelte";
 import ScrollProgress from "../components/ui/ScrollProgress.astro";
+import SitePreloader from "../components/ui/SitePreloader.astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { layoutCopy, siteMetadata } from "../data/site-copy";
 import { base } from "../lib/url";
@@ -16,6 +17,7 @@ interface Props {
   lang?: "en" | "pl";
   path?: string;
   localePaths?: Partial<Record<"en" | "pl", string>>;
+  showPreloader?: boolean;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   lang = "en",
   path = "/",
   localePaths,
+  showPreloader = false,
 } = Astro.props;
 const copy = layoutCopy[lang];
 
@@ -105,6 +108,7 @@ const websiteSchema = {
     <script
       is:inline
       defer
+      fetchpriority="low"
       src="https://umami-production-59f2.up.railway.app/script.js"
       data-website-id="65c6e9d8-5a34-48ea-b139-682c4fc8c6ca"
       data-domains="pawelryfiak.is-a.dev"
@@ -145,10 +149,25 @@ const websiteSchema = {
         );
       })();
     </script>
+    <!-- Clean up any legacy storage keys from previous builds -->
+    {
+      showPreloader && (
+        <script
+          is:inline
+          set:html={`(function () {
+            try {
+              localStorage.removeItem("portfolio-prepared");
+              sessionStorage.removeItem("portfolio-prepared");
+            } catch {}
+          })();`}
+        />
+      )
+    }
   </head>
   <body
     class="bg-base-100 text-base-content flex min-h-dvh flex-col antialiased"
   >
+    {showPreloader && <SitePreloader lang={lang} />}
     <ScrollProgress lang={lang} />
     <!-- Skip nav for keyboard users -->
     <a

@@ -4,7 +4,7 @@ Bilingual (EN/PL) personal portfolio — static Astro frontend on GitHub Pages, 
 
 ## Architecture in one paragraph
 
-The site is **fully static**. At build time, Astro fetches all content from the Strapi REST API (`src/lib/cms/`) and generates HTML. If Strapi is unreachable, every fetcher silently returns data from `src/data/fallback-*.ts` — the build never fails. Visitors receive pre-rendered HTML; there is no client-side CMS fetching. Svelte 5 is used only for interactive islands (filter, particles, cursor, theme toggle); they receive data as props from Astro and do not fetch anything themselves.
+The site is **fully static**. At build time, Astro fetches all content from the Strapi REST API (`src/lib/cms/`) and generates HTML. If Strapi is unreachable, every fetcher silently returns data from `src/data/fallback-*.ts` — the build never fails. Visitors receive pre-rendered HTML; there is no client-side CMS fetching. Svelte 5 is used only for interactive islands (filter, background shader, cursor, theme toggle); they receive data as props from Astro and do not fetch anything themselves.
 
 ## Repository layout
 
